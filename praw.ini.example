@@ -10,16 +10,16 @@ reddit_url=https://www.reddit.com
 # The URL prefix for short URLs
 short_url=https://redd.it
 
-[dev]
-client_id=DevBotID
-client_secret=DevBotSecret
-password=DevBotPassword
-username=WarrenPlanBotDev
-user_agent=WPB Dev Bot 0.1
-
 [prod]
 client_id=ProdBotID
 client_secret=ProdBotSecret
 password=ProdBotPassword
 username=WarrenPlanBot
+user_agent=WPB Dev Bot 0.1
+
+[dev]
+client_id=DevBotID
+client_secret=DevBotSecret
+password=DevBotPassword
+username=WarrenPlanBotDev
 user_agent=WPB Dev Bot 0.1
