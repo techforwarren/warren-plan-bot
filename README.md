@@ -2,9 +2,9 @@
 
 ## Development
 
-### pram.ini file
+### praw.ini file
 
-You'll need a `pram.ini` file in the root of this repo. Copy over the `pram.ini.example` file and fill in the details. Use your own username and password, and get the client_id and client_secret from the Reddit application
+You'll need a `praw.ini` file in the root of this repo. Copy over the `praw.ini.example` file and fill in the details. Use your own username and password, and get the client_id and client_secret from the Reddit application
 
 ### the virtualenv way
 
