@@ -107,4 +107,4 @@ venv.bak/
 praw.ini
 
 # VS Code config
-.vscode/
+.vscode/settings.json
