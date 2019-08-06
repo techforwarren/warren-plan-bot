@@ -1,15 +1,3 @@
-submission_kind=t3
-subreddit_kind=t5
-
-# The URL Prefix for OAuth-related requests
-oauth_url=https://oauth.reddit.com
-
-# The URL prefix for regular requests
-reddit_url=https://www.reddit.com
-
-# The URL prefix for short URLs
-short_url=https://redd.it
-
 [prod]
 client_id=ProdBotID
 client_secret=ProdBotSecret
