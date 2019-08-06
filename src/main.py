@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import praw
 
 #change dev to prod to shift to production bot
