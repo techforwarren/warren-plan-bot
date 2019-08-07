@@ -3,6 +3,7 @@ import pdb
 import re
 import os
 import fuzzywuzzy
+from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
 #change dev to prod to shift to production bot
@@ -122,9 +123,9 @@ plans_dict = {
                                 Learn more about her plan for [The Ultra-Millionaire Tax](https://elizabethwarren.com/ultra-millionaire-tax/).''',
 }
 
-
-
+# init topic keyword array
 query_terms = []
+
 for key in plans_dict:
     query_terms.append(key)
 
@@ -149,44 +150,53 @@ post_limit = 10
 # Get the number of new posts up to the limit
 for submission in subreddit.new(limit=post_limit):
     submission_ID = submission.id
-    print(submission.selftext)
+    
     # If we haven't replied to this post before
     if submission.id not in posts_replied_to:
-        print("submission id: ", submission.id)
-        print("submission text: ", submission.selftext)
-        # Do a case insensitive search
-        if re.search("!warrenplanbot|/u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
-            # Search topic keywords and response body for best match
-            topic_match_in_post = process.extractOne(submission.selftext, query_terms)
-            print("topic found in post text: ", topic_match_in_post[0])
-            print("topic match confidence: ", topic_match_in_post[1])
 
-            #     Reply to the post with plan info, uncomment next line to activate post replies
+        # Do a case insensitive search
+        if re.search("!warrenplanbot | /u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
+            # Log Submission Data
+            print("submission id: ", submission.id)
+            print("submission text: ", submission.selftext)
+            
+            # Search topic keywords and response body for best match
+            topic_match_in_post = process.extractOne(submission.selftext, query_terms, scorer=fuzz.WRatio)
+            print("topic found in post text: ", topic_match_in_post[0])
+            print("topic found in post confidence: ", topic_match_in_post[1])
+
+            # Reply to the post with plan info, uncomment next line to activate post replies
             submission.reply(plans_dict[topic_match_in_post[0]]) 
-            #     print("Bot replying to: ", submission.title)
-            #     posts_replied_to.append(submission.id)
+            print("Bot replying to: ", submission.title)
+            posts_replied_to.append(submission.id)
         
-            # After checking submission.selftext, check comments
-            # Get comments for submission and search for trigger in comment body
+        # After checking submission.selftext, check comments
+        # Get comments for submission and search for trigger in comment body
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
-            print("submission id: ", submission_ID)
-            print("comment text: ", comment.body)
-            if re.search("!warrenplanbot|/u/warrenplanbot", comment.body, re.IGNORECASE):
-                #search for matching query terms in comment body
-                topic_match_in_comments = process.extractOne(comment.body, query_terms)
-                print("topic found in comment ID", comment.id)
-                print("topic found in comments: ", topic_match_in_comments[0])
-                print("topic match in comments confidence: ", topic_match_in_comments[1])
-                
-                comment.reply(plans_dict[topic_match_in_comments[0]]) 
-                #     print("Bot replying to: ", comment.title)
-                #     posts_replied_to.append(comment.id)
+            # If we haven't replied to the comment before
+            if comment.id not in posts_replied_to:
+                # Log Comment Data
+                print("comment id: ", comment.id)
+                print("comment text: ", comment.body)
+
+                # Search for trigger phrases in the comment
+                if re.search("!warrenplanbot | /u/warrenplanbot", comment.body, re.IGNORECASE):
+
+                    # Search for matching topic keywords in comment body
+                    topic_match_in_comments = process.extractOne(comment.body, query_terms, scorer=fuzz.WRatio)
+                    print("topic found in comment ID", comment.id)
+                    print("topic found in comment: ", topic_match_in_comments[0])
+                    print("topic found in comments confidence: ", topic_match_in_comments[1])
+                    
+                    comment.reply(plans_dict[topic_match_in_comments[0]]) 
+                    print("Bot replying to: ", comment.id)
+                    posts_replied_to.append(comment.id)
 
 # Write the updated list back to the file
 with open("posts_replied_to.txt", "w") as f:
     for post_id in posts_replied_to:
         # uncomment next line when ready to start recording post IDs so it doesn't reply multiple times
-        # f.write(post_id + "\n")
+        f.write(post_id + "\n")
         print("replied to : ", post_id + "\n")
 
