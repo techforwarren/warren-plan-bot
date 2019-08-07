@@ -9,7 +9,7 @@ from fuzzywuzzy import process
 reddit = praw.Reddit('dev')
 
 # Create query response dictionary
-query_responses_dict = {
+plans_dict = {
     "student debt" :            '''Senator Warren believes we should treat higher education like our public school system – free and accessible to all Americans. 
                                 That’s why she's calling for something truly transformational – the cancellation of up to $50,000 in student loan debt for 
                                 42 million Americans and free universal college for everyone. 
@@ -120,17 +120,13 @@ query_responses_dict = {
     "ultra millionaire tax":    '''Sen. Warren is proposing something brand new – a tax on the wealth of the richest Americans. My Ultra-Millionaire Tax asks America's richest 0.1% to pay their 
                                 fair share, raising nearly $3 trillion that we can use to rebuild the middle class. 
                                 Learn more about her plan for [The Ultra-Millionaire Tax](https://elizabethwarren.com/ultra-millionaire-tax/).''',
-    
-                             
-    
-
 }
 
-query_terms = []
-for key in query_responses_dict:
-    query_terms.append(key)
 
-print(query_terms)
+
+query_terms = []
+for key in plans_dict:
+    query_terms.append(key)
 
 # Check if replied posts exists, if not create an empty list
 if not os.path.isfile("posts_replied_to.txt"):
@@ -159,12 +155,14 @@ for submission in subreddit.new(limit=post_limit):
         print("submission id: ", submission.id)
         print("submission text: ", submission.selftext)
         # Do a case insensitive search
-        if re.search("!warrenplanbot", submission.selftext, re.IGNORECASE):
-            # Search for topic keywords
+        if re.search("!warrenplanbot|/u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
+            # Search topic keywords and response body for best match
             topic_match_in_post = process.extractOne(submission.selftext, query_terms)
-            print("topic found in post text: ", query_responses_dict[topic_match_in_post[0]])
+            print("topic found in post text: ", topic_match_in_post[0])
+            print("topic match confidence: ", topic_match_in_post[1])
+
             #     Reply to the post with plan info, uncomment next line to activate post replies
-            submission.reply(query_responses_dict[topic_match_in_post[0]]) 
+            submission.reply(plans_dict[topic_match_in_post[0]]) 
             #     print("Bot replying to: ", submission.title)
             #     posts_replied_to.append(submission.id)
         
@@ -173,20 +171,17 @@ for submission in subreddit.new(limit=post_limit):
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
             print("submission id: ", submission_ID)
-            print("comments: ", comment)
-            print(comment.body)
-            if re.search("!warrenplanbot", comment.body, re.IGNORECASE):
+            print("comment text: ", comment.body)
+            if re.search("!warrenplanbot|/u/warrenplanbot", comment.body, re.IGNORECASE):
                 #search for matching query terms in comment body
                 topic_match_in_comments = process.extractOne(comment.body, query_terms)
                 print("topic found in comment ID", comment.id)
                 print("topic found in comments: ", topic_match_in_comments[0])
-                print("topic match strength: ", topic_match_in_comments[1])
-                    
-                #     Reply to the coment with plan info, uncomment to activate replies
-                comment.reply(query_responses_dict[topic_match_in_comments[0]]) 
+                print("topic match in comments confidence: ", topic_match_in_comments[1])
+                
+                comment.reply(plans_dict[topic_match_in_comments[0]]) 
                 #     print("Bot replying to: ", comment.title)
                 #     posts_replied_to.append(comment.id)
-                    
 
 # Write the updated list back to the file
 with open("posts_replied_to.txt", "w") as f:
