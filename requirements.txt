@@ -1,5 +1,2 @@
 praw
-pdb
-re
-os
 fuzzywuzzy
