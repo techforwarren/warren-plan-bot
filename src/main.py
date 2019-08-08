@@ -85,7 +85,7 @@ def run_plan_bot(*args, **kwargs):
 
                 # Reply to the post with plan info, uncomment next line to activate post replies
                 submission.reply(reply_string)
-
+                print("Bot replying to: ", submission.id)
                 # Append post id to prevent future replies to the same submission
                 posts_replied_to.append(submission.id)
 
