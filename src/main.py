@@ -42,7 +42,7 @@ for submission in subreddit.new(limit=post_limit):
     if submission.id not in posts_replied_to:
 
         # Do a case insensitive search
-        if re.search("!warrenplanbot | /u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
+        if re.search("!warrenplanbot|/u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
                         
             # Initialize match_confidence and match_id before fuzzy searching
             match_confidence = 0
@@ -89,10 +89,9 @@ for submission in subreddit.new(limit=post_limit):
             if comment.id not in posts_replied_to:
 
                 # Search for trigger phrases in the comment
-                if re.search("!warrenplanbot | /u/warrenplanbot", comment.body, re.IGNORECASE):
+                if re.search("!warrenplanbot|/u/WarrenPlanBot", comment.body, re.IGNORECASE):
 
                     # Search for matching topic keywords in comment body
-
                     # Initialize match_confidence, match_id, match_response before fuzzy searching
                     match_confidence = 0
                     match_id = 0
