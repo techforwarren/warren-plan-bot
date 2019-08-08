@@ -39,6 +39,7 @@ for submission in subreddit.new(limit=post_limit):
     submission_ID = submission.id
     
     # If we haven't replied to this post before
+
     if submission.id not in posts_replied_to:
 
         # Do a case insensitive search
@@ -60,9 +61,11 @@ for submission in subreddit.new(limit=post_limit):
             
             # Select entry from plans_dict using best match ID
             plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
-            
+            plan_topic = plan_record["topic"]
+
             # Create response text with plan summary
-            reply_string = "She has a plan for that!\n\n" + plan_record["summary"] + "\n\n" 
+            # TODO: add username of the user triggering the bot to the beginning of the reply
+            reply_string = "She has a plan for " +plan_topic +"!\n\n" + plan_record["summary"] + "\n\n" 
             # Add link to learn more about the plan
             reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
             
@@ -107,9 +110,11 @@ for submission in subreddit.new(limit=post_limit):
                     
                     # Select entry from plans_dict using best match ID
                     plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
-                    
+                    plan_topic = plan_record["topic"]
+
                     # Create response text with plan summary
-                    reply_string = "She has a plan for that!\n\n" + plan_record["summary"] + "\n\n" 
+                    # TODO: add username the response is directed to at the beginning of the reply
+                    reply_string = "She has a plan for " + plan_topic +"!\n\n" + plan_record["summary"] + "\n\n" 
                     # Add link to learn more about the plan
                     reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
                     
