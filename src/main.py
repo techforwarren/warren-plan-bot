@@ -13,6 +13,8 @@ reddit = praw.Reddit('dev')
 # JSON filename of policy plans
 plans_file = "plans.json"
 
+POSTS_REPLIED_TO_PATH = os.getenv("POSTS_REPLIED_TO_PATH", "posts_replied_to.txt")
+
 def run_plan_bot(*args, **kwargs):
     print("WOOO")
 
@@ -20,13 +22,13 @@ def run_plan_bot(*args, **kwargs):
         plans_dict = json.load(json_file)
 
     # Check if replied posts exists, if not create an empty list
-    if not os.path.isfile("posts_replied_to.txt"):
+    if not os.path.isfile(POSTS_REPLIED_TO_PATH):
         posts_replied_to = []
 
     # If replied posts file exists, load the list of posts replied to from it
     else:
         # Read the file into a list and remove any empty values
-        with open("posts_replied_to.txt", "r") as f:
+        with open(POSTS_REPLIED_TO_PATH, "r") as f:
             posts_replied_to = f.read()
             posts_replied_to = posts_replied_to.split("\n")
             posts_replied_to = list(filter(None, posts_replied_to))
@@ -136,7 +138,7 @@ def run_plan_bot(*args, **kwargs):
                         posts_replied_to.append(comment.id)
 
     # Write the updated list back to the file
-    with open("posts_replied_to.txt", "w") as f:
+    with open(POSTS_REPLIED_TO_PATH, "w") as f:
         for post_id in posts_replied_to:
             # uncomment next line when ready to start recording post IDs so it doesn't reply multiple times
             f.write(post_id + "\n")
