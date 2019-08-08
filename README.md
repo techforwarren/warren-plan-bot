@@ -20,8 +20,42 @@ The following instructions should be run from the repo root
 
 #### Install dependencies
 
-`pip install -r requirements.txt`
+`pip install -r src/requirements.txt`
 
 #### Run the bot
 
 `python src/main.py`
+
+## Managing the Deployment
+
+### Requirements
+
+#### Terraform
+
+##### Mac (with homebrew)
+
+`brew install terraform`
+
+##### Otherwise
+
+Download the binary at https://www.terraform.io/downloads.html
+
+Make sure the `terraform` binary is in your PATH
+
+#### Service Account Key
+
+Add the key for the Terraform service account to
+
+`~/.gcloud/wpb-dev-terraform-key.json`
+
+You'll need to get the key from @joegoldbeck. You should only need it if you're actively managing the dev deployment
+
+#### All necessary Terraform modules
+
+`terraform init`
+
+### Update deployment
+
+To update the deployment, simply run
+
+`terraform apply`
