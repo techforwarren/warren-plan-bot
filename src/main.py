@@ -16,14 +16,6 @@ plans_file = "plans.json"
 with open(plans_file) as json_file:
     plans_dict = json.load(json_file)
 
-# init topic keyword array
-query_terms = []
-
-for entry in plans_dict["plans"]:
-    query_terms.append({"id": entry["id"], "topic": entry["topic"]})
-
-print(query_terms)
-
 # Check if replied posts exists, if not create an empty list
 if not os.path.isfile("posts_replied_to.txt"):
     posts_replied_to = []
@@ -51,33 +43,43 @@ for submission in subreddit.new(limit=post_limit):
 
         # Do a case insensitive search
         if re.search("!warrenplanbot | /u/WarrenPlanBot", submission.selftext, re.IGNORECASE):
-            # Log Submission Data
-            print("submission id: ", submission.id)
-            print("submission text: ", submission.selftext)
-            
+                        
             # Initialize match_confidence and match_id before fuzzy searching
-
             match_confidence = 0
             match_id = 0
+            match_response = ""
             # Search topic keywords and response body for best match
             for item in plans_dict["plans"]:
                 item_match_confidence = fuzz.WRatio(submission.selftext, item["topic"])
-                item_id = item["id"]
-                print("item confidence score: ", item_match_confidence)
-                print("current topic: ", item["topic"])
+
                 if item_match_confidence > match_confidence:
+                    # Set new match ID
                     match_confidence = item_match_confidence
-                    match_id = item_id
+                    match_id = item["id"]
                     print("new topic match: ", item["topic"])
-                
-                    #print("topic found in post text: ", topic_match_in_post[0])
-                
-                    #print("topic found in post confidence: ", topic_match_in_post[1])
+            
+            # Select entry from plans_dict using best match ID
+            plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
+            
+            # Create response text with plan summary
+            reply_string = "She has a plan for that!\n\n" + plan_record["summary"] + "\n\n" 
+            # Add link to learn more about the plan
+            reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
+            
+            # Add horizontal line above footer
+            reply_string = reply_string + "\n***\n"
+            # Add error reporting info
+            reply_string = reply_string + "Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=reference&nbsp;post&nbsp;id[" +submission.id +"]).  \n"
+                    # Add disclaimer
+            reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign. "
+            # Add volunteer link
+            reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
 
             # Reply to the post with plan info, uncomment next line to activate post replies
-            #submission.reply(plans_dict[topic_match_in_post[0]]) 
-            #print("Bot replying to: ", submission.title)
-            #posts_replied_to.append(submission.id)
+            submission.reply(reply_string) 
+
+            # Append post id to prevent future replies to the same submission
+            posts_replied_to.append(submission.id)
         
         # After checking submission.selftext, check comments
         # Get comments for submission and search for trigger in comment body
@@ -85,27 +87,51 @@ for submission in subreddit.new(limit=post_limit):
         for comment in submission.comments.list():
             # If we haven't replied to the comment before
             if comment.id not in posts_replied_to:
-                # Log Comment Data
-                print("comment id: ", comment.id)
-                print("comment text: ", comment.body)
 
                 # Search for trigger phrases in the comment
                 if re.search("!warrenplanbot | /u/warrenplanbot", comment.body, re.IGNORECASE):
-                    print("doing nothing for now")
+
                     # Search for matching topic keywords in comment body
-                    #topic_match_in_comments = process.extractOne(comment.body, query_terms, scorer=fuzz.WRatio)
-                    #print("topic found in comment ID", comment.id)
-                    #print("topic found in comment: ", topic_match_in_comments[0])
-                    #print("topic found in comments confidence: ", topic_match_in_comments[1])
+
+                    # Initialize match_confidence, match_id, match_response before fuzzy searching
+                    match_confidence = 0
+                    match_id = 0
+                    match_response = ""
+                    # Search topic keywords and response body for best match
+                    for item in plans_dict["plans"]:
+                        item_match_confidence = fuzz.WRatio(comment.body, item["topic"])
+
+                        if item_match_confidence > match_confidence:
+                            # Set new match ID
+                            match_confidence = item_match_confidence
+                            match_id = item["id"]
                     
-                    #comment.reply(plans_dict[topic_match_in_comments[0]]) 
-                    #print("Bot replying to: ", comment.id)
-                    #posts_replied_to.append(comment.id)
+                    # Select entry from plans_dict using best match ID
+                    plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
+                    
+                    # Create response text with plan summary
+                    reply_string = "She has a plan for that!\n\n" + plan_record["summary"] + "\n\n" 
+                    # Add link to learn more about the plan
+                    reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
+                    
+                    # Add horizontal line above footer
+                    reply_string = reply_string + "\n***\n"
+                    # Add error reporting info
+                    reply_string = reply_string + "Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=ref&nbsp;comment&nbsp;id[" +submission.id +" | " +comment.id +"]).  \n"
+                    # Add disclaimer
+                    reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  \n"
+                    # Add volunteer link
+                    reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
+        
+                    # Reply to the post with plan info, uncomment next line to activate post replies
+                    comment.reply(reply_string) 
+                    print("Bot replying to: ", comment.id)
+                    posts_replied_to.append(comment.id)
 
 # Write the updated list back to the file
 with open("posts_replied_to.txt", "w") as f:
     for post_id in posts_replied_to:
         # uncomment next line when ready to start recording post IDs so it doesn't reply multiple times
         f.write(post_id + "\n")
-        print("replied to : ", post_id + "\n")
+        print("updated replies list includes: ", post_id + "\n")
 
