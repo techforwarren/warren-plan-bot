@@ -200,3 +200,6 @@ with open("posts_replied_to.txt", "w") as f:
         f.write(post_id + "\n")
         print("replied to : ", post_id + "\n")
 
+def run_plan_bot(event, context):
+    print("Success!")
+    return "Success :)"
