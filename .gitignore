@@ -106,5 +106,12 @@ venv.bak/
 # praw ini
 praw.ini
 
-# VS Code config
+# Editor config
 .vscode
+.idea
+
+# Terraform local state
+.terraform
+
+# Rando Mac files
+.DS_Store
