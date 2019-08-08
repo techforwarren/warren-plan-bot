@@ -86,13 +86,13 @@ output "blag" {
 }
 resource "google_cloudfunctions_function" "run_plan_bot" {
   name = var.function_name
-  description = "Run the plan bot"
+  description = "run the plan bot"
   runtime = "python37"
 
   available_memory_mb = 256
 
   event_trigger {
-    event_type = "providers/cloud.pubsub/eventTypes/topic.publish"
+    event_type = "providers/cloud.pubsub/eventtypes/topic.publish"
     resource = google_pubsub_topic.run_plan_bot.name
   }
   source_archive_bucket = google_storage_bucket.plan_bot_function_storage.name
@@ -101,7 +101,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   entry_point = "run_plan_bot"
   max_instances = 1
   labels = {
-    // Here so that the deploy trick above keeps working
+    // here so that the deploy trick above keeps working
     deployment-tool = "cli-gcloud"
   }
 
@@ -119,6 +119,6 @@ resource "null_resource" "update_cloud_function" {
   }
 
   provisioner "local-exec" {
-    command = "GOOGLE_APPLICATION_CREDENTIALS=${var.credentials_file} gcloud functions deploy ${var.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
+    command = "google_application_credentials=${var.credentials_file} gcloud functions deploy ${var.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
   }
 }

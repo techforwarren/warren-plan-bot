@@ -3,32 +3,57 @@ import pdb
 import re
 import os
 import json
-import fuzzywuzzy
+import click
+
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
-#change dev to prod to shift to production bot
+# change dev to prod to shift to production bot
 reddit = praw.Reddit('dev')
 
 # JSON filename of policy plans
 plans_file = "plans.json"
 
-POSTS_REPLIED_TO_PATH = os.getenv("POSTS_REPLIED_TO_PATH", "posts_replied_to.txt")
 
-def run_plan_bot(*args, **kwargs):
-    print("WOOO")
+def build_response_text(plan_record, submission_id="None", comment_id="None"):
+    """
+    Create response text with plan summary
+    """
 
+    reply_string = "She has a plan for " + plan_record["topic"] + "!\n\n" + plan_record["summary"] + "\n\n"
+    # Add link to learn more about the plan
+    reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record[
+        "url"] + ")\n\n"
+
+    # Add horizontal line above footer
+    reply_string = reply_string + "\n***\n"
+    # Add error reporting info
+    reply_string = reply_string + f"Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=reference&nbsp;{'comment' if comment_id else 'post'}&nbsp;id[" + submission_id + " | " + comment_id + "]).  \n"
+    # Add disclaimer
+    reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  \n"
+    # Add volunteer link
+    reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
+
+    return reply_string
+
+
+@click.command()
+@click.argument('posts_replied_to_path', envvar='POSTS_REPLIED_TO_PATH', type=click.Path(),
+                default="posts_replied_to.txt")
+@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False)
+@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=True)
+def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True):
     with open(plans_file) as json_file:
         plans_dict = json.load(json_file)
 
     # Check if replied posts exists, if not create an empty list
-    if not os.path.isfile(POSTS_REPLIED_TO_PATH):
+    if not os.path.isfile(posts_replied_to_path):
         posts_replied_to = []
 
     # If replied posts file exists, load the list of posts replied to from it
     else:
         # Read the file into a list and remove any empty values
-        with open(POSTS_REPLIED_TO_PATH, "r") as f:
+        with open(posts_replied_to_path, "r") as f:
             posts_replied_to = f.read()
             posts_replied_to = posts_replied_to.split("\n")
             posts_replied_to = list(filter(None, posts_replied_to))
@@ -41,7 +66,6 @@ def run_plan_bot(*args, **kwargs):
 
     # Get the number of new posts up to the limit
     for submission in subreddit.new(limit=post_limit):
-        submission_ID = submission.id
 
         # If we haven't replied to this post before
 
@@ -66,28 +90,18 @@ def run_plan_bot(*args, **kwargs):
 
                 # Select entry from plans_dict using best match ID
                 plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
-                plan_topic = plan_record["topic"]
 
-                # Create response text with plan summary
-                # TODO: add username of the user triggering the bot to the beginning of the reply
-                reply_string = "She has a plan for " +plan_topic +"!\n\n" + plan_record["summary"] + "\n\n"
-                # Add link to learn more about the plan
-                reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
-
-                # Add horizontal line above footer
-                reply_string = reply_string + "\n***\n"
-                # Add error reporting info
-                reply_string = reply_string + "Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=reference&nbsp;post&nbsp;id[" +submission.id +"]).  \n"
-                        # Add disclaimer
-                reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign. "
-                # Add volunteer link
-                reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
+                reply_string = build_response_text(plan_record, submission.id)
 
                 # Reply to the post with plan info, uncomment next line to activate post replies
-                submission.reply(reply_string)
-                print("Bot replying to: ", submission.id)
-                # Append post id to prevent future replies to the same submission
-                posts_replied_to.append(submission.id)
+                if send_replies:
+                    submission.reply(reply_string)
+                    print("Bot replying to submission: ", submission.id)
+                    if track_replies:
+                        # Append post id to prevent future replies to the same submission
+                        posts_replied_to.append(submission.id)
+                else:
+                    print("Bot would have replied to submission: ", submission.id)
 
             # After checking submission.selftext, check comments
             # Get comments for submission and search for trigger in comment body
@@ -115,32 +129,23 @@ def run_plan_bot(*args, **kwargs):
 
                         # Select entry from plans_dict using best match ID
                         plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
-                        plan_topic = plan_record["topic"]
 
                         # Create response text with plan summary
-                        # TODO: add username the response is directed to at the beginning of the reply
-                        reply_string = "She has a plan for " + plan_topic +"!\n\n" + plan_record["summary"] + "\n\n"
-                        # Add link to learn more about the plan
-                        reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record["url"] +")\n\n"
-
-                        # Add horizontal line above footer
-                        reply_string = reply_string + "\n***\n"
-                        # Add error reporting info
-                        reply_string = reply_string + "Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=ref&nbsp;comment&nbsp;id[" +submission.id +" | " +comment.id +"]).  \n"
-                        # Add disclaimer
-                        reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  \n"
-                        # Add volunteer link
-                        reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
+                        reply_string = build_response_text(plan_record, submission.id, comment.id)
 
                         # Reply to the post with plan info, uncomment next line to activate post replies
-                        comment.reply(reply_string)
-                        print("Bot replying to: ", comment.id)
-                        posts_replied_to.append(comment.id)
+                        if send_replies:
+                            comment.reply(reply_string)
+                            print("Bot replying to comment: ", comment.id)
+                            if track_replies:
+                                posts_replied_to.append(comment.id)
+                        else:
+                            print("Bot would have replied to comment: ", comment.id)
 
     # Write the updated list back to the file
-    with open(POSTS_REPLIED_TO_PATH, "w") as f:
+    with open(posts_replied_to_path, "w") as f:
         for post_id in posts_replied_to:
-            # uncomment next line when ready to start recording post IDs so it doesn't reply multiple times
+            # record post IDs so it doesn't reply multiple times
             f.write(post_id + "\n")
             print("updated replies list includes: ", post_id + "\n")
 
