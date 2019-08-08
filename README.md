@@ -24,7 +24,18 @@ The following instructions should be run from the repo root
 
 #### Run the bot
 
+To run the bot _without_ making actual replies:
+
 `python src/main.py`
+
+To run the bot and make actual replies:
+
+`python src/main.py --send-replies` <--- be careful if you do this, you could end up spamming reddit
+
+By default, the bot will track which files it replied to
+
+`python src/main.py --skip-track`
+
 
 ## Managing the Deployment
 
