@@ -106,5 +106,6 @@ venv.bak/
 # praw ini
 praw.ini
 
-# VS Code config
+# Editor config
 .vscode
+.idea
