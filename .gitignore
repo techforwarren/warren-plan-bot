@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # praw ini
-praw.ini
+src/praw.ini
 
 # Editor config
 .vscode

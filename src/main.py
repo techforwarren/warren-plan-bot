@@ -4,12 +4,13 @@ import re
 import os
 import json
 import click
+import urllib.parse
+import tempfile
+from google.cloud import storage
 
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
-# change dev to prod to shift to production bot
-reddit = praw.Reddit('dev')
 
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
@@ -37,10 +38,24 @@ def build_response_text(plan_record, submission_id="None", comment_id="None"):
     return reply_string
 
 
+def parse_gs_uri(uri):
+    '''
+    :param uri:
+    :return: (bucket, blob)
+    '''
+    parsed = urllib.parse.urlparse(uri)
+
+    return parsed.netloc, parsed.path.strip("/")
+
+
 def read_file(uri):
     if uri.startswith("gs://"):
-        # TODO
-        return
+        bucket_name, blob_name = parse_gs_uri(uri)
+
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket(bucket_name)
+
+        return bucket.blob(blob_name).download_as_string().decode("utf-8")
 
     if not os.path.isfile(uri):
         return
@@ -51,8 +66,12 @@ def read_file(uri):
 
 def write_file(uri, contents):
     if uri.startswith("gs://"):
-        # TODO
-        return
+        bucket_name, blob_name = parse_gs_uri(uri)
+
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket(bucket_name)
+
+        return bucket.blob(blob_name).upload_from_string(contents)
 
     with open(uri, "w") as f:
         return f.write(contents)
@@ -60,11 +79,17 @@ def write_file(uri, contents):
 
 @click.command()
 @click.option('--replied-to-path', envvar='REPLIED_TO_PATH', type=click.Path(),
-              default="posts_replied_to.txt", help='path to file where replies are tracked')
+              default="gs://wpb-storage-dev/posts_replied_to.txt", help='path to file where replies are tracked')
 @click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, help='whether to send replies')
-@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=True, help='whether to track replies')
+@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=False, help='whether to track replies')
 @click.option('--limit', envvar='LIMIT', default=10, help='number of posts to return')
 def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True, limit=10):
+
+    # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    # change dev to prod to shift to production bot
+    reddit = praw.Reddit('dev')
+
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
 
