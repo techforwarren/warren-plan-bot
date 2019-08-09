@@ -80,9 +80,11 @@ def write_file(uri, contents):
 @click.command()
 @click.option('--replied-to-path', envvar='REPLIED_TO_PATH', type=click.Path(),
               default="gs://wpb-storage-dev/posts_replied_to.txt", help='path to file where replies are tracked')
-@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, help='whether to send replies')
-@click.option('--skip-tracking', default=False, help='whether to check whether replies have already been posted')
-@click.option('--limit', envvar='LIMIT', default=10, help='number of posts to return')
+@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, is_flag=True,
+              help='whether to send replies')
+@click.option('--skip-tracking', default=False, is_flag=True,
+              help='whether to check whether replies have already been posted')
+@click.option('--limit', envvar='LIMIT', default=10, type=int, help='number of posts to return')
 def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", send_replies=False, skip_tracking=False,
                  limit=10):
     # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
