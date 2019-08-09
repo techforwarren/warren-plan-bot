@@ -34,12 +34,6 @@ To run the bot and make actual replies:
 
 or set the env var `SEND_REPLIES=true`
 
-By default, the bot will track which files it replied to. To skip tracking,
-
-`python src/main.py --skip-track`
-
-or set the env var `TRACK_REPLIES=false`
-
 To change which file is used to track posts replied to
 
 `python src/main.py --replied-to-path [my_new_file.txt]`

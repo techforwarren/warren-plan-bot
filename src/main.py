@@ -81,9 +81,8 @@ def write_file(uri, contents):
 @click.option('--replied-to-path', envvar='REPLIED_TO_PATH', type=click.Path(),
               default="gs://wpb-storage-dev/posts_replied_to.txt", help='path to file where replies are tracked')
 @click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, help='whether to send replies')
-@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=False, help='whether to track replies')
 @click.option('--limit', envvar='LIMIT', default=10, help='number of posts to return')
-def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True, limit=10):
+def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, limit=10):
 
     # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -179,7 +178,7 @@ def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, tra
     # Write the updated tracking list back to the file
     post_replied_to_output = "\n".join(posts_replied_to)
 
-    if track_replies:
+    if send_replies:
         write_file(replied_to_path, post_replied_to_output)
         print("updated posts_replied_to list:", "\n", post_replied_to_output)
     else:
