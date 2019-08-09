@@ -1,3 +1,4 @@
 praw
 fuzzywuzzy
 click
+google-cloud-storage

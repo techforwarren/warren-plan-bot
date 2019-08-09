@@ -15,7 +15,7 @@ variable "credentials_file" {
 
 variable "function_name" {
   type = string
-  default = "run-plan-bot-3"
+  default = "run-plan-bot"
 }
 
 variable "function_storage_bucket" {
@@ -65,7 +65,7 @@ data "archive_file" "plan_bot_zip" {
   output_path = "${path.root}/dist/plan_bot.zip"
 }
 
-# create the storage bucket
+# create the storage bucket for function storage
 resource "google_storage_bucket" "plan_bot_function_storage" {
   name = var.function_storage_bucket
 }
@@ -79,11 +79,8 @@ resource "google_storage_bucket_object" "plan_bot_zip" {
   depends_on = [
     data.archive_file.plan_bot_zip
   ]
+}
 
-}
-output "blag" {
-  value = google_pubsub_topic.run_plan_bot.id
-}
 resource "google_cloudfunctions_function" "run_plan_bot" {
   name = var.function_name
   description = "run the plan bot"
@@ -92,13 +89,14 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   available_memory_mb = 256
 
   event_trigger {
-    event_type = "providers/cloud.pubsub/eventtypes/topic.publish"
+    event_type = "google.pubsub.topic.publish"
     resource = google_pubsub_topic.run_plan_bot.name
   }
+
   source_archive_bucket = google_storage_bucket.plan_bot_function_storage.name
   source_archive_object = google_storage_bucket_object.plan_bot_zip.name
   timeout = 60
-  entry_point = "run_plan_bot"
+  entry_point = "run_plan_bot_event_handler"
   max_instances = 1
   labels = {
     // here so that the deploy trick above keeps working
@@ -106,9 +104,11 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   }
 
   environment_variables = {
+    REPLIED_TO_PATH = "gs://${google_storage_bucket.plan_bot_other_storage.name}/${google_storage_bucket_object.plan_bot_plans_replied_to.name}"
   }
 }
 
+# redeploy cloud function if code has changed
 resource "null_resource" "update_cloud_function" {
   depends_on = [
     google_cloudfunctions_function.run_plan_bot,
@@ -121,4 +121,20 @@ resource "null_resource" "update_cloud_function" {
   provisioner "local-exec" {
     command = "google_application_credentials=${var.credentials_file} gcloud functions deploy ${var.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
   }
+}
+
+
+# Storage for plans_replied_to #
+
+# create the storage bucket for function storage
+resource "google_storage_bucket" "plan_bot_other_storage" {
+  name = "wpb-storage-dev"
+}
+
+
+# seed plans_replied_to with whatever is stored in repo
+resource "google_storage_bucket_object" "plan_bot_plans_replied_to" {
+  name = "posts_replied_to.txt"
+  bucket = google_storage_bucket.plan_bot_other_storage.name
+  source = "${path.root}/src/posts_replied_to.txt"
 }

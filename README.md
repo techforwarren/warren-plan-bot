@@ -24,18 +24,31 @@ The following instructions should be run from the repo root
 
 #### Run the bot
 
-To run the bot _without_ making actual replies:
+To run the bot _without_ making actual replies, and _without_ checking a posts_replied_to list:
 
-`python src/main.py`
+`python src/main.py --skip-tracking`
 
-To run the bot and make actual replies:
+To run the bot _without_ making actual replies, using the posts_replied_to.txt in the repo:
 
-`python src/main.py --send-replies` <--- be careful if you do this, you could end up spamming reddit
+`python src/main.py --replied-to-path posts_replied_to.txt`
 
-By default, the bot will track which files it replied to
+To run the bot and make actual replies, using the shared tracking file on google cloud storage,
 
-`python src/main.py --skip-track`
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
 
+You'll need to get this account credentials from @joegoldbeck, and put it at the appropriate location
+
+To change which file is used to track posts replied to
+
+`python src/main.py --replied-to-path [my_new_file.txt]`
+
+or set the env var `REPLIED_TO_PATH=[my_new_file.txt]`
+
+To update the number of posts considered for reply, change `--limit`
+
+`python src/main.py --limit=20`
+
+or update the env var `LIMIT`
 
 ## Managing the Deployment
 
