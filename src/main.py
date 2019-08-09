@@ -93,7 +93,7 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", se
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
 
-    posts_replied_to_contents = read_file(replied_to_path) or "" if skip_tracking else ""
+    posts_replied_to_contents = read_file(replied_to_path) or "" if not skip_tracking else ""
 
     # Load the list of posts replied to or start with empty list if none
     posts_replied_to = list(filter(None, posts_replied_to_contents.split("\n")))
