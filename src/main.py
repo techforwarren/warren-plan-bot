@@ -14,9 +14,6 @@ reddit = praw.Reddit('dev')
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
 
-# number of posts to return
-LIMIT = 10
-
 
 def build_response_text(plan_record, submission_id="None", comment_id="None"):
     """
@@ -63,10 +60,10 @@ def write_file(uri, contents):
 
 @click.command()
 @click.option('--replied-to-path', envvar='REPLIED_TO_PATH', type=click.Path(),
-              default="posts_replied_to.txt")
-@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False)
-@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=True)
-@click.option('--limit', envvar='LIMIT', default=10)
+              default="posts_replied_to.txt", help='path to file where replies are tracked')
+@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, help='whether to send replies')
+@click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=True, help='whether to track replies')
+@click.option('--limit', envvar='LIMIT', default=10, help='number of posts to return')
 def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True, limit=10):
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
@@ -80,7 +77,7 @@ def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, tra
     subreddit = reddit.subreddit("WPBSandbox")
 
     # Get the number of new posts up to the limit
-    for submission in subreddit.new(limit=LIMIT):
+    for submission in subreddit.new(limit=limit):
 
         # If we haven't replied to this post before
         if submission.id not in posts_replied_to:
