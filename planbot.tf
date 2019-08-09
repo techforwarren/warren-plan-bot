@@ -61,8 +61,24 @@ resource "google_cloud_scheduler_job" "run_plan_bot" {
 # zip up our source code
 data "archive_file" "plan_bot_zip" {
   type = "zip"
-  source_dir = "${path.root}/src/"
+//  source_dir = "${path.root}/src/"
   output_path = "${path.root}/dist/plan_bot.zip"
+  source {
+    content  = "${path.root}/src/main.py"
+    filename = "main.py"
+  }
+  source {
+    content  = "${path.root}/praw.ini"
+    filename = "praw.ini"
+  }
+  source {
+    content  = "${path.root}/requirements.txt"
+    filename = "requirements.txt"
+  }
+  source {
+    content  = "${path.root}/plans.json"
+    filename = "plans.json"
+  }
 }
 
 # create the storage bucket for function storage
@@ -89,9 +105,10 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   available_memory_mb = 256
 
   event_trigger {
-    event_type = "providers/cloud.pubsub/eventtypes/topic.publish"
+    event_type = "google.pubsub.topic.publish"
     resource = google_pubsub_topic.run_plan_bot.name
   }
+
   source_archive_bucket = google_storage_bucket.plan_bot_function_storage.name
   source_archive_object = google_storage_bucket_object.plan_bot_zip.name
   timeout = 60
@@ -133,7 +150,7 @@ resource "google_storage_bucket" "plan_bot_other_storage" {
 
 # seed plans_replied_to with whatever is stored in repo
 resource "google_storage_bucket_object" "plan_bot_plans_replied_to" {
-  name = "plans_replied_to.txt"
+  name = "posts_replied_to.txt"
   bucket = google_storage_bucket.plan_bot_other_storage.name
-  source = "${path.root}/plans_replied_to.txt"
+  source = "${path.root}/posts_replied_to.txt"
 }
