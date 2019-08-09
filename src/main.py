@@ -5,12 +5,12 @@ import os
 import json
 import click
 import urllib.parse
+import sys
 import tempfile
 from google.cloud import storage
 
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-
 
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
@@ -83,8 +83,8 @@ def write_file(uri, contents):
 @click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False, help='whether to send replies')
 @click.option('--skip-tracking', default=False, help='whether to check whether replies have already been posted')
 @click.option('--limit', envvar='LIMIT', default=10, help='number of posts to return')
-def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", send_replies=False, skip_tracking=False, limit=10):
-
+def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", send_replies=False, skip_tracking=False,
+                 limit=10):
     # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     # change dev to prod to shift to production bot
@@ -187,7 +187,12 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", se
 
 
 def run_plan_bot_event_handler(event, context):
-    run_plan_bot(prog_name='run_that_plan_bot')  # need to set prog_name to avoid weird click behavior in cloud fn
+    # Click exits with return code 0 when everything worked. Skip that behavior
+    try:
+        run_plan_bot(prog_name='run_that_plan_bot')  # need to set prog_name to avoid weird click behavior in cloud fn
+    except SystemExit as e:
+        if e.code != 0:
+            raise
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ variable "credentials_file" {
 
 variable "function_name" {
   type = string
-  default = "run-plan-bot-3"
+  default = "run-plan-bot"
 }
 
 variable "function_storage_bucket" {
