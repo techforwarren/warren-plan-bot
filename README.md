@@ -32,10 +32,25 @@ To run the bot and make actual replies:
 
 `python src/main.py --send-replies` <--- be careful if you do this, you could end up spamming reddit
 
-By default, the bot will track which files it replied to
+or set the env var `SEND_REPLIES=true`
+
+By default, the bot will track which files it replied to. To skip tracking,
 
 `python src/main.py --skip-track`
 
+or set the env var `TRACK_REPLIES=false`
+
+To change which file is used to track posts replied to
+
+`python src/main.py --replied-to-path [my_new_file.txt]`
+
+or set the env var `REPLIED_TO_PATH=[my_new_file.txt]`
+
+To update the number of posts considered for reply, change `--limit`
+
+`python src/main.py --limit=20`
+
+or update the env var `LIMIT`
 
 ## Managing the Deployment
 

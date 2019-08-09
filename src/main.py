@@ -12,7 +12,10 @@ from fuzzywuzzy import process
 reddit = praw.Reddit('dev')
 
 # JSON filename of policy plans
-plans_file = "plans.json"
+PLANS_FILE = "plans.json"
+
+# number of posts to return
+LIMIT = 10
 
 
 def build_response_text(plan_record, submission_id="None", comment_id="None"):
@@ -37,38 +40,49 @@ def build_response_text(plan_record, submission_id="None", comment_id="None"):
     return reply_string
 
 
+def read_file(uri):
+    if uri.startswith("gs://"):
+        # TODO
+        return
+
+    if not os.path.isfile(uri):
+        return
+
+    with open(uri, "r") as f:
+        return f.read()
+
+
+def write_file(uri, contents):
+    if uri.startswith("gs://"):
+        # TODO
+        return
+
+    with open(uri, "w") as f:
+        return f.write(contents)
+
+
 @click.command()
-@click.argument('posts_replied_to_path', envvar='POSTS_REPLIED_TO_PATH', type=click.Path(),
-                default="posts_replied_to.txt")
+@click.option('--replied-to-path', envvar='REPLIED_TO_PATH', type=click.Path(),
+              default="posts_replied_to.txt")
 @click.option('--send-replies/--skip-send', envvar='SEND_REPLIES', default=False)
 @click.option('--track-replies/--skip-track', envvar='TRACK_REPLIES', default=True)
-def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True):
-    with open(plans_file) as json_file:
+@click.option('--limit', envvar='LIMIT', default=10)
+def run_plan_bot(replied_to_path="posts_replied_to.txt", send_replies=False, track_replies=True, limit=10):
+    with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
 
-    # Check if replied posts exists, if not create an empty list
-    if not os.path.isfile(posts_replied_to_path):
-        posts_replied_to = []
+    posts_replied_to_contents = read_file(replied_to_path) or ""
 
-    # If replied posts file exists, load the list of posts replied to from it
-    else:
-        # Read the file into a list and remove any empty values
-        with open(posts_replied_to_path, "r") as f:
-            posts_replied_to = f.read()
-            posts_replied_to = posts_replied_to.split("\n")
-            posts_replied_to = list(filter(None, posts_replied_to))
+    # Load the list of posts replied to or start with empty list if none
+    posts_replied_to = list(filter(None, posts_replied_to_contents.split("\n")))
 
     # Get the subreddit
     subreddit = reddit.subreddit("WPBSandbox")
 
-    # Set const for number of posts to return
-    post_limit = 10
-
     # Get the number of new posts up to the limit
-    for submission in subreddit.new(limit=post_limit):
+    for submission in subreddit.new(limit=LIMIT):
 
         # If we haven't replied to this post before
-
         if submission.id not in posts_replied_to:
 
             # Do a case insensitive search
@@ -77,7 +91,7 @@ def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=Fals
                 # Initialize match_confidence and match_id before fuzzy searching
                 match_confidence = 0
                 match_id = 0
-                match_response = ""
+
                 # Search topic keywords and response body for best match
                 for item in plans_dict["plans"]:
                     item_match_confidence = fuzz.WRatio(submission.selftext, item["topic"])
@@ -97,9 +111,8 @@ def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=Fals
                 if send_replies:
                     submission.reply(reply_string)
                     print("Bot replying to submission: ", submission.id)
-                    if track_replies:
-                        # Append post id to prevent future replies to the same submission
-                        posts_replied_to.append(submission.id)
+                    # Append post id to prevent future replies to the same submission
+                    posts_replied_to.append(submission.id)
                 else:
                     print("Bot would have replied to submission: ", submission.id)
 
@@ -117,7 +130,7 @@ def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=Fals
                         # Initialize match_confidence, match_id, match_response before fuzzy searching
                         match_confidence = 0
                         match_id = 0
-                        match_response = ""
+
                         # Search topic keywords and response body for best match
                         for item in plans_dict["plans"]:
                             item_match_confidence = fuzz.WRatio(comment.body, item["topic"])
@@ -137,17 +150,18 @@ def run_plan_bot(posts_replied_to_path="posts_replied_to.txt", send_replies=Fals
                         if send_replies:
                             comment.reply(reply_string)
                             print("Bot replying to comment: ", comment.id)
-                            if track_replies:
-                                posts_replied_to.append(comment.id)
+                            posts_replied_to.append(comment.id)
                         else:
                             print("Bot would have replied to comment: ", comment.id)
 
-    # Write the updated list back to the file
-    with open(posts_replied_to_path, "w") as f:
-        for post_id in posts_replied_to:
-            # record post IDs so it doesn't reply multiple times
-            f.write(post_id + "\n")
-            print("updated replies list includes: ", post_id + "\n")
+    # Write the updated tracking list back to the file
+    post_replied_to_output = "\n".join(posts_replied_to)
+
+    if track_replies:
+        write_file(replied_to_path, post_replied_to_output)
+        print("updated posts_replied_to list:", "\n", post_replied_to_output)
+    else:
+        print("would have updated posts_replied_to list to:", "\n", post_replied_to_output)
 
 
 if __name__ == "__main__":
