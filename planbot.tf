@@ -96,7 +96,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   source_archive_bucket = google_storage_bucket.plan_bot_function_storage.name
   source_archive_object = google_storage_bucket_object.plan_bot_zip.name
   timeout = 60
-  entry_point = "run_plan_bot"
+  entry_point = "run_plan_bot_event_handler"
   max_instances = 1
   labels = {
     // here so that the deploy trick above keeps working

@@ -186,5 +186,9 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt", se
         print("would have updated posts_replied_to list to:", "\n", post_replied_to_output)
 
 
+def run_plan_bot_event_handler(event, context):
+    run_plan_bot(prog_name='run_that_plan_bot')  # need to set prog_name to avoid weird click behavior in cloud fn
+
+
 if __name__ == "__main__":
     run_plan_bot()
