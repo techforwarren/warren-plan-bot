@@ -165,43 +165,43 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt",
                 else:
                     print("Bot would have replied to submission: ", submission.id)
 
-            # After checking submission.selftext, check comments
-            # Get comments for submission and search for trigger in comment body
-            submission.comments.replace_more(limit=None)
-            for comment in submission.comments.list():
-                # If we haven't replied to the comment before
-                if comment.id not in posts_replied_to:
+        # After checking submission.selftext, check comments
+        # Get comments for submission and search for trigger in comment body
+        submission.comments.replace_more(limit=None)
+        for comment in submission.comments.list():
+            # If we haven't replied to the comment before
+            if comment.id not in posts_replied_to:
 
-                    # Search for trigger phrases in the comment
-                    if re.search("!warrenplanbot|/u/WarrenPlanBot", comment.body, re.IGNORECASE):
+                # Search for trigger phrases in the comment
+                if re.search("!warrenplanbot|/u/WarrenPlanBot", comment.body, re.IGNORECASE):
 
-                        # Search for matching topic keywords in comment body
-                        # Initialize match_confidence, match_id, match_response before fuzzy searching
-                        match_confidence = 0
-                        match_id = 0
+                    # Search for matching topic keywords in comment body
+                    # Initialize match_confidence, match_id, match_response before fuzzy searching
+                    match_confidence = 0
+                    match_id = 0
 
-                        # Search topic keywords and response body for best match
-                        for item in plans_dict["plans"]:
-                            item_match_confidence = fuzz.WRatio(comment.body, item["topic"])
+                    # Search topic keywords and response body for best match
+                    for item in plans_dict["plans"]:
+                        item_match_confidence = fuzz.WRatio(comment.body, item["topic"])
 
-                            if item_match_confidence > match_confidence:
-                                # Set new match ID
-                                match_confidence = item_match_confidence
-                                match_id = item["id"]
+                        if item_match_confidence > match_confidence:
+                            # Set new match ID
+                            match_confidence = item_match_confidence
+                            match_id = item["id"]
 
-                        # Select entry from plans_dict using best match ID
-                        plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
+                    # Select entry from plans_dict using best match ID
+                    plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
 
-                        # Create response text with plan summary
-                        reply_string = build_response_text(plan_record, submission.id, comment.id)
+                    # Create response text with plan summary
+                    reply_string = build_response_text(plan_record, submission.id, comment.id)
 
-                        # Reply to the post with plan info, uncomment next line to activate post replies
-                        if send_replies:
-                            comment.reply(reply_string)
-                            print("Bot replying to comment: ", comment.id)
-                            posts_replied_to.append(comment.id)
-                        else:
-                            print("Bot would have replied to comment: ", comment.id)
+                    # Reply to the post with plan info, uncomment next line to activate post replies
+                    if send_replies:
+                        comment.reply(reply_string)
+                        print("Bot replying to comment: ", comment.id)
+                        posts_replied_to.append(comment.id)
+                    else:
+                        print("Bot would have replied to comment: ", comment.id)
 
     # Write the updated tracking list back to the file
     post_replied_to_output = "\n".join(posts_replied_to)
