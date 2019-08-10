@@ -4,9 +4,11 @@
 
 ### praw.ini file
 
-You'll need a `praw.ini` file in the root of this repo. Copy over the `praw.ini.example` file and fill in the details. Use your own username and password, and get the client_id and client_secret from the Reddit application
+You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. Use your own username and password, and get the client_id and client_secret from the Reddit application
 
 ### the virtualenv way
+
+There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
 
 The following instructions should be run from the repo root
 
@@ -22,33 +24,52 @@ The following instructions should be run from the repo root
 
 `pip install -r src/requirements.txt`
 
-#### Run the bot
+### Run the bot
 
-To run the bot _without_ making actual replies, and _without_ checking a posts_replied_to list:
+#### Safely and Statelessly
+
+- Without making actual replies
+- Without checking a posts_replied_to list
 
 `python src/main.py --skip-tracking`
 
-To run the bot _without_ making actual replies, using the posts_replied_to.txt in the repo:
+#### Safely, using state from the repo
+
+- Without making actual replies
+- Using the posts_replied_to.txt in the repo
 
 `python src/main.py --replied-to-path posts_replied_to.txt`
 
-To run the bot and make actual replies, using the shared tracking file on google cloud storage,
+#### Live, using shared tracking state
+
+- Make actual replies
+- Using the shared tracking file on google cloud storage
 
 `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
 
 You'll need to get this account credentials from @joegoldbeck, and put it at the appropriate location
 
-To change which file is used to track posts replied to
+## Bot options
 
-`python src/main.py --replied-to-path [my_new_file.txt]`
+`python src/main.py --help` will bring up a list of command line options and their environment variable equivalents
 
-or set the env var `REPLIED_TO_PATH=[my_new_file.txt]`
+```
+Usage: main.py [OPTIONS]
 
-To update the number of posts considered for reply, change `--limit`
+  Run a single pass of Warren Plan Bot
 
-`python src/main.py --limit=20`
+  - Check list of posts replied to (If tracking is on)
+  - Search for any new comments and submissions not on that list
+  - Reply to any unreplied matching comments (If replies are on)
+  - Update replied_to list (If replies and tracking is on)
 
-or update the env var `LIMIT`
+Options:
+  --replied-to-path PATH        path to file where replies are tracked  [env var: REPLIED_TO_PATH; default: gs://wpb-storage-dev/posts_replied_to.txt]
+  --send-replies / --skip-send  whether to send replies  [env var: SEND_REPLIES; default: False]
+  --skip-tracking               whether to check whether replies have already been posted  [default: False]
+  --limit INTEGER               number of posts to return  [env var: LIMIT; default: 10]
+  --help                        Show this message and exit.
+```
 
 ## Managing the Deployment
 
@@ -72,7 +93,7 @@ Add the key for the Terraform service account to
 
 `~/.gcloud/wpb-dev-terraform-key.json`
 
-You'll need to get the key from @joegoldbeck. You should only need it if you're actively managing the dev deployment
+You'll need to get this key from @joegoldbeck
 
 #### All necessary Terraform modules
 
@@ -83,3 +104,6 @@ You'll need to get the key from @joegoldbeck. You should only need it if you're 
 To update the deployment, simply run
 
 `terraform apply`
+
+This will deploy any new infrastructure, and if anything in the `/src` folder is updated, 
+will upload the that folder as a .zip archive and deploy a new version of the cloud function pointing to that archive
