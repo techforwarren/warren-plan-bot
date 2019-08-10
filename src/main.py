@@ -23,7 +23,7 @@ def build_response_text(plan_record, submission_id="None", comment_id="None"):
     Create response text with plan summary
     """
 
-    reply_string = "She has a plan for " + plan_record["topic"] + "!\n\n" + plan_record["summary"] + "\n\n"
+    reply_string = "Senator Warren has a plan for that!\n\n" + plan_record["summary"] + "\n\n"
     # Add link to learn more about the plan
     reply_string = reply_string + "Learn more about her plan for [" + plan_record["display_title"] + "](" + plan_record[
         "url"] + ")\n\n"
@@ -33,7 +33,7 @@ def build_response_text(plan_record, submission_id="None", comment_id="None"):
     # Add error reporting info
     reply_string = reply_string + f"Wrong topic or another problem?  [Send a report to my creator](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=reference&nbsp;{'comment' if comment_id else 'post'}&nbsp;id[" + submission_id + " | " + comment_id + "]).  \n"
     # Add disclaimer
-    reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  \n"
+    reply_string = reply_string + "This bot was independently created by volunteers for Sen. Warren's 2020 campaign. "
     # Add volunteer link
     reply_string = reply_string + "If you'd like to join us, visit the campaign's [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).  \n"
 
