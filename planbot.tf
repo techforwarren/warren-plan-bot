@@ -105,6 +105,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
 
   environment_variables = {
     REPLIED_TO_PATH = "gs://${google_storage_bucket.plan_bot_other_storage.name}/${google_storage_bucket_object.plan_bot_plans_replied_to.name}"
+    SEND_REPLIES = true
   }
 }
 
