@@ -138,4 +138,7 @@ resource "google_storage_bucket_object" "plan_bot_plans_replied_to" {
   name = "posts_replied_to.txt"
   bucket = google_storage_bucket.plan_bot_other_storage.name
   source = "${path.root}/src/posts_replied_to.txt"
+  lifecycle {
+    prevent_destroy = true
+  }
 }
