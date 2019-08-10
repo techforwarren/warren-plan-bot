@@ -107,3 +107,9 @@ To update the deployment, simply run
 
 This will deploy any new infrastructure, and if anything in the `/src` folder is updated, 
 will upload the that folder as a .zip archive and deploy a new version of the cloud function pointing to that archive
+
+### Turn off the bot
+
+To prevent the bot from running every minute, the simplest thing to do is to remove the Cloud Scheduler job
+
+`terraform destroy -target google_cloud_scheduler_job.run_plan_bot`
