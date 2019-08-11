@@ -202,6 +202,9 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt",
     # change dev to prod to shift to production bot
     reddit = praw.Reddit(praw_site)
 
+    # Ensure that we don't accidentally write to Reddit
+    reddit.read_only = not send_replies
+
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
 
