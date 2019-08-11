@@ -7,16 +7,24 @@ class Wrapper:
 
 
 class Submission(Wrapper):
+    """
+    Wraps a PRAW Submission instance with some standard methods and properties
+    """
+
     def __init__(self, submission):
         super().__init__(submission)
         self.type = "submission"
 
     @property
     def text(self):
-        return self.self_text
+        return self.selftext
 
 
 class Comment(Wrapper):
+    """
+    Wraps a PRAW Comment instance with some standard methods and properties
+    """
+
     def __init__(self, comment):
         super().__init__(comment)
         self.type = "comment"

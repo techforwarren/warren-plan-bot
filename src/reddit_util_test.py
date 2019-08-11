@@ -5,34 +5,36 @@ import pytest
 import reddit_util
 
 
-def _mock_submission():
-    mock_submission = mock.MagicMock()
-    mock_submission.self_text = "text of submission"
-    mock_submission.reply.return_value = "a comment"
-    del mock_submission.non_existent  # avoid magic mock's magic
-    return mock_submission
+class MockSubmission:
+    def __init__(self):
+        self.selftext = "text of submission"
+        self.reply = mock.Mock()
+        self.reply.return_value = "a comment"
+
+
+class MockComment:
+    def __init__(self):
+        self.body = "text of comment"
+        self.submission = MockSubmission()
+        self.reply = mock.Mock()
+        self.reply.return_value = "a comment"
 
 
 @pytest.fixture
 def mock_submission():
-    return _mock_submission()
+    return MockSubmission()
 
 
 @pytest.fixture
 def mock_comment():
-    mock_comment = mock.MagicMock()
-    mock_comment.body = "text of comment"
-    mock_comment.submission = _mock_submission()
-    mock_comment.reply.return_value = "a comment"
-    del mock_comment.non_existent  # avoid magic mock's magic
-    return mock_comment
+    return MockComment()
 
 
 class TestSubmission:
     def test_text(self, mock_submission):
         submission = reddit_util.Submission(mock_submission)
         assert submission.text == "text of submission", "text attribute added"
-        assert submission.self_text == "text of submission", "self_text preserved"
+        assert submission.selftext == "text of submission", "selftext preserved"
 
     def test_type(self, mock_submission):
         submission = reddit_util.Submission(mock_submission)
@@ -70,7 +72,7 @@ class TestComment:
         comment = reddit_util.Comment(mock_comment)
         assert type(comment.submission) == reddit_util.Submission
         assert comment.submission.text == "text of submission"
-        assert comment.submission.self_text == "text of submission"
+        assert comment.submission.selftext == "text of submission"
 
     def test_nonexistent_attribute(self, mock_comment):
         comment = reddit_util.Comment(mock_comment)
