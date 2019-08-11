@@ -4,7 +4,7 @@
 
 ### praw.ini file
 
-You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. Use your own username and password, and get the client_id and client_secret from the Reddit application
+You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. You'll need to get the client_id and client_secret from the Reddit application
 
 ### the virtualenv way
 
@@ -24,6 +24,7 @@ The following instructions should be run from the repo root
 
 `pip install -r src/requirements.txt`
 
+
 ### Run the bot
 
 #### Safely and Statelessly
@@ -39,6 +40,13 @@ The following instructions should be run from the repo root
 - Using the posts_replied_to.txt in the repo
 
 `python src/main.py --replied-to-path posts_replied_to.txt`
+
+#### Simulate state
+
+- Without making actual replies
+- While updating the posts_replied_to list in the repo
+
+`python src/main.py --replied-to-path posts_replied_to.txt --simulate-replies`
 
 #### Live, using shared tracking state
 
@@ -67,6 +75,7 @@ Options:
   --replied-to-path PATH        path to file where replies are tracked  [env var: REPLIED_TO_PATH; default: gs://wpb-storage-dev/posts_replied_to.txt]
   --send-replies / --skip-send  whether to send replies  [env var: SEND_REPLIES; default: False]
   --skip-tracking               whether to check whether replies have already been posted  [default: False]
+  --simulate-replies            pretend to make replies, including updating state  [default: False]
   --limit INTEGER               number of posts to return  [env var: LIMIT; default: 10]
   --help                        Show this message and exit.
 ```
