@@ -22,8 +22,14 @@ The following instructions should be run from the repo root
 
 #### Install dependencies
 
-`pip install -r src/requirements.txt`
+`pip install -r requirements-dev.txt`
 
+
+### Format code
+
+Sort imports
+
+`isort src/*.py`
 
 ### Run the bot
 

@@ -1,5 +1,5 @@
-praw
-fuzzywuzzy
-click
-google-cloud-storage
+praw==6.3.1
+fuzzywuzzy==0.17.0
+click==7.0
+google-cloud-storage==1.18.0
 google-cloud-firestore
