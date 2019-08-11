@@ -2,15 +2,13 @@
 
 import json
 import os
-import pdb
 import re
-import urllib.parse
 
 import click
 import praw
 import praw.models
-from fuzzywuzzy import fuzz, process
-from google.cloud import storage, firestore
+from fuzzywuzzy import fuzz
+from google.cloud import firestore
 
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
