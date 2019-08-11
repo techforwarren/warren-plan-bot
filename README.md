@@ -47,38 +47,25 @@ Sort imports
 
 `python src/main.py --skip-tracking`
 
-#### Safely, using state from the repo
+#### Safely, using state from the local Firestore emulator 
 
-- Without making actual replies
-- Using the posts_replied_to.txt in the repo
-
-`python src/main.py --replied-to-path posts_replied_to.txt`
-
-#### Safely, using state from the local firestore emulator 
-
-##### Start local firestore
+##### Start local Firestore
 
 (You'll need java if you don't have it: `brew cask install java`)
 
 `gcloud beta emulators firestore start --project wpb-dev --host-port localhost:8480`
 
-##### Start the bot
-and in another terminal
-
---FIXME-- This ideally shouldn't need credentials...
-`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --skip-tracking --simulate-replies`
-
-#### Simulate state
+##### Run the bot
 
 - Without making actual replies
-- While updating the posts_replied_to list in the repo
+- While updating the local emulated posts database
 
-`python src/main.py --replied-to-path posts_replied_to.txt --simulate-replies`
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --simulate-replies`
 
 #### Live, using shared tracking state
 
 - Make actual replies
-- Using the shared tracking file on google cloud storage
+- Using the shared posts database in Firestore
 
 `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
 
