@@ -38,10 +38,11 @@ def build_response_text(plan_record, post):
         # Error reporting info
         f"Wrong topic or another problem?  [Send a report to my creator]"
         f"(https://www.reddit.com/message/compose?to=WarrenPlanBotDev&"
-        f"subject=reference&nbsp;Submission[{submission.id}]&nbsp{'Comment[' + comment.id + ']' if comment else ''})."
+        f"subject=reference&nbsp;Submission[{submission.id}]&nbsp{'Comment[' + comment.id + ']' if comment else ''}).  "
         f"\n"
         # Disclaimer
-        f"This bot was independently created by volunteers for Sen. Warren's 2020 campaign. "
+        f"This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  "
+        f"\n"
         # Add volunteer link
         f"If you'd like to join us, visit the campaign's "
         f"[Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer)."
