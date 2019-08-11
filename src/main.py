@@ -173,7 +173,6 @@ click_kwargs = {
 
 
 @click.command()
-# TODO add a way to specify the project associated with the firestore, while maintaining dev functionality
 @click.option('--send-replies/--skip-send', envvar='SEND_REPLIES',
               default=False, is_flag=True,
               help='whether to send replies', **click_kwargs)
@@ -189,11 +188,15 @@ click_kwargs = {
 @click.option('--praw-site', envvar='PRAW_SITE',
               type=click.Choice(['dev', 'prod']), default='dev',
               help='section of praw file to use for reddit module configuration', **click_kwargs)
+@click.option('--project', envvar='PROJECT',
+              default="wpb-dev", type=str,
+              help='gcp project where firestore db lives', **click_kwargs)
 def run_plan_bot(send_replies=False,
                  skip_tracking=False,
                  simulate_replies=False,
                  limit=10,
-                 praw_site="dev"
+                 praw_site="dev",
+                 project="wpb-dev"
                  ):
     """
     Run a single pass of Warren Plan Bot
@@ -219,7 +222,7 @@ def run_plan_bot(send_replies=False,
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
 
-    db = firestore.Client()
+    db = firestore.Client(project=project)
 
     posts_db = db.collection(u'posts')
 
