@@ -38,6 +38,10 @@ Sort imports
 
 `isort src/*.py`
 
+Format code
+
+`black src`
+
 ### Run the bot
 
 #### Safely and Statelessly

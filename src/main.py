@@ -94,7 +94,7 @@ def _post_type(post):
         return "submission"
     if post_class is praw.models.Comment:
         return "comment"
-    raise NotImplementedError(f'Unsupported post type {post_class}')
+    raise NotImplementedError(f"Unsupported post type {post_class}")
 
 
 def _get_text(post):
@@ -103,17 +103,17 @@ def _get_text(post):
         return post.selftext
     if post_class is praw.models.Comment:
         return post.body
-    raise NotImplementedError(f'Unsupported post type {post.__class__.__name__}')
+    raise NotImplementedError(f"Unsupported post type {post.__class__.__name__}")
 
 
 def reply(post, reply_string: str, send=False, simulate=False):
-    '''
+    """
     :param post: post to reply on
     :param reply_string: string to reply with
     :param send: whether to send an actual reply to reddit
     :param simulate: whether to simulate sending an actual reply to reddit
     :return: did_reply – whether an actual or simulated reply was made
-    '''
+    """
     post_type = _post_type(post)
 
     if simulate:
@@ -127,7 +127,15 @@ def reply(post, reply_string: str, send=False, simulate=False):
     print(f"Bot would have replied to {post_type}: ", post.id)
 
 
-def process_post(post, plans_dict, posts_db, post_ids_replied_to=None, send=False, simulate=False, skip_tracking=False):
+def process_post(
+    post,
+    plans_dict,
+    posts_db,
+    post_ids_replied_to=None,
+    send=False,
+    simulate=False,
+    skip_tracking=False,
+):
     if post_ids_replied_to is None:
         post_ids_replied_to = []
 
@@ -153,53 +161,83 @@ def process_post(post, plans_dict, posts_db, post_ids_replied_to=None, send=Fals
                     print("new topic match: ", plan["topic"])
 
             # Select entry from plans_dict using best match ID
-            plan_record = next(plan for plan in plans_dict["plans"] if plan["id"] == match_id)
+            plan_record = next(
+                plan for plan in plans_dict["plans"] if plan["id"] == match_id
+            )
 
             reply_string = build_response_text(plan_record, post)
 
             did_reply = reply(post, reply_string, send=send, simulate=simulate)
 
             if did_reply and not skip_tracking:
-                posts_db.document(post.id).set({
-                    # TODO add more info about the match here
-                    "replied": True,
-                    "type": post_type,
-                    "reply_timestamp": firestore.SERVER_TIMESTAMP
-                })
+                posts_db.document(post.id).set(
+                    {
+                        # TODO add more info about the match here
+                        "replied": True,
+                        "type": post_type,
+                        "reply_timestamp": firestore.SERVER_TIMESTAMP,
+                    }
+                )
 
 
-click_kwargs = {
-    "show_envvar": True,
-    "show_default": True
-}
+click_kwargs = {"show_envvar": True, "show_default": True}
 
 
 @click.command()
-@click.option('--send-replies/--skip-send', envvar='SEND_REPLIES',
-              default=False, is_flag=True,
-              help='whether to send replies', **click_kwargs)
-@click.option('--skip-tracking',
-              default=False, is_flag=True,
-              help='whether to check whether replies have already been posted', **click_kwargs)
-@click.option('--simulate-replies',
-              default=False, is_flag=True,
-              help='pretend to make replies, including updating state', **click_kwargs)
-@click.option('--limit', envvar='LIMIT',
-              type=int, default=10,
-              help='number of posts to return', **click_kwargs)
-@click.option('--praw-site', envvar='PRAW_SITE',
-              type=click.Choice(['dev', 'prod']), default='dev',
-              help='section of praw file to use for reddit module configuration', **click_kwargs)
-@click.option('--project', envvar='GCP_PROJECT',
-              default="wpb-dev", type=str,
-              help='gcp project where firestore db lives', **click_kwargs)
-def run_plan_bot(send_replies=False,
-                 skip_tracking=False,
-                 simulate_replies=False,
-                 limit=10,
-                 praw_site="dev",
-                 project="wpb-dev"
-                 ):
+@click.option(
+    "--send-replies/--skip-send",
+    envvar="SEND_REPLIES",
+    default=False,
+    is_flag=True,
+    help="whether to send replies",
+    **click_kwargs,
+)
+@click.option(
+    "--skip-tracking",
+    default=False,
+    is_flag=True,
+    help="whether to check whether replies have already been posted",
+    **click_kwargs,
+)
+@click.option(
+    "--simulate-replies",
+    default=False,
+    is_flag=True,
+    help="pretend to make replies, including updating state",
+    **click_kwargs,
+)
+@click.option(
+    "--limit",
+    envvar="LIMIT",
+    type=int,
+    default=10,
+    help="number of posts to return",
+    **click_kwargs,
+)
+@click.option(
+    "--praw-site",
+    envvar="PRAW_SITE",
+    type=click.Choice(["dev", "prod"]),
+    default="dev",
+    help="section of praw file to use for reddit module configuration",
+    **click_kwargs,
+)
+@click.option(
+    "--project",
+    envvar="GCP_PROJECT",
+    default="wpb-dev",
+    type=str,
+    help="gcp project where firestore db lives",
+    **click_kwargs,
+)
+def run_plan_bot(
+    send_replies=False,
+    skip_tracking=False,
+    simulate_replies=False,
+    limit=10,
+    praw_site="dev",
+    project="wpb-dev",
+):
     """
     Run a single pass of Warren Plan Bot
 
@@ -211,7 +249,9 @@ def run_plan_bot(send_replies=False,
     """
 
     if simulate_replies and send_replies:
-        raise ValueError("--simulate-replies and --send-replies options are incompatible. at most one may be set")
+        raise ValueError(
+            "--simulate-replies and --send-replies options are incompatible. at most one may be set"
+        )
 
     # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -226,10 +266,10 @@ def run_plan_bot(send_replies=False,
 
     db = firestore.Client(project=project)
 
-    posts_db = db.collection(u'posts')
+    posts_db = db.collection("posts")
 
     # Load the list of posts replied to or start with empty list if none
-    posts_replied_to = posts_db.where(u'replied', u'==', True).stream()
+    posts_replied_to = posts_db.where("replied", "==", True).stream()
 
     post_ids_replied_to = [post.id for post in posts_replied_to]
 
@@ -240,20 +280,36 @@ def run_plan_bot(send_replies=False,
 
     # Get the number of new posts up to the limit
     for submission in subreddit.new(limit=limit):
-        process_post(submission, plans_dict, posts_db, post_ids_replied_to, send=send_replies,
-                     simulate=simulate_replies, skip_tracking=skip_tracking)
+        process_post(
+            submission,
+            plans_dict,
+            posts_db,
+            post_ids_replied_to,
+            send=send_replies,
+            simulate=simulate_replies,
+            skip_tracking=skip_tracking,
+        )
 
         # Get comments for submission and search for trigger in comment body
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
-            process_post(comment, plans_dict, posts_db, post_ids_replied_to, send=send_replies,
-                         simulate=simulate_replies, skip_tracking=skip_tracking)
+            process_post(
+                comment,
+                plans_dict,
+                posts_db,
+                post_ids_replied_to,
+                send=send_replies,
+                simulate=simulate_replies,
+                skip_tracking=skip_tracking,
+            )
 
 
 def run_plan_bot_event_handler(event, context):
     # Click exits with return code 0 when everything worked. Skip that behavior
     try:
-        run_plan_bot(prog_name='run_that_plan_bot')  # need to set prog_name to avoid weird click behavior in cloud fn
+        run_plan_bot(
+            prog_name="run_that_plan_bot"
+        )  # need to set prog_name to avoid weird click behavior in cloud fn
     except SystemExit as e:
         if e.code != 0:
             raise
