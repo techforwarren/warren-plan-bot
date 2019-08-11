@@ -163,7 +163,8 @@ def process_post(post, plans_dict, posts_db, post_ids_replied_to=None, send=Fals
                 posts_db.document(post.id).set({
                     # TODO add more info about the match here
                     "replied": True,
-                    "type": post_type
+                    "type": post_type,
+                    "reply_timestamp": firestore.SERVER_TIMESTAMP
                 })
 
 
