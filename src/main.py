@@ -188,7 +188,7 @@ click_kwargs = {
 @click.option('--praw-site', envvar='PRAW_SITE',
               type=click.Choice(['dev', 'prod']), default='dev',
               help='section of praw file to use for reddit module configuration', **click_kwargs)
-@click.option('--project', envvar='PROJECT',
+@click.option('--project', envvar='GCP_PROJECT',
               default="wpb-dev", type=str,
               help='gcp project where firestore db lives', **click_kwargs)
 def run_plan_bot(send_replies=False,
