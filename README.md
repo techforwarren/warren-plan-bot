@@ -77,6 +77,7 @@ Options:
   --skip-tracking               whether to check whether replies have already been posted  [default: False]
   --simulate-replies            pretend to make replies, including updating state  [default: False]
   --limit INTEGER               number of posts to return  [env var: LIMIT; default: 10]
+  --praw-site [dev|prod]        section of praw file to use for reddit module configuration  [env var: PRAW_SITE; default: dev]
   --help                        Show this message and exit.
 ```
 

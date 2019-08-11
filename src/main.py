@@ -175,11 +175,16 @@ click_kwargs = {
 @click.option('--limit', envvar='LIMIT',
               type=int, default=10,
               help='number of posts to return', **click_kwargs)
+@click.option('--praw-site', envvar='PRAW_SITE',
+              type=click.Choice(['dev', 'prod']), default='dev',
+              help='section of praw file to use for reddit module configuration', **click_kwargs)
 def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt",
                  send_replies=False,
                  skip_tracking=False,
                  simulate_replies=False,
-                 limit=10):
+                 limit=10,
+                 praw_site="dev"
+                 ):
     """
     Run a single pass of Warren Plan Bot
 
@@ -196,7 +201,7 @@ def run_plan_bot(replied_to_path="gs://wpb-storage-dev/posts_replied_to.txt",
     # Change working directory so that praw.ini works, and so all files can be in this same folder. FIXME
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     # change dev to prod to shift to production bot
-    reddit = praw.Reddit('dev')
+    reddit = praw.Reddit(praw_site)
 
     with open(PLANS_FILE) as json_file:
         plans_dict = json.load(json_file)
