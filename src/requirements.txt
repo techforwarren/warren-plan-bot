@@ -2,3 +2,4 @@ praw
 fuzzywuzzy
 click
 google-cloud-storage
+google-cloud-firestore
