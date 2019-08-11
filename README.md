@@ -24,6 +24,13 @@ The following instructions should be run from the repo root
 
 `pip install -r requirements-dev.txt`
 
+### Other requirements
+
+#### Java (if you're running the local Firestore emulator)
+
+`brew cask install java` on Mac
+
+or visit https://www.java.com/download/
 
 ### Format code
 
@@ -46,6 +53,19 @@ Sort imports
 - Using the posts_replied_to.txt in the repo
 
 `python src/main.py --replied-to-path posts_replied_to.txt`
+
+#### Safely, using state from the local firestore emulator 
+
+##### Start local firestore
+
+(You'll need java if you don't have it: `brew cask install java`)
+
+`gcloud beta emulators firestore start --project wpb-dev --host-port localhost:8480`
+
+##### Start the bot
+and in another terminal
+
+`FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --skip-tracking --simulate-replies`
 
 #### Simulate state
 
