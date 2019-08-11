@@ -49,45 +49,6 @@ def build_response_text(plan_record, post):
     )
 
 
-def parse_gs_uri(uri):
-    """
-    :param uri:
-    :return: (bucket, blob)
-    """
-    parsed = urllib.parse.urlparse(uri)
-
-    return parsed.netloc, parsed.path.strip("/")
-
-
-def read_file(uri):
-    if uri.startswith("gs://"):
-        bucket_name, blob_name = parse_gs_uri(uri)
-
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket(bucket_name)
-
-        return bucket.blob(blob_name).download_as_string().decode("utf-8")
-
-    if not os.path.isfile(uri):
-        return
-
-    with open(uri, "r") as f:
-        return f.read()
-
-
-def write_file(uri, contents):
-    if uri.startswith("gs://"):
-        bucket_name, blob_name = parse_gs_uri(uri)
-
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket(bucket_name)
-
-        return bucket.blob(blob_name).upload_from_string(contents)
-
-    with open(uri, "w") as f:
-        return f.write(contents)
-
-
 def _post_type(post):
     post_class = type(post)
     if post_class is praw.models.Submission:
