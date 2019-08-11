@@ -24,6 +24,12 @@ The following instructions should be run from the repo root
 
 `pip install -r requirements-dev.txt`
 
+### Add src folder to your Python path
+
+There are several ways to do this, one way is to extend your env/bin/activate file by running
+
+`echo -e "\nexport PYTHONPATH=\$PYTHONPATH:$(pwd)/src" >> env/bin/activate`
+
 ### Other requirements
 
 #### Java (if you're running the local Firestore emulator)
@@ -34,13 +40,7 @@ or visit https://www.java.com/download/
 
 ### Format code
 
-Sort imports
-
-`isort src/*.py`
-
-Format code
-
-`black src`
+`./scripts/autoformat.sh`
 
 ### Run the bot
 
