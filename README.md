@@ -65,7 +65,8 @@ Sort imports
 ##### Start the bot
 and in another terminal
 
-`FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --skip-tracking --simulate-replies`
+--FIXME-- This ideally shouldn't need credentials...
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --skip-tracking --simulate-replies`
 
 #### Simulate state
 
@@ -92,13 +93,12 @@ Usage: main.py [OPTIONS]
 
   Run a single pass of Warren Plan Bot
 
-  - Check list of posts replied to (If tracking is on)
+  - Check posts store for posts replied to (If tracking is on)
   - Search for any new comments and submissions not on that list
   - Reply to any unreplied matching comments (If replies are on)
-  - Update replied_to list (If replies and tracking is on)
+  - Update posts store (If replies and tracking is on)
 
 Options:
-  --replied-to-path PATH        path to file where replies are tracked  [env var: REPLIED_TO_PATH; default: gs://wpb-storage-dev/posts_replied_to.txt]
   --send-replies / --skip-send  whether to send replies  [env var: SEND_REPLIES; default: False]
   --skip-tracking               whether to check whether replies have already been posted  [default: False]
   --simulate-replies            pretend to make replies, including updating state  [default: False]
