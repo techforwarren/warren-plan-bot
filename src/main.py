@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 
-import praw
-import praw.models
+import json
+import os
 import pdb
 import re
-import os
-import json
-import click
 import urllib.parse
-from google.cloud import storage
 
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+import click
+import praw
+import praw.models
+from fuzzywuzzy import fuzz, process
+from google.cloud import storage
 
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
