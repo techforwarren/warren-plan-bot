@@ -34,13 +34,7 @@ or visit https://www.java.com/download/
 
 ### Format code
 
-Sort imports
-
-`isort src/*.py`
-
-Format code
-
-`black src`
+`./scripts/autoformat.sh`
 
 ### Run the bot
 
