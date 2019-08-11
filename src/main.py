@@ -10,6 +10,8 @@ import praw.models
 from fuzzywuzzy import fuzz
 from google.cloud import firestore
 
+import reddit_util
+
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
 
@@ -18,10 +20,8 @@ def build_response_text(plan_record, post):
     """
     Create response text with plan summary
     """
-    post_type = _post_type(post)
-
-    submission = post if post_type == "submission" else post.submission
-    comment = post if post_type == "comment" else None
+    submission = post if post.type == "submission" else post.submission
+    comment = post if post.type == "comment" else None
 
     return (
         f"Senator Warren has a plan for that!"
@@ -47,24 +47,6 @@ def build_response_text(plan_record, post):
     )
 
 
-def _post_type(post):
-    post_class = type(post)
-    if post_class is praw.models.Submission:
-        return "submission"
-    if post_class is praw.models.Comment:
-        return "comment"
-    raise NotImplementedError(f"Unsupported post type {post_class}")
-
-
-def _get_text(post):
-    post_class = type(post)
-    if post_class is praw.models.Submission:
-        return post.selftext
-    if post_class is praw.models.Comment:
-        return post.body
-    raise NotImplementedError(f"Unsupported post type {post.__class__.__name__}")
-
-
 def reply(post, reply_string: str, send=False, simulate=False):
     """
     :param post: post to reply on
@@ -73,17 +55,16 @@ def reply(post, reply_string: str, send=False, simulate=False):
     :param simulate: whether to simulate sending an actual reply to reddit
     :return: did_reply – whether an actual or simulated reply was made
     """
-    post_type = _post_type(post)
 
     if simulate:
-        print(f"[simulated] Bot replying to {post_type}: ", post.id)
+        print(f"[simulated] Bot replying to {post.type}: ", post.id)
         return True
     if send:
         post.reply(reply_string)
-        print(f"Bot replying to {post_type}: ", post.id)
+        print(f"Bot replying to {post.type}: ", post.id)
         return True
 
-    print(f"Bot would have replied to {post_type}: ", post.id)
+    print(f"Bot would have replied to {post.type}: ", post.id)
 
 
 def process_post(
@@ -100,18 +81,15 @@ def process_post(
 
     if post.id not in post_ids_replied_to:
 
-        post_type = _post_type(post)
-        post_text = _get_text(post)
-
         # Do a case insensitive search
-        if re.search("!warrenplanbot|/u/WarrenPlanBot", post_text, re.IGNORECASE):
+        if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
             # Initialize match_confidence and match_id before fuzzy searching
             match_confidence = 0
             match_id = 0
 
             # Search topic keywords and response body for best match
             for plan in plans_dict["plans"]:
-                plan_match_confidence = fuzz.WRatio(post_text, plan["topic"])
+                plan_match_confidence = fuzz.WRatio(post.text, plan["topic"])
 
                 if plan_match_confidence > match_confidence:
                     # Set new match ID
@@ -133,7 +111,7 @@ def process_post(
                     {
                         # TODO add more info about the match here
                         "replied": True,
-                        "type": post_type,
+                        "type": post.type,
                         "reply_timestamp": firestore.SERVER_TIMESTAMP,
                     }
                 )
@@ -239,6 +217,9 @@ def run_plan_bot(
 
     # Get the number of new posts up to the limit
     for submission in subreddit.new(limit=limit):
+        # turn this into our more standardized class
+        submission = reddit_util.Submission(submission)
+
         process_post(
             submission,
             plans_dict,
@@ -252,6 +233,8 @@ def run_plan_bot(
         # Get comments for submission and search for trigger in comment body
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
+            # turn this into our more standardized class
+            comment = reddit_util.Comment(comment)
             process_post(
                 comment,
                 plans_dict,
