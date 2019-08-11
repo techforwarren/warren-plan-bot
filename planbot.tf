@@ -123,24 +123,3 @@ resource "null_resource" "update_cloud_function" {
     command = "google_application_credentials=${var.credentials_file} gcloud functions deploy ${var.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
   }
 }
-
-
-# Storage for plans_replied_to #
-
-# create the storage bucket for function storage
-resource "google_storage_bucket" "plan_bot_other_storage" {
-  name = "wpb-storage-dev"
-}
-
-
-# seed plans_replied_to with whatever is stored in repo
-resource "google_storage_bucket_object" "plan_bot_plans_replied_to" {
-  name = "posts_replied_to.txt"
-  bucket = google_storage_bucket.plan_bot_other_storage.name
-  source = "${path.root}/src/posts_replied_to.txt"
-  lifecycle {
-    ignore_changes = [
-      "detect_md5hash"
-    ]
-  }
-}
