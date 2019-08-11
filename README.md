@@ -22,8 +22,21 @@ The following instructions should be run from the repo root
 
 #### Install dependencies
 
-`pip install -r src/requirements.txt`
+`pip install -r requirements-dev.txt`
 
+### Other requirements
+
+#### Java (if you're running the local Firestore emulator)
+
+`brew cask install java` on Mac
+
+or visit https://www.java.com/download/
+
+### Format code
+
+Sort imports
+
+`isort src/*.py`
 
 ### Run the bot
 
@@ -34,24 +47,25 @@ The following instructions should be run from the repo root
 
 `python src/main.py --skip-tracking`
 
-#### Safely, using state from the repo
+#### Safely, using state from the local Firestore emulator 
+
+##### Start local Firestore
+
+(You'll need java if you don't have it: `brew cask install java`)
+
+`gcloud beta emulators firestore start --project wpb-dev --host-port localhost:8480`
+
+##### Run the bot
 
 - Without making actual replies
-- Using the posts_replied_to.txt in the repo
+- While updating the local emulated posts database
 
-`python src/main.py --replied-to-path posts_replied_to.txt`
-
-#### Simulate state
-
-- Without making actual replies
-- While updating the posts_replied_to list in the repo
-
-`python src/main.py --replied-to-path posts_replied_to.txt --simulate-replies`
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --simulate-replies`
 
 #### Live, using shared tracking state
 
 - Make actual replies
-- Using the shared tracking file on google cloud storage
+- Using the shared posts database in Firestore
 
 `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
 
@@ -66,17 +80,18 @@ Usage: main.py [OPTIONS]
 
   Run a single pass of Warren Plan Bot
 
-  - Check list of posts replied to (If tracking is on)
+  - Check posts store for posts replied to (If tracking is on)
   - Search for any new comments and submissions not on that list
   - Reply to any unreplied matching comments (If replies are on)
-  - Update replied_to list (If replies and tracking is on)
+  - Update posts store (If replies and tracking is on)
 
 Options:
-  --replied-to-path PATH        path to file where replies are tracked  [env var: REPLIED_TO_PATH; default: gs://wpb-storage-dev/posts_replied_to.txt]
   --send-replies / --skip-send  whether to send replies  [env var: SEND_REPLIES; default: False]
   --skip-tracking               whether to check whether replies have already been posted  [default: False]
   --simulate-replies            pretend to make replies, including updating state  [default: False]
   --limit INTEGER               number of posts to return  [env var: LIMIT; default: 10]
+  --praw-site [dev|prod]        section of praw file to use for reddit module configuration  [env var: PRAW_SITE; default: dev]
+  --project TEXT                gcp project where firestore db lives  [env var: GCP_PROJECT; default: wpb-dev]
   --help                        Show this message and exit.
 ```
 
