@@ -119,9 +119,9 @@ def run_plan_bot(
     # Get the number of new posts up to the limit
     for submission in subreddit.new(limit=limit):
         # turn this into our more standardized class
-
+        submission = reddit_util.Submission(submission)
         process_post(
-            reddit_util.Submission(submission),
+            submission,
             plans_dict,
             posts_db,
             post_ids_replied_to,
