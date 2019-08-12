@@ -69,35 +69,51 @@ def process_post(
     if post.id not in post_ids_replied_to:
         # Do a case insensitive search
         if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
-            # Initialize match_confidence and match_id before fuzzy searching
-            match_confidence = 0
+            # Initialize minimum match_confidence to 50% and match_id before fuzzy searching
+            match_confidence = 50
             match_id = 0
+            match_topic=""
 
             # Search topic keywords and response body for best match
             for plan in plans_dict["plans"]:
-                plan_match_confidence = fuzz.WRatio(post.text, plan["topic"])
+                plan_match_confidence = fuzz.token_sort_ratio(post.text, plan["topic"])
 
                 if plan_match_confidence > match_confidence:
                     # Set new match ID
                     match_confidence = plan_match_confidence
                     match_id = plan["id"]
+                    match_topic = plan["topic"]
                     print("new topic match: ", plan["topic"])
 
-            # Select entry from plans_dict using best match ID
-            plan_record = next(
-                plan for plan in plans_dict["plans"] if plan["id"] == match_id
-            )
+            # If new topic matched with confidence > 50% select and build reply from new match_id
+            if match_id != 0:
+                # Select entry from plans_dict using best match ID
+                plan_record = next(
+                    plan for plan in plans_dict["plans"] if plan["id"] == match_id
+                )
 
-            reply_string = build_response_text(plan_record, post)
+                reply_string = build_response_text(plan_record, post)
 
-            did_reply = reply(post, reply_string, send=send, simulate=simulate)
+                did_reply = reply(post, reply_string, send=send, simulate=simulate)
 
-            if did_reply and not skip_tracking:
+                if did_reply and not skip_tracking:
+                    posts_db.document(post.id).set(
+                        {
+                            # TODO add more info about the match here
+                            "replied": True,
+                            "type": post.type,
+                            "topic_confidence": match_confidence,
+                            "topic_selected": match_topic,
+                            "reply_timestamp": firestore.SERVER_TIMESTAMP,
+                        }
+                    )
+            else:
                 posts_db.document(post.id).set(
                     {
                         # TODO add more info about the match here
-                        "replied": True,
+                        "replied": False,
                         "type": post.type,
-                        "reply_timestamp": firestore.SERVER_TIMESTAMP,
+                        "topic_confidence": match_confidence,
+                        "post_text": post.text
                     }
                 )
