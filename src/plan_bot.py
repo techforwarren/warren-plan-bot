@@ -8,8 +8,6 @@ def build_response_text(plan_record, post):
     """
     Create response text with plan summary
     """
-    submission = post if post.type == "submission" else post.submission
-    comment = post if post.type == "comment" else None
 
     return (
         f"Senator Warren has a plan for that!"
@@ -24,7 +22,8 @@ def build_response_text(plan_record, post):
         # Error reporting info
         f"Wrong topic or another problem?  [Send a report to my creator]"
         f"(https://www.reddit.com/message/compose?to=WarrenPlanBotDev&"
-        f"subject=reference&nbsp;Submission[{submission.id}]&nbsp{'Comment[' + comment.id + ']' if comment else ''}).  "
+        f"subject=BotReport&"
+        f"message=Issue with bot response to: {post.permalink}).  "
         f"\n"
         # Disclaimer
         f"This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  "
@@ -72,7 +71,7 @@ def process_post(
             # Initialize minimum match_confidence to 50% and match_id before fuzzy searching
             match_confidence = 50
             match_id = 0
-            match_topic=""
+            match_topic = ""
 
             # Search topic keywords and response body for best match
             for plan in plans_dict["plans"]:
@@ -114,6 +113,6 @@ def process_post(
                         "replied": False,
                         "type": post.type,
                         "topic_confidence": match_confidence,
-                        "post_text": post.text
+                        "post_text": post.text,
                     }
                 )
