@@ -106,6 +106,7 @@ def process_post(
                             "replied": True,
                             "type": post.type,
                             "post_text": post.text,
+                            "post_url": post.permalink,
                             "topic_confidence": match_confidence,
                             "topic_selected": match_topic,
                             "reply_timestamp": firestore.SERVER_TIMESTAMP,
@@ -119,6 +120,7 @@ def process_post(
                         "replied": False,
                         "type": post.type,
                         "post_text": post.text,
+                        "post_url": post.permalink,
                         "topic_selected": match_topic,
                         "topic_confidence": match_confidence,
                     }
