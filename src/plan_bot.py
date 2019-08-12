@@ -8,8 +8,6 @@ def build_response_text(plan_record, post):
     """
     Create response text with plan summary
     """
-    submission = post if post.type == "submission" else post.submission
-    comment = post if post.type == "comment" else None
 
     return (
         f"Senator Warren has a plan for that!"
@@ -24,7 +22,8 @@ def build_response_text(plan_record, post):
         # Error reporting info
         f"Wrong topic or another problem?  [Send a report to my creator]"
         f"(https://www.reddit.com/message/compose?to=WarrenPlanBotDev&"
-        f"subject=reference&nbsp;Submission[{submission.id}]&nbsp{'Comment[' + comment.id + ']' if comment else ''}).  "
+        f"subject=BotReport&"
+        f"message=Issue with bot response to: {post.permalink}).  "
         f"\n"
         # Disclaimer
         f"This bot was independently created by volunteers for Sen. Warren's 2020 campaign.  "
@@ -54,6 +53,9 @@ def reply(post, reply_string: str, send=False, simulate=False):
     print(f"Bot would have replied to {post.type}: ", post.id)
 
 
+MATCH_CONFIDENCE_THRESHOLD = 50
+
+
 def process_post(
     post,
     plans_dict,
@@ -70,9 +72,9 @@ def process_post(
         # Do a case insensitive search
         if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
             # Initialize minimum match_confidence to 50% and match_id before fuzzy searching
-            match_confidence = 50
+            match_confidence = 0
             match_id = 0
-            match_topic=""
+            match_topic = ""
 
             # Search topic keywords and response body for best match
             for plan in plans_dict["plans"]:
@@ -83,10 +85,11 @@ def process_post(
                     match_confidence = plan_match_confidence
                     match_id = plan["id"]
                     match_topic = plan["topic"]
-                    print("new topic match: ", plan["topic"])
 
             # If new topic matched with confidence > 50% select and build reply from new match_id
-            if match_id != 0:
+            if match_id != 0 and match_confidence > MATCH_CONFIDENCE_THRESHOLD:
+                print("topic match: ", match_topic, post.id, match_confidence)
+
                 # Select entry from plans_dict using best match ID
                 plan_record = next(
                     plan for plan in plans_dict["plans"] if plan["id"] == match_id
@@ -102,18 +105,23 @@ def process_post(
                             # TODO add more info about the match here
                             "replied": True,
                             "type": post.type,
+                            "post_text": post.text,
+                            "post_url": post.permalink,
                             "topic_confidence": match_confidence,
                             "topic_selected": match_topic,
                             "reply_timestamp": firestore.SERVER_TIMESTAMP,
                         }
                     )
-            else:
+            elif not skip_tracking:
+                print("topic mismatch: ", match_topic, post.id, match_confidence)
                 posts_db.document(post.id).set(
                     {
                         # TODO add more info about the match here
                         "replied": False,
                         "type": post.type,
+                        "post_text": post.text,
+                        "post_url": post.permalink,
+                        "topic_selected": match_topic,
                         "topic_confidence": match_confidence,
-                        "post_text": post.text
                     }
                 )

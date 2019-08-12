@@ -10,6 +10,7 @@ class MockSubmission:
         self.id = "123"
         self.text = "text of submission"
         self.type = "submission"
+        self.permalink = "http://post.post"
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
 
@@ -19,6 +20,7 @@ class MockComment:
         self.id = "456"
         self.text = "text of comment"
         self.type = "comment"
+        self.permalink = "http://post.post"
         self.submission = MockSubmission()
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
@@ -72,24 +74,22 @@ def test_reply_send_and_simulate(mock_comment):
     assert return_val is True
 
 
-def test_build_response_text_to_comment(mock_comment, mock_submission, mock_plan):
+def test_build_response_text_to_comment(mock_comment, mock_plan):
     response_text = plan_bot.build_response_text(mock_plan, mock_comment)
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-    assert mock_submission.id in response_text
-    assert mock_comment.id in response_text
+    assert mock_comment.permalink in response_text
 
 
-def test_build_response_text_to_submission(mock_comment, mock_submission, mock_plan):
+def test_build_response_text_to_submission(mock_submission, mock_plan):
     response_text = plan_bot.build_response_text(mock_plan, mock_submission)
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-    assert mock_submission.id in response_text
-    assert mock_comment.id not in response_text
+    assert mock_submission.permalink in response_text
 
 
 @pytest.mark.skip("Needs tests")
