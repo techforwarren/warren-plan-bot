@@ -88,7 +88,7 @@ def process_post(
 
             # If new topic matched with confidence > 50% select and build reply from new match_id
             if match_id != 0 and match_confidence > MATCH_CONFIDENCE_THRESHOLD:
-                print("topic match: ", match_topic, match_confidence)
+                print("topic match: ", match_topic, post.id, match_confidence)
 
                 # Select entry from plans_dict using best match ID
                 plan_record = next(
@@ -113,7 +113,7 @@ def process_post(
                         }
                     )
             elif not skip_tracking:
-                print("topic mismatch: ", match_topic, match_confidence)
+                print("topic mismatch: ", match_topic, post.id, match_confidence)
                 posts_db.document(post.id).set(
                     {
                         # TODO add more info about the match here
