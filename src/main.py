@@ -96,7 +96,7 @@ def run_plan_bot(
     reddit.read_only = not send_replies
 
     with open(PLANS_FILE) as json_file:
-        plans = json.load(json_file)["plans"]
+        plans = json.load(json_file)
 
     if skip_tracking:
         posts_db = None

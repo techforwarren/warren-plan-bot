@@ -3,17 +3,29 @@ from fuzzywuzzy import fuzz
 
 class Strategy:
     """
-    Contains methods which accept a plans list and a post object and return a best_match dict
-        return {
-            "is_match": whether the plan should be considered a match
-            "confidence": the confidence that the plan is a match (0 - 100)
-            "plan": the best matching plan
-            # Can include other metadata about the match here
-        }
+    Defines strategies used for matching posts to plans
+
+    Strategies must each accept a plans list and a post object and return a best_match dict
+
+    Each strategy must adhere to the following contract
+
+    :param plans: List of plan dicts
+    :type plans: list of dict
+    :param post: Post object
+    :type post: reddit_util.Comment/reddit_util.Submission
+    :param threshold: Confidence threshold between 0-100. If confidence > threshold, then the plan is considered a match
+    :type threshold: int
+    :return: {
+        "match": plan id if the plan is considered a match, otherwise None
+        "confidence": the confidence that the plan is a match (0 - 100)
+        "plan": the best matching plan
+        # Can include other metadata about the match here
+    }
     """
 
     @staticmethod
     def token_sort_ratio(plans: list, post, threshold=50):
+
         match_confidence = 0
         match = None
 
@@ -26,7 +38,7 @@ class Strategy:
                 match = plan
 
         return {
-            "is_match": match_confidence > threshold,
+            "match": match["id"] if match_confidence > threshold else None,
             "confidence": match_confidence,
             "plan": match,
             # Can include other metadata about the match here

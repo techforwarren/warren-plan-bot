@@ -70,16 +70,16 @@ def process_post(
     if post.id not in post_ids_replied_to:
         # Do a case insensitive search
         if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
-            best_match = matching_strategy(plans, post)
+            match_info = matching_strategy(plans, post)
 
-            is_match = best_match["is_match"]
-            match_confidence = best_match["confidence"]
-            plan = best_match["plan"]
-            plan_topic = plan["topic"]
+            match = match_info["match"]
+            plan_confidence = match_info["confidence"]
+            plan = match_info["plan"]
+            plan_id = plan["id"]
 
             # If plan is matched with confidence, build and send reply
-            if is_match:
-                print("topic match: ", plan_topic, post.id, match_confidence)
+            if match:
+                print("plan match: ", plan_id, post.id, plan_confidence)
 
                 reply_string = build_response_text(plan, post)
 
@@ -93,13 +93,15 @@ def process_post(
                             "type": post.type,
                             "post_text": post.text,
                             "post_url": post.permalink,
-                            "topic_confidence": match_confidence,
-                            "topic_selected": plan_topic,
+                            "plan_match": match,
+                            # TODO flesh out / clarify this some
+                            "top_plan_confidence": plan_confidence,
+                            "top_plan": plan_id,
                             "reply_timestamp": firestore.SERVER_TIMESTAMP,
                         }
                     )
             elif not skip_tracking:
-                print("topic mismatch: ", plan_topic, post.id, match_confidence)
+                print("topic mismatch: ", plan_id, post.id, plan_confidence)
                 posts_db.document(post.id).set(
                     {
                         # TODO add more info about the match here
@@ -107,7 +109,8 @@ def process_post(
                         "type": post.type,
                         "post_text": post.text,
                         "post_url": post.permalink,
-                        "topic_selected": plan_topic,
-                        "topic_confidence": match_confidence,
+                        "plan_match": match,
+                        "top_plan_confidence": plan_confidence,
+                        "top_plan": plan_id,
                     }
                 )
