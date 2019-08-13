@@ -96,7 +96,7 @@ def run_plan_bot(
     reddit.read_only = not send_replies
 
     with open(PLANS_FILE) as json_file:
-        plans_dict = json.load(json_file)
+        plans = json.load(json_file)["plans"]
 
     if skip_tracking:
         posts_db = None
@@ -122,7 +122,7 @@ def run_plan_bot(
         submission = reddit_util.Submission(submission)
         process_post(
             submission,
-            plans_dict,
+            plans,
             posts_db,
             post_ids_replied_to,
             send=send_replies,
@@ -137,7 +137,7 @@ def run_plan_bot(
             comment = reddit_util.Comment(comment)
             process_post(
                 comment,
-                plans_dict,
+                plans,
                 posts_db,
                 post_ids_replied_to,
                 send=send_replies,
