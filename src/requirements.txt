@@ -4,6 +4,6 @@ click==7.0
 google-cloud-storage==1.18.0
 google-cloud-firestore==1.4.0
 python-rake==1.4.5
-bs4==4.8.0
+bs4
 lxml==4.4.1
 requests==2.22.0
