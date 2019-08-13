@@ -1,0 +1,203 @@
+[
+  {
+    "text": "!WarrenPlanBot student debt",
+    "source": "sh",
+    "match": "student_debt_free_college"
+  },
+  {
+    "text": "!WarrenPlanBot immigration reform",
+    "source": "sh",
+    "match": "immigration_reform"
+  },
+  {
+    "text": "!WarrenPlanBot wall street reform",
+    "source": "sh",
+    "match": "wall_street_reform"
+  },
+  {
+    "text": "!WarrenPlanBot strong economy",
+    "source": "sh",
+    "match": "stop_economy_crash"
+  },
+  {
+    "text": "!WarrenPlanBot clean green energy",
+    "source": "sh",
+    "match": "clean_energy_transition"
+  },
+  {
+    "text": "!WarrenPlanBot pay for women of color",
+    "source": "sh",
+    "match": "women_of_color_economic"
+  },
+  {
+    "text": "!WarrenPlanBot diplomacy",
+    "source": "sh",
+    "match": "foreign_service"
+  },
+  {
+    "text": "!WarrenPlanBot election reform",
+    "source": "sh",
+    "match": "election_reform"
+  },
+  {
+    "text": "!WarrenPlanBot for profit prison reform",
+    "source": "sh",
+    "match": "private_prison_reform"
+  },
+  {
+    "text": "!WarrenPlanBot minority business owners",
+    "source": "sh",
+    "match": "minority_businesses"
+  },
+  {
+    "text": "!WarrenPlanBot American jobs",
+    "source": "sh",
+    "match": "economic_patriotism"
+  },
+  {
+    "text": "!WarrenPlanBot green energy jobs",
+    "source": "sh",
+    "match": "green_manufacturing"
+  },
+  {
+    "text": "!WarrenPlanBot crimes by the president",
+    "source": "sh",
+    "match": "presidential_accountability"
+  },
+  {
+    "text": "!WarrenPlanBot reproductive rights",
+    "source": "sh",
+    "match": "reproductive_rights"
+  },
+  {
+    "text": "!WarrenPlanBot military lobbyists",
+    "source": "sh",
+    "match": "defense_lobbyists"
+  },
+  {
+    "text": "!WarrenPlanBot national security climate change",
+    "source": "sh",
+    "match": "national_security_climate_change"
+  },
+  {
+    "text": "!WarrenPlanBot opioid crisis",
+    "source": "sh",
+    "match": "opioid_crisis"
+  },
+  {
+    "text": "!WarrenPlanBot Puerto Rico debt relief",
+    "source": "sh",
+    "match": "puerto_rico_debt_relief"
+  },
+  {
+    "text": "!WarrenPlanBot maternal mortality",
+    "source": "sh",
+    "match": "black_maternal_mortality"
+  },
+  {
+    "text": "!WarrenPlanBot military housing",
+    "source": "sh",
+    "match": "military_housing"
+  },
+  {
+    "text": "!WarrenPlanBot public land management",
+    "source": "sh",
+    "match": "public_land"
+  },
+  {
+    "text": "!WarrenPlanBot corporate taxes",
+    "source": "sh",
+    "match": "corporate_taxes"
+  },
+  {
+    "text": "!WarrenPlanBot ceo accountability",
+    "source": "sh",
+    "match": "corporate_executive_accountability"
+  },
+  {
+    "text": "!WarrenPlanBot family farms",
+    "source": "sh",
+    "match": "family_farms"
+  },
+  {
+    "text": "!WarrenPlanBot electoral college reform",
+    "source": "sh",
+    "match": "electoral_college"
+  },
+  {
+    "text": "!WarrenPlanBot safe affordable housing",
+    "source": "sh",
+    "match": "affordable_housing"
+  },
+  {
+    "text": "!WarrenPlanBot big tech companies",
+    "source": "sh",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot universal child care",
+    "source": "sh",
+    "match": "universal_child_care"
+  },
+  {
+    "text": "!WarrenPlanBot ultra millionaire tax",
+    "source": "sh",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "!WarrenPlanBot farming economy",
+    "source": "sh",
+    "match": "new_farm_economy"
+  },
+  {
+    "text": "!WarrenPlanBot gun violence mass shootings",
+    "source": "sh",
+    "match": "gun_violence"
+  },
+  {
+    "text": "!WarrenPlanBot free college",
+    "source": "jg",
+    "match": "student_debt_free_college"
+  },
+  {
+    "text": "!WarrenPlanBot college tuition",
+    "source": "jg",
+    "match": "student_debt_free_college"
+  },
+  {
+    "text": "!WarrenPlanBot voting",
+    "source": "jg",
+    "match": "election_reform",
+    "alternate_matches": ["electoral_college"]
+  },
+  {
+    "text": "!WarrenPlanBot amazon",
+    "source": "jg",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot google",
+    "source": "jg",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot facebook",
+    "source": "jg",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot abortions",
+    "source": "jg",
+    "match": "reproductive_rights"
+  },
+  {
+    "text": "!WarrenPlanBot green new deal",
+    "source": "jg",
+    "match": "clean_energy_transition"
+  },
+  {
+    "text": "!WarrenPlanBot immigration",
+    "source": "jg",
+    "match": "immigration_reform"
+  }
+]

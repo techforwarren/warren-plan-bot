@@ -42,6 +42,26 @@ or visit https://www.java.com/download/
 
 `./scripts/autoformat.sh`
 
+### Test strategies for matching
+
+`python src/score_strategies.py`
+
+We can matching strategies against labeled posts in `labeled_posts.json`
+
+Posts in that file have the form
+
+```json
+  {
+    "text": "TEXT OF POST",
+    "source": "WHERE WE GOT THIS POST FROM i.e. /r/warren, jg (joe goldbeck), sh (shane ham), ...",
+    "match": "ID_OF_PLAN_WHICH_THIS_TEXT_SHOULD_MATCH",
+    "alternate_matches": ["ID_OF_PLAN_WHICH_WOULD_ALSO_BE_SOMEWHAT_ACCEPTABLE_MATCHES", "..."]
+  }
+```
+
+Strategies are defined as static methods of the Strategy class in `matching.py`
+
+
 ### Run the bot
 
 #### Safely and Statelessly

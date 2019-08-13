@@ -1,7 +1,7 @@
 {
     "synonym_info": [
         {
-            "id": 1,
+            "id": "student_debt_free_college",
             "topic": "Cancellation of Student Loan Debt and Universal Free Public College",
             "synonym_keyphrases": [
                 "cost-of-living expenses grew",
@@ -32,7 +32,7 @@
             ]
         },
         {
-            "id": 2,
+            "id": "immigration_reform",
             "topic": "A Fair and Welcoming Immigration System",
             "synonym_keyphrases": [
                 "non-violent criminal records",
@@ -42,7 +42,7 @@
             ]
         },
         {
-            "id": 3,
+            "id": "wall_street_reform",
             "topic": "End Wall Street's Stranglehold on Our Economy",
             "synonym_keyphrases": [
                 "middle-class prosperity ahead",
@@ -55,7 +55,7 @@
             ]
         },
         {
-            "id": 4,
+            "id": "stop_economy_crash",
             "topic": "The Next Economic Crash -- And How to Stop It",
             "synonym_keyphrases": [
                 "trade-war-by-tweet",
@@ -65,14 +65,14 @@
             ]
         },
         {
-            "id": 5,
+            "id": "clean_energy_transition",
             "topic": "Accelerate the Transition to Clean Energy",
             "synonym_keyphrases": [
                 "near-term financial implications”"
             ]
         },
         {
-            "id": 6,
+            "id": "women_of_color_economic",
             "topic": "Valuing the Work of Women of Color",
             "synonym_keyphrases": [
                 "abusive non-compete clauses",
@@ -83,7 +83,7 @@
             ]
         },
         {
-            "id": 7,
+            "id": "foreign_service",
             "topic": "Revitalizing Diplomacy: A 21st Century Foreign Service",
             "synonym_keyphrases": [
                 "mid-career hiring authorities",
@@ -91,7 +91,7 @@
             ]
         },
         {
-            "id": 8,
+            "id": "election_reform",
             "topic": "Her Plan to Strengthen Our Democracy",
             "synonym_keyphrases": [
                 "state-of-the-art equipment",
@@ -105,7 +105,7 @@
             ]
         },
         {
-            "id": 9,
+            "id": "private_prison_reform",
             "topic": "Ending Private Prisons  and Exploitation for Profit",
             "synonym_keyphrases": [
                 "washington works hand-in-hand",
@@ -114,7 +114,7 @@
             ]
         },
         {
-            "id": 10,
+            "id": "minority_businesses",
             "topic": "Leveling the Playing Field for Entrepreneurs",
             "synonym_keyphrases": [
                 "no-strings-attached equity",
@@ -126,7 +126,7 @@
             ]
         },
         {
-            "id": 11,
+            "id": "economic_patriotism",
             "topic": "The New American Patriotism",
             "synonym_keyphrases": [
                 "middle-class prosperity ahead",
@@ -144,7 +144,7 @@
             ]
         },
         {
-            "id": 12,
+            "id": "green_manufacturing",
             "topic": "A Green Manufacturing Plan",
             "synonym_keyphrases": [
                 "hard-to-decarbonize sectors —",
@@ -161,26 +161,26 @@
             ]
         },
         {
-            "id": 13,
+            "id": "presidential_accountability",
             "topic": "Plan to Make Sure That No President is Above the Law",
             "synonym_keyphrases": [
                 "now-president donald trump"
             ]
         },
         {
-            "id": 14,
+            "id": "reproductive_rights",
             "topic": "Congressional Action to Protect Choice",
             "synonym_keyphrases": [
                 "right-wing ideologues bent"
             ]
         },
         {
-            "id": 15,
+            "id": "defense_lobbyists",
             "topic": " Reduce Corporate Influence at the Pentagon",
             "synonym_keyphrases": []
         },
         {
-            "id": 16,
+            "id": "national_security_climate_change",
             "topic": "National Security & Climate Change",
             "synonym_keyphrases": [
                 "fifth-generation aircraft shredded",
@@ -188,7 +188,7 @@
             ]
         },
         {
-            "id": 17,
+            "id": "opioid_crisis",
             "topic": "Tackling the Opioid Crisis Head On",
             "synonym_keyphrases": [
                 "hiv/aids grew rapidly",
@@ -199,55 +199,24 @@
             ]
         },
         {
-            "id": 18,
+            "id": "puerto_rico_debt_relief",
             "topic": "Providing Debt Relief for Puerto Rico",
             "synonym_keyphrases": [
                 "disaster-stricken areas across"
             ]
         },
         {
-            "id": 19,
+            "id": "black_maternal_mortality",
             "topic": "Addressing Our Maternal Mortality Epidemic",
             "synonym_keyphrases": []
         },
         {
-            "id": 20,
+            "id": "military_housing",
             "topic": "Improving Our Military Housing",
             "synonym_keyphrases": []
         },
         {
-            "id": 21,
-            "topic": "Cancellation of Student Loan Debt and Universal Free Public College",
-            "synonym_keyphrases": [
-                "cost-of-living expenses grew",
-                "mature 19-year-old would",
-                "ban for-profit colleges",
-                "for-profit colleges exploded",
-                "enormous middle-class stimulus",
-                "for-profit college took",
-                "for-profit college defaulted",
-                "“consumer-driven economic stimulus",
-                "many for-profit colleges",
-                "part-time waitressing salary",
-                "public four-year colleges",
-                "four-year public colleges",
-                "greater home-buying rates",
-                "high school-level education",
-                "invested less per-student",
-                "public four-year college",
-                "need-based financial aid",
-                "cover non-tuition expenses",
-                "every public two-year",
-                "latinx-white wealth gaps",
-                "graduate debt-freestep two",
-                "targeting lower-income students",
-                "make sure lower-income",
-                "for-profit colleges",
-                "public college debt-free"
-            ]
-        },
-        {
-            "id": 22,
+            "id": "public_land",
             "topic": "Public Lands",
             "synonym_keyphrases": [
                 "significant proof-of-concept",
@@ -255,14 +224,14 @@
             ]
         },
         {
-            "id": 22,
+            "id": "corporate_taxes",
             "topic": "Real Corporate Profits Tax",
             "synonym_keyphrases": [
                 "recent eight-year period"
             ]
         },
         {
-            "id": 23,
+            "id": "corporate_executive_accountability",
             "topic": "Corporate Executive Accountability Act",
             "synonym_keyphrases": [
                 "important}#main-sections-nav-inner{position",
@@ -279,7 +248,7 @@
             ]
         },
         {
-            "id": 24,
+            "id": "family_farms",
             "topic": "Leveling the Playing Field for America's Family Farmers",
             "synonym_keyphrases": [
                 "national right-to-repair law",
@@ -290,12 +259,12 @@
             ]
         },
         {
-            "id": 25,
+            "id": "electoral_college",
             "topic": "Getting Rid of the Electoral College",
             "synonym_keyphrases": []
         },
         {
-            "id": 26,
+            "id": "affordable_housing",
             "topic": "For Affordable Housing for America",
             "synonym_keyphrases": [
                 "basic supply-and-demand problem",
@@ -308,7 +277,7 @@
             ]
         },
         {
-            "id": 27,
+            "id": "break_up_big_tech",
             "topic": "How We Can Break Up Big Tech",
             "synonym_keyphrases": [
                 "violating anti-monopoly laws",
@@ -318,7 +287,7 @@
             ]
         },
         {
-            "id": 28,
+            "id": "universal_child_care",
             "topic": "Universal Child Care",
             "synonym_keyphrases": [
                 "high-quality child-care providers",
@@ -335,12 +304,12 @@
             ]
         },
         {
-            "id": 29,
+            "id": "ultra_millionaire_tax",
             "topic": "The Ultra-Millionaire Tax",
             "synonym_keyphrases": []
         },
         {
-            "id": 30,
+            "id": "new_farm_economy",
             "topic": "A New Farm Economy",
             "synonym_keyphrases": [
                 "tried-and-true method",
@@ -351,7 +320,7 @@
             ]
         },
         {
-            "id": 31,
+            "id": "gun_violence",
             "topic": "Protecting Our Communities from Gun Violence",
             "synonym_keyphrases": [
                 "up-to-date inventories",
