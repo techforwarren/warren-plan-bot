@@ -1,4 +1,5 @@
 import re
+import pprint
 
 from google.cloud import firestore
 
@@ -77,60 +78,62 @@ def process_post(
             plan = match_info["plan"]
             plan_id = plan["id"]
 
-            # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
-            post_subreddit = post.subreddit.name[3:]
-            post_parent_id = post.parent_id[3:] if post.type == "comment" else None
-            post_top_level_parent_id = (
-                post.link_id[3:] if post.type == "comment" else None
-            )
 
-            post_title = post.title if post.type == "submission" else None
+            # Create partial db entry from known values, placeholder defaults for mutable values
+            db_data = create_db_record(post, match, plan_confidence, plan_id)
 
             # If plan is matched with confidence, build and send reply if post not locked
             if match and not post.locked:
-                print("plan match: ", plan_id, post.id, plan_confidence)
+                print("plan match: ", plan_id, post.id, plan_confidence) 
 
                 reply_string = build_response_text(plan, post)
 
                 did_reply = reply(post, reply_string, send=send, simulate=simulate)
 
                 if did_reply and not skip_tracking:
+                    # Replace default None values in db_data record
+                    db_data["replied"] = True
+                    db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
+                   
+                    posts_db.document(post.id).set(db_data)
 
-                    posts_db.document(post.id).set(
-                        {
-                            "replied": True,
-                            "type": post.type,
-                            "post_author": "/u/" + post.author.name,
-                            "post_text": post.text,
-                            "post_parent_id": post_parent_id,  # ID or None if no parent_id
-                            "post_url": "https://www.reddit.com" + post.permalink,
-                            "post_subreddit": post_subreddit,
-                            "post_title": post_title,  # Post Title or None if no title
-                            "post_top_level_parent_id": post_top_level_parent_id,
-                            # TODO flesh out / clarify this some
-                            "plan_match": match,
-                            "top_plan_confidence": plan_confidence,
-                            "top_plan": plan_id,
-                            "reply_timestamp": firestore.SERVER_TIMESTAMP,
-                        }
-                    )
-            elif not skip_tracking:
-                print("topic mismatch: ", plan_id, post.id, plan_confidence)
-                posts_db.document(post.id).set(
-                    {
-                        # TODO DRY
-                        "replied": False,
-                        "type": post.type,
-                        "post_author": "/u/" + post.author.name,
-                        "post_text": post.text,
-                        "post_parent_id": post_parent_id,  # ID or None if no parent_id
-                        "post_url": "https://www.reddit.com" + post.permalink,
-                        "post_subreddit": post_subreddit,
-                        "post_title": post_title,  # Post Title or None if no title
-                        "post_locked": post.locked,
-                        # TODO flesh out / clarify this some
-                        "plan_match": match,
-                        "top_plan_confidence": plan_confidence,
-                        "top_plan": plan_id,
-                    }
-                )
+                elif not skip_tracking:
+                    print("topic mismatch: ", plan_id, post.id, plan_confidence)
+
+                    posts_db.document(post.id).set(db_data)
+
+def create_db_record(
+    post,
+    match,
+    plan_confidence,
+    plan_id,
+    reply_timestamp = None,
+    reply_made = False,
+) -> dict:
+    # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
+    post_parent_id = post.parent_id[3:] if post.type == "comment" else None
+    post_subreddit_id = post.subreddit.name[3:]
+    post_top_level_parent_id = post.link_id[3:] if post.type == "comment" else None
+    post_title = post.title if post.type == "submission" else None
+    # Return db_entry for Firestore
+    entry = {
+        "replied": reply_made,
+        "type": post.type,
+        "post_id": post.id,
+        "post_author": "/u/" + post.author.name,
+        "post_text": post.text,
+        "post_parent_id": post_parent_id,  # ID or None if no parent_id
+        "post_url": "https://www.reddit.com" + post.permalink,
+        "post_subreddit_id": post_subreddit_id,
+        "post_subreddit_display_name": post.subreddit.display_name,
+        "post_title": post_title,  # Post Title or None if no title
+        "post_top_level_parent_id": post_top_level_parent_id,
+        "post_locked": post.locked,
+        # TODO flesh out / clarify this some
+        "plan_match": match,
+        "top_plan_confidence": plan_confidence,
+        "top_plan": plan_id,
+        "reply_timestamp": reply_timestamp,
+    }
+
+    return entry
