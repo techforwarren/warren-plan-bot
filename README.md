@@ -44,7 +44,7 @@ or visit https://www.java.com/download/
 
 ### Test strategies for matching
 
-`python src/score_strategies.py`
+`python scripts/score_strategies.py`
 
 We can matching strategies against labeled posts in `labeled_posts.json`
 

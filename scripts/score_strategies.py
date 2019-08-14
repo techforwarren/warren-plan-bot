@@ -26,7 +26,7 @@ with open(path.join(DIRNAME, "labeled_posts.json")) as posts_file:
     labeled_posts = [Post(post) for post in json.load(posts_file)]
 
 
-with open(path.join(DIRNAME, "plans.json")) as plans_file:
+with open(path.join(DIRNAME, "../src/plans.json")) as plans_file:
     plans = json.load(plans_file)
 
 # Weights for how good/bad the possible outcomes are to be considered

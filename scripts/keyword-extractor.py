@@ -6,14 +6,16 @@
 
 import json
 import os
-
-import requests
+from os import path
 
 import RAKE
+import requests
 from bs4 import BeautifulSoup
 from lxml import html
 
-PLANS_FILE = "plans.json"
+DIRNAME = path.dirname(path.realpath(__file__))
+
+PLANS_FILE = path.join(DIRNAME, "../src/plans.json")
 # RAKE options
 MIN_CHARACTERS_IN_PHRASE = 3
 MAX_WORDS_IN_PHRASE = 3
@@ -32,8 +34,6 @@ RAKE_STOPLIST = RAKE.NLTKStopList()
 # minimum score allowed for keyword extracted to be inserted into synonym list
 MIN_RESULT_SCORE = 10.0
 
-# Change working directory so that plans.json works, and so all files can be in this same folder. FIXME
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 with open(PLANS_FILE) as json_file:
     plans = json.load(json_file)
