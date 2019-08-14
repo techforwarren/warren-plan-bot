@@ -86,12 +86,12 @@ Strategies are defined as static methods of the Strategy class in `matching.py`
 
 `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --simulate-replies`
 
-#### Live, using shared tracking state
+#### (Unsafe) Live, using shared tracking state
 
 - Make actual replies
 - Using the shared posts database in Firestore
 
-`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
+(Unsafe) `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json python src/main.py --send-replies`
 
 You'll need to get this account credentials from @joegoldbeck, and put it at the appropriate location
 
