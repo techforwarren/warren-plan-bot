@@ -1,17 +1,16 @@
+#!/usr/bin/env python3
+
 # TODO:
 #       def function to feed plan list from db or .json file to populate plans return synonym list if auto processing
 #       is desired.
 #       Otherwise, write output to file or firestore.
-#       Add imports to requirements if function created for future use.
 
 import json
-import os
 from os import path
 
 import RAKE
 import requests
 from bs4 import BeautifulSoup
-from lxml import html
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
