@@ -161,3 +161,7 @@ will upload the that folder as a .zip archive and deploy a new version of the cl
 To prevent the bot from running every minute, the simplest thing to do is to remove the Cloud Scheduler job
 
 `terraform destroy -target google_cloud_scheduler_job.run_plan_bot`
+
+### Pushshift Samples URL
+
+https://api.pushshift.io/reddit/search/?q=elizabeth%20warren%20plan&dataviz=false&aggs=false&subreddit=elizabethwarren&searchtype=posts,comments&search=true&start=1565112951&end=1565717751&size=100
