@@ -76,18 +76,16 @@ def process_post(
             plan_confidence = match_info["confidence"]
             plan = match_info["plan"]
             plan_id = plan["id"]
-            post_parent_id = False # Could be "" unless constructing URLs with it later
-            post_title = False # Could be "" unless constructing URLs with it later
-            post_top_level_parent_id = False
 
-            if(self.type == "comment"):
-                # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
-                post_parent_id = post.parent_id([3:])
-                post_top_level_parent_id = post.link_id([3:])
-            
-            if(self.type = "submission"):
-                post_title = post.title
-            
+            # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
+            post_subreddit = post.subreddit.name[3:]
+            post_parent_id = post.parent_id[3:] if post.type == "comment" else None
+            post_top_level_parent_id = (
+                post.link_id[3:] if post.type == "comment" else None
+            )
+
+            post_title = post.title if post.type == "submission" else None
+
             # If plan is matched with confidence, build and send reply if post not locked
             if match and not post.locked:
                 print("plan match: ", plan_id, post.id, plan_confidence)
@@ -97,20 +95,18 @@ def process_post(
                 did_reply = reply(post, reply_string, send=send, simulate=simulate)
 
                 if did_reply and not skip_tracking:
-                    
+
                     posts_db.document(post.id).set(
                         {
-                            # TODO add more info about the match here
                             "replied": True,
                             "type": post.type,
-                            "post_author": "/u/" + post.author,
+                            "post_author": "/u/" + post.author.name,
                             "post_text": post.text,
-                            "post_parent_id": post_parent_id,   # ID or False if no parent_id
+                            "post_parent_id": post_parent_id,  # ID or None if no parent_id
                             "post_url": "https://www.reddit.com" + post.permalink,
-                            "post_subreddit": post.subreddit,
-                            "post_title": post_title,           # Post Title or False if no title
+                            "post_subreddit": post_subreddit,
+                            "post_title": post_title,  # Post Title or None if no title
                             "post_top_level_parent_id": post_top_level_parent_id,
-
                             # TODO flesh out / clarify this some
                             "plan_match": match,
                             "top_plan_confidence": plan_confidence,
@@ -122,17 +118,16 @@ def process_post(
                 print("topic mismatch: ", plan_id, post.id, plan_confidence)
                 posts_db.document(post.id).set(
                     {
-                        # TODO add more info about the match here
+                        # TODO DRY
                         "replied": False,
                         "type": post.type,
-                        "post_author": "/u/" + post.author,
+                        "post_author": "/u/" + post.author.name,
                         "post_text": post.text,
-                        "post_parent_id": post_parent_id,   # ID or False if no parent_id
+                        "post_parent_id": post_parent_id,  # ID or None if no parent_id
                         "post_url": "https://www.reddit.com" + post.permalink,
-                        "post_subreddit": post.subreddit,
-                        "post_title": post_title,           # Post Title or False if no title
-                        "post_locked": post.locked
-
+                        "post_subreddit": post_subreddit,
+                        "post_title": post_title,  # Post Title or None if no title
+                        "post_locked": post.locked,
                         # TODO flesh out / clarify this some
                         "plan_match": match,
                         "top_plan_confidence": plan_confidence,
