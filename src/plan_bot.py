@@ -78,6 +78,7 @@ def process_post(
             plan_id = plan["id"]
 
             # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
+            post_subreddit = post.subreddit.name[3:]
             post_parent_id = post.parent_id[3:] if post.type == "comment" else None
             post_top_level_parent_id = (
                 post.link_id[3:] if post.type == "comment" else None
@@ -103,7 +104,7 @@ def process_post(
                             "post_text": post.text,
                             "post_parent_id": post_parent_id,  # ID or None if no parent_id
                             "post_url": "https://www.reddit.com" + post.permalink,
-                            "post_subreddit": post.subreddit.name,
+                            "post_subreddit": post_subreddit,
                             "post_title": post_title,  # Post Title or None if no title
                             "post_top_level_parent_id": post_top_level_parent_id,
                             # TODO flesh out / clarify this some
@@ -124,7 +125,7 @@ def process_post(
                         "post_text": post.text,
                         "post_parent_id": post_parent_id,  # ID or None if no parent_id
                         "post_url": "https://www.reddit.com" + post.permalink,
-                        "post_subreddit": post.subreddit.name,
+                        "post_subreddit": post_subreddit,
                         "post_title": post_title,  # Post Title or None if no title
                         "post_locked": post.locked,
                         # TODO flesh out / clarify this some
