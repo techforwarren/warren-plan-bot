@@ -52,6 +52,10 @@ or visit https://www.java.com/download/
 
 `python scripts/parse_plans.py`
 
+#### Regenerate gensim models
+
+`python scripts/prepare_gensim_models_v1.py`
+
 ### Test strategies for matching
 
 `python scripts/score_strategies.py`
