@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
 import glob
+import json
 import logging
 import os
+import re
 from os import path
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Comment
+from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
@@ -64,6 +68,27 @@ def remove_html_comments(soup):
     soup.smooth()
 
 
+def parse_article(soup):
+    """
+    Parse any plans that have a nice article tag
+
+    Medium posts and WashingtonPost fall under this category neatly
+
+    Essence has some very minor issues here because they have the first word of a paragraph
+    often separated from the rest of the paragraph
+    """
+    article = soup.find("article")
+
+    for tag in ["a", "b", "i", "u", "em", "strong"]:
+        unwrap_and_smooth(article, tag)
+
+    for tag in ["noscript", "img", "button"]:
+        decompose_and_smooth(article, tag)
+
+    remove_html_comments(article)
+
+    return article.get_text(separator="\n")
+
 def parse_plans():
     """
     Extract text from plan html, preserving whitespace as appropriate
@@ -77,35 +102,39 @@ def parse_plans():
     for plan_file_path in plan_file_paths:
         logger.info(f"Parsing {plan_file_path}")
 
-        plan_id = path.basename(plan_file_path)
-
         with open(plan_file_path) as plan_file:
-            page = plan_file.read()
+            plan = json.load(plan_file)
 
-        page_soup = BeautifulSoup(page, "lxml")
+        plan_id = plan["id"]
 
-        article = page_soup.find("article")
+        html = plan["html"]
 
-        if article is None:
-            # TODO parse ultra_millionaire_tax https://elizabethwarren.com/ultra-millionaire-tax/
-            logger.warning(f"Failure to parse {plan_id}. Missing <article> tag")
+        plan_hostname = urlparse(plan["url"]).netloc
+
+        page_soup = BeautifulSoup(html, "lxml")
+
+        if page_soup.find("article"):
+            text = parse_article(page_soup)
+        else:
+            logger.warning(
+                f"Failure to parse {plan_id}. Hostname: {plan_hostname} is not yet supported"
+            )
             continue
 
-        for tag in ["a", "b", "i", "u", "em", "strong"]:
-            unwrap_and_smooth(article, tag)
+        filename = path.join(OUTPUT_DIR, f"{plan_id}.json")
 
-        for tag in ["noscript", "img", "button"]:
-            decompose_and_smooth(article, tag)
-
-        remove_html_comments(article)
-
-        text = article.get_text(separator="\n")
-
-        filename = path.join(OUTPUT_DIR, plan_id)
+        # replace smart quotes and em-dashes ... with their ascii equivalents
+        text = unidecode(text)
 
         logger.info(f"Writing plan text to {filename}")
         with open(filename, "w") as plan_text_file:
-            plan_text_file.write(text)
+            json.dump(
+                {"text": text, "url": plan["url"], "id": plan["id"]},
+                plan_text_file,
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
+            )
 
 
 if __name__ == "__main__":

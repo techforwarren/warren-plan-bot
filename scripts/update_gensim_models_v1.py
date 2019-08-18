@@ -32,12 +32,17 @@ def update_gensim_models():
     """
     Prepare TFIDF and LSA models for later similarity comparisons
     """
+
+    parsed_plans = [
+        json.load(open(plan_file_path)) for plan_file_path in plan_file_paths
+    ]
+
     # save plan ids to be able to get back to plan id from document index later
-    plan_ids = [path.basename(plan_file_path) for plan_file_path in plan_file_paths]
+    plan_ids = [p["id"] for p in parsed_plans]
     with open(path.join(OUTPUT_DIR, "plan_ids.json"), "w") as plan_id_file:
         json.dump(plan_ids, plan_id_file)
 
-    documents = [open(plan_file_path).read() for plan_file_path in plan_file_paths]
+    documents = [p["text"] for p in parsed_plans]
 
     # Run preprocessing
     preprocessed_documents = [Preprocess.preprocess_gensim_v1(doc) for doc in documents]
