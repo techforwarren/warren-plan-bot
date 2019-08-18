@@ -89,6 +89,35 @@ def parse_article(soup):
 
     return article.get_text(separator="\n")
 
+
+def _parse_contents(contents):
+    if isinstance(contents, list):
+        return [_parse_contents(content) for content in contents]
+    if isinstance(contents, dict):
+        if "value" in contents:
+            return contents["value"]
+        elif "content" in contents:
+            return _parse_contents(contents["content"])
+        else:
+            raise NotImplementedError(f"dont know how to parse {contents}")
+
+
+def parse_e_warren_dot_com(soup):
+    scripts = soup.findAll("script")
+    script = [
+        script for script in scripts if "window.contentfulFields" in script.get_text()
+    ][0]
+
+    script_text = script.get_text()
+
+    match = re.search("contentfulFields = (\{.*\});", script_text)
+
+    contentful_fields = json.loads(match.group(1))
+
+    contents = contentful_fields["contentType"]["fields"]["content"]["content"]
+
+    text = ""
+
 def parse_plans():
     """
     Extract text from plan html, preserving whitespace as appropriate
@@ -115,6 +144,8 @@ def parse_plans():
 
         if page_soup.find("article"):
             text = parse_article(page_soup)
+        # elif "elizabethwarren" in plan_hostname:
+        #     text = parse_e_warren_dot_com(page_soup)
         else:
             logger.warning(
                 f"Failure to parse {plan_id}. Hostname: {plan_hostname} is not yet supported"
