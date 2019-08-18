@@ -42,7 +42,7 @@ or visit https://www.java.com/download/
 
 `./scripts/autoformat.sh`
 
-### Preprocess plans
+### Preprocess plans (repeat every time a new plan is added)
 
 #### Download plans
 
