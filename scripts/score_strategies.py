@@ -49,6 +49,7 @@ def score_match(post, match_info):
 def score_strategy(strategy):
     strategy_name = strategy.__name__
     print(f"")
+    print(f"")
     print(f"--SCORING STRATEGY: {strategy_name}--")
     print(f"")
     match_scoring = []
@@ -63,6 +64,7 @@ def score_strategy(strategy):
         }
         match_scoring.append(match)
 
+    alternate_matches = [m for m in match_scoring if m["score"] == ALTERNATE_MATCH]
     wrong_matches = [m for m in match_scoring if m["score"] == WRONG_MATCH]
     no_matches = [m for m in match_scoring if m["score"] == NO_MATCH]
     bulk_score = sum(m["score"] for m in match_scoring)
@@ -78,7 +80,16 @@ def score_strategy(strategy):
         print(f"{strategy_name}: {m}")
     print(f"")
 
+    print(
+        f"{strategy_name}: ALTERNATE MATCHES FOR{'' if alternate_matches else ' None!'}:\n"
+    )
+    for m in alternate_matches:
+        print(f"{strategy_name}: {m}")
+    print(f"")
+
     print(f"{strategy_name}: TOTAL SCORE: {total_score}")
+
+    return {"name": strategy_name, "total_score": total_score}
 
 
 def score_strategies():
@@ -88,8 +99,18 @@ def score_strategies():
         if callable(getattr(Strategy, func_name))
         if not func_name.startswith("_")
     ]
-    for strategy in strategies:
-        score_strategy(strategy)
+
+    results = [score_strategy(strategy) for strategy in strategies]
+
+    results.sort(key=lambda x: -x["total_score"])
+
+    print("")
+    print("")
+    print("--Top Strategies--")
+    print("")
+
+    for result in results[:5]:
+        print(f"{result['name']}: TOTAL SCORE: {result['total_score']}")
 
 
 if __name__ == "__main__":
