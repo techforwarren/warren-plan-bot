@@ -199,5 +199,11 @@
     "text": "!WarrenPlanBot immigration",
     "source": "jg",
     "match": "immigration_reform"
+  },
+  {
+    "text": "!WarrenPlanBot clean green energy",
+    "source": "sh",
+    "match": "climate_risk_disclosure",
+    "alternate_matches": ["green_manufacturing"]
   }
 ]
