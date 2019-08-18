@@ -13,6 +13,7 @@ from gensim.parsing.preprocessing import (
     strip_punctuation,
     strip_short,
 )
+from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
@@ -180,13 +181,22 @@ class Preprocess:
             w
             for w in s.split()
             if w.lower()
-            not in {"elizabeth", "warren", "plan", "warrenplanbot", "warrenplanbotdev"}
+            not in {
+                "elizabeth",
+                "warren",
+                "plan",
+                "warrenplanbot",
+                "warrenplanbotdev",
+                "sen",
+                "senator",
+            }
         )
 
     @staticmethod
     def preprocess_gensim_v1(doc):
         # Run preprocessing
         preprocessing_filters = [
+            unidecode,
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,

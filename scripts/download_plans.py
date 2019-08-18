@@ -59,11 +59,13 @@ def download_plans():
 
         page = resp.text
 
-        filename = path.join(OUTPUT_DIR, plan["id"])
+        filename = path.join(OUTPUT_DIR, f"{plan['id']}.json")
 
         logger.info(f"Writing plan html to {filename}")
         with open(filename, "w") as plan_text_file:
-            plan_text_file.write(page)
+            json.dump(
+                {"html": page, "url": plan["url"], "id": plan["id"]}, plan_text_file
+            )
 
 
 if __name__ == "__main__":
