@@ -42,6 +42,16 @@ or visit https://www.java.com/download/
 
 `./scripts/autoformat.sh`
 
+### Preprocess plans
+
+#### Download plans
+
+`python scripts/download_plans.py`
+
+#### Extract plan text
+
+`python scripts/parse_plans.py`
+
 ### Test strategies for matching
 
 `python scripts/score_strategies.py`
