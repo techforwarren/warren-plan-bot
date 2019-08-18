@@ -28,7 +28,7 @@ PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "../data/interim/plan_text"))
 plan_file_paths = [f for f in glob.glob(path.join(PLAN_TEXT_DIR, "*"))]
 
 
-def prepare_gensim_models():
+def update_gensim_models():
     """
     Prepare TFIDF and LSA models for later similarity comparisons
     """
@@ -73,4 +73,4 @@ def prepare_gensim_models():
 
 
 if __name__ == "__main__":
-    prepare_gensim_models()
+    update_gensim_models()

@@ -54,7 +54,7 @@ or visit https://www.java.com/download/
 
 #### Regenerate gensim models
 
-`python scripts/prepare_gensim_models_v1.py`
+`python scripts/update_gensim_models_v1.py`
 
 ### Test strategies for matching
 
