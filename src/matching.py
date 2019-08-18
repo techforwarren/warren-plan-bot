@@ -45,6 +45,9 @@ class Strategy:
 
     @staticmethod
     def token_sort_ratio(plans: list, post, threshold=50):
+        """
+        Match plans based on hardcoded plan topics, using fuzzywuzzy's token_sort_ratio for fuzzy matching
+        """
 
         match_confidence = 0
         match = None
@@ -69,7 +72,6 @@ class Strategy:
     def _composite_strategy(plans: list, post, strategies: list):
         """
         Run strategies in order until one has a match
-
         """
         for strategy in strategies:
             match_info = strategy(plans, post)
@@ -112,19 +114,31 @@ class Strategy:
         }
 
     @staticmethod
-    def token_sort_lsa_v1_composite(plans: list, post, threshold=60):
-        # TODO do something with threshold of lsa_gensim_v1
+    def token_sort_lsi_v1_composite(plans: list, post, threshold=60):
+        """
+        Tries the following strategies in order:
+         1) fuzzy matching based on hardcoded topics
+         2) LSI using gensim models
+        """
+
         return Strategy._composite_strategy(
             plans,
             post,
             [
                 partial(Strategy.token_sort_ratio, threshold=threshold),
-                Strategy.lsa_gensim_v1,
+                partial(Strategy.lsi_gensim_v1, threshold=80),
             ],
         )
 
     @staticmethod
-    def lsa_gensim_v1(plans: list, post, threshold=80):
+    def lsi_gensim_v1(plans: list, post, threshold=80):
+        """
+        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
+
+        Using gensim
+
+        Models have been precomputed using ../scripts/update_gensim_models_v1.py
+        """
         return Strategy._gensim_similarity(
             plans,
             post,
@@ -136,6 +150,13 @@ class Strategy:
 
     @staticmethod
     def tfidf_gensim_v1(plans: list, post, threshold=20):
+        """
+        TFIDF – Term Frequency–Inverse Document Frequency
+
+        Using gensim
+
+        Models have been precomputed using ../scripts/update_gensim_models_v1.py
+        """
         return Strategy._gensim_similarity(
             plans,
             post,
