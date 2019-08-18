@@ -43,10 +43,14 @@ def download_plans():
     for plan in plans:
         logger.info(f"Downloading {plan['url']}")
 
-        resp = requests.get(plan["url"])
+        resp = requests.get(
+            plan["url"],
+            headers={
+                # add user agent to avoid some 403s
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+            },
+        )
 
-        # FIXME black_maternal_mortality not downloaded.
-        #  Status code: 403. Url: https://www.essence.com/feature/sen-elizabeth-warren-black-women-mortality-essence/
         if resp.status_code != 200:
             logger.warning(
                 f"Plan {plan['id']} not downloaded. Status code: {resp.status_code}. Url: {plan['url']}"
