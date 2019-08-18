@@ -32,6 +32,9 @@ def clear_output_dir():
 
 
 def unwrap_and_smooth(soup, tag):
+    """
+    Remove html tag, preserving contents as text
+    """
     # remove tag
     for t in soup.findAll(tag):
         t.unwrap()
@@ -40,6 +43,9 @@ def unwrap_and_smooth(soup, tag):
 
 
 def decompose_and_smooth(soup, tag):
+    """
+    Remove html tag including any contents
+    """
     # remove tag
     for t in soup.findAll(tag):
         t.decompose()
@@ -48,6 +54,9 @@ def decompose_and_smooth(soup, tag):
 
 
 def remove_html_comments(soup):
+    """
+    Remove html comments entirely ("<---blah--->")
+    """
     comments = soup.findAll(text=lambda text: isinstance(text, Comment))
     for comment in comments:
         comment.extract()
