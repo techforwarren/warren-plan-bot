@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import glob
+import logging
 import os
 from os import path
 
@@ -17,9 +18,12 @@ PLAN_HTML_DIR = path.abspath(path.join(DIRNAME, "../data/raw/plan_html"))
 
 plan_file_paths = [f for f in glob.glob(path.join(PLAN_HTML_DIR, "*"))]
 
+logging.basicConfig(format="%(levelname)s : %(message)s", level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
 
 def unwrap_and_smooth(soup, tag):
-    print(f"removing {tag} tags")
     # remove tag
     for t in soup.findAll(tag):
         t.unwrap()
@@ -52,7 +56,7 @@ def parse_plan():
 
     # Iterate through plans
     for plan_file_path in plan_file_paths:
-        print(f"Parsing {plan_file_path}")
+        logger.info(f"Parsing {plan_file_path}")
 
         plan_id = path.basename(plan_file_path)
 
@@ -62,6 +66,11 @@ def parse_plan():
         page_soup = BeautifulSoup(page, "lxml")
 
         article = page_soup.find("article")
+
+        if article is None:
+            # TODO parse ultra_millionaire_tax https://elizabethwarren.com/ultra-millionaire-tax/
+            logger.warning(f"Failure to parse {plan_id}. Missing <article> tag")
+            continue
 
         for tag in ["a", "b", "i", "u", "em", "strong"]:
             unwrap_and_smooth(article, tag)
@@ -75,7 +84,7 @@ def parse_plan():
 
         filename = path.join(OUTPUT_DIR, plan_id)
 
-        print(f"Writing plan text to {filename}")
+        logger.info(f"Writing plan text to {filename}")
         with open(filename, "w") as plan_text_file:
             plan_text_file.write(text)
 
