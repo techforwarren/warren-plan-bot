@@ -20,9 +20,9 @@
     "match": "stop_economy_crash"
   },
   {
-    "text": "!WarrenPlanBot clean green energy",
-    "source": "sh",
-    "match": "clean_energy_transition"
+    "text": "!WarrenPlanBot climate risk disclosure",
+    "source": "jg",
+    "match": "climate_risk_disclosure"
   },
   {
     "text": "!WarrenPlanBot pay for women of color",
@@ -193,7 +193,7 @@
   {
     "text": "!WarrenPlanBot green new deal",
     "source": "jg",
-    "match": "clean_energy_transition"
+    "match": "green_manufacturing"
   },
   {
     "text": "!WarrenPlanBot immigration",

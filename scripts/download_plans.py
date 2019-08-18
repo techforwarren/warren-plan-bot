@@ -17,8 +17,16 @@ PLANS_FILE = path.join(DIRNAME, "../src/plans.json")
 
 OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../data/raw/plan_html"))
 
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
+
+def clear_output_dir():
+    """
+    Make empty output directory
+    """
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
+    for file_path in os.listdir(OUTPUT_DIR):
+        os.remove(path.join(OUTPUT_DIR, file_path))
 
 
 def download_plans():
@@ -28,6 +36,8 @@ def download_plans():
     """
     with open(PLANS_FILE) as json_file:
         plans = json.load(json_file)
+
+    clear_output_dir()
 
     # Iterate through plans_dict, download html
     for plan in plans:

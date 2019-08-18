@@ -8,15 +8,8 @@ import os
 from os import path
 
 from gensim import corpora, models, similarities
-from gensim.parsing.preprocessing import (
-    preprocess_string,
-    remove_stopwords,
-    stem_text,
-    strip_multiple_whitespaces,
-    strip_numeric,
-    strip_punctuation,
-    strip_short,
-)
+
+from matching import GENSIM_V1_MODELS_PATH, Preprocess
 
 logging.basicConfig(format="%(levelname)s : %(message)s", level=logging.INFO)
 
@@ -24,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
-OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../src/models/gensim_strategy_v1"))
+OUTPUT_DIR = GENSIM_V1_MODELS_PATH
 
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
@@ -33,28 +26,6 @@ if not os.path.exists(OUTPUT_DIR):
 PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "../data/interim/plan_text"))
 
 plan_file_paths = [f for f in glob.glob(path.join(PLAN_TEXT_DIR, "*"))]
-
-
-CUSTOM_STOPWORDS = {"elizabeth", "warren", "plan", "warrenplanbot", "warrenplanbotdev"}
-
-
-def remove_custom_stopwords(s):
-    return " ".join(w for w in s.split() if w.lower() not in CUSTOM_STOPWORDS)
-
-
-def preprocess(doc):
-    # Run preprocessing
-    preprocessing_filters = [  # TODO maybe add additional stopwords
-        strip_punctuation,
-        strip_multiple_whitespaces,
-        strip_numeric,
-        remove_stopwords,
-        remove_custom_stopwords,
-        strip_short,
-        stem_text,  # This is the Porter stemmer  # TODO lemmatization might be better for this
-    ]
-
-    return preprocess_string(doc, preprocessing_filters)
 
 
 def prepare_gensim_models():
@@ -69,7 +40,7 @@ def prepare_gensim_models():
     documents = [open(plan_file_path).read() for plan_file_path in plan_file_paths]
 
     # Run preprocessing
-    preprocessed_documents = [preprocess(doc) for doc in documents]
+    preprocessed_documents = [Preprocess.preprocess_gensim_v1(doc) for doc in documents]
 
     dictionary = corpora.Dictionary(preprocessed_documents)
 
@@ -86,7 +57,9 @@ def prepare_gensim_models():
     tfidf = models.TfidfModel(corpus)
 
     corpus_tfidf = tfidf[corpus]
-    tfidf_index = similarities.MatrixSimilarity(tfidf[corpus])
+    tfidf_index = similarities.MatrixSimilarity(
+        tfidf[corpus], num_features=len(dictionary)
+    )
 
     tfidf.save(path.join(OUTPUT_DIR, "tfidf.model"))
     tfidf_index.save(path.join(OUTPUT_DIR, "tfidf.index"))
@@ -94,7 +67,7 @@ def prepare_gensim_models():
     # LSI
     lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=300)
 
-    lsi_index = similarities.MatrixSimilarity(lsi[corpus])
+    lsi_index = similarities.MatrixSimilarity(lsi[corpus], num_features=len(dictionary))
     lsi.save(path.join(OUTPUT_DIR, "lsi.model"))
     lsi_index.save(path.join(OUTPUT_DIR, "lsi.index"))
 

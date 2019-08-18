@@ -11,5 +11,4 @@ pytest==4.5.0
 python-rake==1.4.5
 bs4
 requests==2.22.0
-gensim
 lxml

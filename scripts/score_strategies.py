@@ -59,6 +59,7 @@ def score_strategy(strategy):
             "post_source": post.source,
             "score": score_match(post, match_info),
             "match": match_info["match"],
+            "match_confidence": match_info["confidence"],
         }
         match_scoring.append(match)
 

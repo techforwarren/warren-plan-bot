@@ -11,9 +11,6 @@ DIRNAME = path.dirname(path.realpath(__file__))
 
 OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../data/interim/plan_text"))
 
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
-
 PLAN_HTML_DIR = path.abspath(path.join(DIRNAME, "../data/raw/plan_html"))
 
 plan_file_paths = [f for f in glob.glob(path.join(PLAN_HTML_DIR, "*"))]
@@ -21,6 +18,17 @@ plan_file_paths = [f for f in glob.glob(path.join(PLAN_HTML_DIR, "*"))]
 logging.basicConfig(format="%(levelname)s : %(message)s", level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+
+
+def clear_output_dir():
+    """
+    Make empty output directory
+    """
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
+    for file_path in os.listdir(OUTPUT_DIR):
+        os.remove(path.join(OUTPUT_DIR, file_path))
 
 
 def unwrap_and_smooth(soup, tag):
@@ -47,12 +55,14 @@ def remove_html_comments(soup):
     soup.smooth()
 
 
-def parse_plan():
+def parse_plans():
     """
     Extract text from plan html, preserving whitespace as appropriate
 
     Optimized for Medium posts
     """
+
+    clear_output_dir()
 
     # Iterate through plans
     for plan_file_path in plan_file_paths:
@@ -90,4 +100,4 @@ def parse_plan():
 
 
 if __name__ == "__main__":
-    parse_plan()
+    parse_plans()
