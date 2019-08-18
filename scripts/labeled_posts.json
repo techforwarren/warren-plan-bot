@@ -259,6 +259,15 @@
     "match": "ultra_millionaire_tax"
   },
   {
+    "text": "!WarrenPlanBot fair pay",
+    "source": "sh",
+    "match": null,
+    "alternate_matches": [
+      "women_of_color_economic",
+      "economic_patriotism"
+    ]
+  },
+  {
     "text": "!WarrenPlanBot what are Warren's thoughts on universal basic income?",
     "source": "/r/WPBSandbox",
     "match": null
