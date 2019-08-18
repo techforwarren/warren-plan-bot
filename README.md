@@ -42,6 +42,20 @@ or visit https://www.java.com/download/
 
 `./scripts/autoformat.sh`
 
+### Preprocess plans (repeat every time a new plan is added)
+
+#### Download plans
+
+`python scripts/download_plans.py`
+
+#### Extract plan text
+
+`python scripts/parse_plans.py`
+
+#### Regenerate gensim models
+
+`python scripts/update_gensim_models_v1.py`
+
 ### Test strategies for matching
 
 `python scripts/score_strategies.py`

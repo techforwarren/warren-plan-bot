@@ -3,3 +3,4 @@ fuzzywuzzy[speedup]==0.17.0
 click==7.0
 google-cloud-storage==1.18.0
 google-cloud-firestore==1.4.0
+gensim==3.8.0

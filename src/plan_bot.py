@@ -62,7 +62,7 @@ def process_post(
     send=False,
     simulate=False,
     skip_tracking=False,
-    matching_strategy=Strategy.token_sort_ratio,
+    matching_strategy=Strategy.token_sort_lsa_v1_composite,
 ):
     if post_ids_replied_to is None:
         post_ids_replied_to = []
@@ -77,13 +77,12 @@ def process_post(
             plan = match_info["plan"]
             plan_id = plan["id"]
 
-
             # Create partial db entry from known values, placeholder defaults for mutable values
             db_data = create_db_record(post, match, plan_confidence, plan_id)
 
             # If plan is matched with confidence, build and send reply if post not locked
             if match and not post.locked:
-                print("plan match: ", plan_id, post.id, plan_confidence) 
+                print("plan match: ", plan_id, post.id, plan_confidence)
 
                 reply_string = build_response_text(plan, post)
 
@@ -93,7 +92,7 @@ def process_post(
                     # Replace default None values in db_data record
                     db_data["replied"] = True
                     db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
-                   
+
                     posts_db.document(post.id).set(db_data)
 
                 elif not skip_tracking:
@@ -101,13 +100,9 @@ def process_post(
 
                     posts_db.document(post.id).set(db_data)
 
+
 def create_db_record(
-    post,
-    match,
-    plan_confidence,
-    plan_id,
-    reply_timestamp = None,
-    reply_made = False,
+    post, match, plan_confidence, plan_id, reply_timestamp=None, reply_made=False
 ) -> dict:
     # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
     post_parent_id = post.parent_id[3:] if post.type == "comment" else None
