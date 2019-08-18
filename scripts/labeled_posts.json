@@ -10,6 +10,11 @@
     "match": "immigration_reform"
   },
   {
+    "text": "!WarrenPlanBot reform immigration",
+    "source": "sh",
+    "match": "immigration_reform"
+  },
+  {
     "text": "!WarrenPlanBot wall street reform",
     "source": "sh",
     "match": "wall_street_reform"
@@ -205,5 +210,68 @@
     "source": "sh",
     "match": "climate_risk_disclosure",
     "alternate_matches": ["green_manufacturing"]
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan to stop gun deaths?",
+    "source": "/r/WPBSandbox",
+    "match": "gun_violence"
+  },
+  {
+    "text": "!WarrenPlanBot How will she reduce mass shootings in America?",
+    "source": "/r/WPBSandbox",
+    "match": "gun_violence"
+  },
+  {
+    "text": "!WarrenPlanBot does she have a plan for public housing",
+    "source": "/r/WPBSandbox",
+    "match": null,
+    "alternate_matches": ["affordable_housing"]
+  },
+  {
+    "text": "!WarrenPlanBot public housing",
+    "source": "/r/WPBSandbox",
+    "match": null,
+    "alternate_matches": ["affordable_housing"]
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for affordable public housing?",
+    "source": "/r/WPBSandbox",
+    "match": "affordable_housing"
+  },
+  {
+    "text": "I've heard a lot of what Sen. Warren has to say about big tech companies, but what does everything else think about her plan to make Google illegal?\nWhat's her plan /u/WarrenPlanBot?",
+    "source": "sh",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot student debt cancellation",
+    "source": "sh",
+    "match": "student_debt_free_college"
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for an ultra-millionaire tax?",
+    "source": "sh",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "What is her plan to tax millionaires so they pay their fair share /u/WarrenPlanBot?",
+    "source": "sh",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "!WarrenPlanBot what are Warren's thoughts on universal basic income?",
+    "source": "/r/WPBSandbox",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot what's Senator Warren's plan for climate change?",
+    "source": "/r/WPBSandbox",
+    "match": null,
+    "alternate_matches": [
+      "new_farm_economy",
+      "national_security_climate_change",
+      "green_manufacturing",
+      "climate_risk_disclosure"
+    ]
   }
 ]
