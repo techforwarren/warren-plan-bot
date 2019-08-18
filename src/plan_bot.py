@@ -62,7 +62,7 @@ def process_post(
     send=False,
     simulate=False,
     skip_tracking=False,
-    matching_strategy=Strategy.token_sort_ratio,
+    matching_strategy=Strategy.token_sort_lsa_v1_composite,
 ):
     if post_ids_replied_to is None:
         post_ids_replied_to = []
