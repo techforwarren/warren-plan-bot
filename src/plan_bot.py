@@ -95,10 +95,10 @@ def process_post(
 
                     posts_db.document(post.id).set(db_data)
 
-                elif not skip_tracking:
-                    print("topic mismatch: ", plan_id, post.id, plan_confidence)
+            elif not skip_tracking:
+                print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
-                    posts_db.document(post.id).set(db_data)
+                posts_db.document(post.id).set(db_data)
 
 
 def create_db_record(
