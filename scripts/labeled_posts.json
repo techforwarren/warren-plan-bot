@@ -229,13 +229,13 @@
   },
   {
     "text": "!WarrenPlanBot public housing",
-    "source": "/r/WPBSandbox",
+    "source": "sh",
     "match": null,
     "alternate_matches": ["affordable_housing"]
   },
   {
     "text": "!WarrenPlanBot what is her plan for affordable public housing?",
-    "source": "/r/WPBSandbox",
+    "source": "sh",
     "match": "affordable_housing"
   },
   {
