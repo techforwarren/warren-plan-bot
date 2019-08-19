@@ -99,6 +99,9 @@ def process_post(
                     print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
                     posts_db.document(post.id).set(db_data)
+        else:
+            print ("plan mismatch: ", plan_id, post.id, plan_confidence)
+            posts_db.document(post.id).set(db_data)
 
 
 def create_db_record(
