@@ -17,9 +17,7 @@ from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
-GENSIM_V1_MODELS_PATH = path.abspath(
-    path.join(DIRNAME, "../src/models/gensim_strategy_v1")
-)
+GENSIM_V1_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v1"))
 
 
 class Strategy:
