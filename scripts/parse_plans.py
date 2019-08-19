@@ -89,6 +89,56 @@ def parse_article(soup):
 
     return article.get_text(separator="\n")
 
+
+def _flatten(x):
+    if isinstance(x, list):
+        return [a for i in x for a in _flatten(i)]
+    else:
+        return [x]
+
+
+def _get_contents(contents):
+    if isinstance(contents, list):
+        return [_get_contents(content) for content in contents]
+    if isinstance(contents, dict):
+        if "value" in contents:
+            return contents["value"]
+        elif "content" in contents:
+            return _get_contents(contents["content"])
+        else:
+            raise NotImplementedError(f"dont know how to parse {contents}")
+
+
+def parse_e_warren_dot_com(soup):
+    """
+    Parse javascript-y magic from e-warren dot com to get plan text
+
+    This doesnt necessarily maintain line breaks, and has double whitespaces in some places
+    """
+    scripts = soup.findAll("script")
+    script = [
+        script for script in scripts if "window.contentfulFields" in script.get_text()
+    ][0]
+
+    script_text = script.get_text()
+
+    # contentfulFields is a js object, which we can parse as json
+    match = re.search(r"contentfulFields = ({.*});", script_text)
+
+    contentful_fields = json.loads(match.group(1))
+
+    # do some magic to get the content out and concatenate it
+    contents = contentful_fields["contentType"]["fields"]["content"]["content"]
+
+    content_lists = _get_contents(contents)
+
+    content_str = " ".join(_flatten(content_lists))
+
+    content_str = content_str.replace("\xa0", "")
+
+    return content_str
+
+
 def parse_plans():
     """
     Extract text from plan html, preserving whitespace as appropriate
@@ -115,6 +165,8 @@ def parse_plans():
 
         if page_soup.find("article"):
             text = parse_article(page_soup)
+        elif "elizabethwarren" in plan_hostname:
+            text = parse_e_warren_dot_com(page_soup)
         else:
             logger.warning(
                 f"Failure to parse {plan_id}. Hostname: {plan_hostname} is not yet supported"
