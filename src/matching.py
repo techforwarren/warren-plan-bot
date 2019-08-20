@@ -52,7 +52,7 @@ class Strategy:
         match = None
 
         for plan in plans:
-            plan_match_confidence = fuzz.token_sort_ratio(post.text, plan["topic"])
+            plan_match_confidence = fuzz.token_sort_ratio(post.text.lower(), plan["topic"].lower())
 
             if plan_match_confidence > match_confidence:
                 # Update match
