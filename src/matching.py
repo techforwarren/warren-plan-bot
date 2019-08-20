@@ -195,6 +195,7 @@ class Preprocess:
         # Run preprocessing
         preprocessing_filters = [
             unidecode,
+            lambda x: x.lower(),
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
