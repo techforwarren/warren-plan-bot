@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  planbot:
+    container_name: planbot
+    build: .
+    volumes:
+      - .:/usr/src/app
+    entrypoint: bash
+    stdin_open: true
+    tty: true

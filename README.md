@@ -24,19 +24,50 @@ The following instructions should be run from the repo root
 
 `pip install -r requirements-dev.txt`
 
-### Add src folder to your Python path
+#### Add src folder to your Python path
 
 There are several ways to do this, one way is to extend your env/bin/activate file by running
 
 `echo -e "\nexport PYTHONPATH=\$PYTHONPATH:$(pwd)/src" >> env/bin/activate`
 
-### Other requirements
 
-#### Java (if you're running the local Firestore emulator)
+#### Other requirements
+
+##### Gcloud
+
+--TODO-- add instructions for mac and add to docker image
+
+##### Java (if you're running the local Firestore emulator)
 
 `brew cask install java` on Mac
 
 or visit https://www.java.com/download/
+
+--TODO-- add java to docker image
+
+
+### The Docker way
+
+#### Start the container
+
+`docker-compose up -d`
+
+#### Updating dependencies
+
+When you update dependencies, you'll need to rebuild the container
+
+`docker-compose build`
+
+and then start the new container
+
+`docker-compose down && docker-compose up -d`
+
+#### Run commands from within the docker container
+
+This will allow you to run all the commands below 
+
+`docker exec -it planbot bash`
+
 
 ### Format code
 
