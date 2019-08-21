@@ -35,16 +35,15 @@ There are several ways to do this, one way is to extend your env/bin/activate fi
 
 ##### Gcloud
 
---TODO-- add instructions for mac and add to docker image
+`brew cask install google-cloud-sdk` on Mac
+
+or visit https://cloud.google.com/sdk/docs/quickstarts
 
 ##### Java (if you're running the local Firestore emulator)
 
 `brew cask install java` on Mac
 
 or visit https://www.java.com/download/
-
---TODO-- add java to docker image
-
 
 ### The Docker way
 
@@ -67,7 +66,6 @@ and then start the new container
 This will allow you to run all the commands below 
 
 `docker exec -it planbot bash`
-
 
 ### Format code
 
@@ -120,8 +118,6 @@ Strategies are defined as static methods of the Strategy class in `matching.py`
 
 ##### Start local Firestore
 
-(You'll need java if you don't have it: `brew cask install java`)
-
 `gcloud beta emulators firestore start --project wpb-dev --host-port localhost:8480`
 
 ##### Run the bot
@@ -130,6 +126,8 @@ Strategies are defined as static methods of the Strategy class in `matching.py`
 - While updating the local emulated posts database
 
 `GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/wpb-dev-terraform-key.json FIRESTORE_EMULATOR_HOST=localhost:8480 python src/main.py --simulate-replies`
+
+Note: this method doesn't yet work in Docker, since that container doesn't have credentials (even fake ones)
 
 #### (Unsafe) Live, using shared tracking state
 
