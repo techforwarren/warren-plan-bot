@@ -1,7 +1,6 @@
 import re
 
 from google.cloud import firestore
-
 from matching import Strategy
 
 
