@@ -4,9 +4,9 @@ services:
     container_name: planbot
     build: .
     volumes:
-      - .:/usr/src/app
+      - .:/mnt
     entrypoint: bash
     stdin_open: true
     tty: true
     environment:
-      - PYTHONPATH=/mnt
+      - PYTHONPATH=/mnt/src
