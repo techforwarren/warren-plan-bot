@@ -8,3 +8,5 @@ services:
     entrypoint: bash
     stdin_open: true
     tty: true
+    environment:
+      - PYTHONPATH=/mnt
