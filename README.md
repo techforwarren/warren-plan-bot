@@ -51,9 +51,9 @@ or visit https://www.java.com/download/
 
 `docker-compose up -d`
 
-#### Updating dependencies
+#### Rebuild the container
 
-When you update dependencies, you'll need to rebuild the container
+If dependencies get updated, or if the dockerfile itself changes, you'll need to rebuild the container
 
 `docker-compose build`
 
