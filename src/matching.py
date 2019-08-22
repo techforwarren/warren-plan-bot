@@ -18,6 +18,7 @@ from unidecode import unidecode
 DIRNAME = path.dirname(path.realpath(__file__))
 
 GENSIM_V1_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v1"))
+GENSIM_V2_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v2"))
 
 
 class Strategy:
@@ -52,7 +53,9 @@ class Strategy:
         match = None
 
         for plan in plans:
-            plan_match_confidence = fuzz.token_sort_ratio(post.text.lower(), plan["topic"].lower())
+            plan_match_confidence = fuzz.token_sort_ratio(
+                post.text.lower(), plan["topic"].lower()
+            )
 
             if plan_match_confidence > match_confidence:
                 # Update match
@@ -79,19 +82,25 @@ class Strategy:
         return match_info
 
     @staticmethod
-    def _gensim_similarity(plans: list, post, model_name, model, similarity, threshold):
-        plan_ids = json.load(open(path.join(GENSIM_V1_MODELS_PATH, "plan_ids.json")))
+    def _gensim_similarity(
+        plans: list,
+        post,
+        model_name,
+        model,
+        similarity,
+        threshold,
+        model_path=GENSIM_V1_MODELS_PATH,
+    ):
+        plan_ids = json.load(open(path.join(model_path, "plan_ids.json")))
 
-        dictionary = corpora.Dictionary.load(
-            path.join(GENSIM_V1_MODELS_PATH, "plans.dict")
-        )
+        dictionary = corpora.Dictionary.load(path.join(model_path, "plans.dict"))
 
         preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
 
         vec_post = dictionary.doc2bow(preprocessed_post)
 
-        index = similarity.load(path.join(GENSIM_V1_MODELS_PATH, f"{model_name}.index"))
-        model = model.load(path.join(GENSIM_V1_MODELS_PATH, f"{model_name}.model"))
+        index = similarity.load(path.join(model_path, f"{model_name}.index"))
+        model = model.load(path.join(model_path, f"{model_name}.model"))
 
         # find similar plans
         sims = index[model[vec_post]]
@@ -163,6 +172,45 @@ class Strategy:
             models.TfidfModel,
             similarities.MatrixSimilarity,
             threshold,
+        )
+
+    @staticmethod
+    def lsa_gensim_v2(plans: list, post, threshold=80):
+        """
+        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
+
+        This version includes the hand-written topics from plans.json in the corpus
+        of documents posts are matched against
+
+        Models have been precomputed using ../scripts/update_gensim_models_v2.py
+        """
+        return Strategy._gensim_similarity(
+            plans,
+            post,
+            "lsa",
+            models.LsiModel,
+            similarities.MatrixSimilarity,
+            threshold,
+            model_path=GENSIM_V2_MODELS_PATH,
+        )
+
+    @staticmethod
+    def tfidf_gensim_v2(plans: list, post, threshold=20):
+        """
+        TFIDF – Term Frequency–Inverse Document Frequency
+
+        Using gensim
+
+        Models have been precomputed using ../scripts/update_gensim_models_v2.py
+        """
+        return Strategy._gensim_similarity(
+            plans,
+            post,
+            "tfidf",
+            models.TfidfModel,
+            similarities.MatrixSimilarity,
+            threshold,
+            model_path=GENSIM_V2_MODELS_PATH,
         )
 
 
