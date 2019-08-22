@@ -33,7 +33,7 @@ with open(path.join(DIRNAME, "../src/plans.json")) as plans_file:
 CORRECT_MATCH = 1
 ALTERNATE_MATCH = 0.5
 NO_MATCH = 0
-WRONG_MATCH = -1
+WRONG_MATCH = -2
 
 
 def score_match(post, match_info):
