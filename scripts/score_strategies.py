@@ -27,7 +27,12 @@ with open(path.join(DIRNAME, "labeled_posts.json")) as posts_file:
 
 
 with open(path.join(DIRNAME, "../src/plans.json")) as plans_file:
-    plans = json.load(plans_file)
+    pure_plans = json.load(plans_file)
+
+with open(path.join(DIRNAME, "../src/plan_clusters.json")) as plans_file:
+    plan_clusters = json.load(plans_file)
+
+plans = pure_plans + plan_clusters
 
 # Weights for how good/bad the possible outcomes are to be considered
 CORRECT_MATCH = 1

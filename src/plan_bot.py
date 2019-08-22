@@ -5,18 +5,8 @@ from google.cloud import firestore
 from matching import Strategy
 
 
-def build_response_text(plan_record, post):
-    """
-    Create response text with plan summary
-    """
-
+def footer(post):
     return (
-        f"Senator Warren has a plan for that!"
-        f"\n\n"
-        f"{plan_record['summary']}"
-        f"\n\n"
-        # Link to learn more about the plan
-        f"Learn more about her plan for [{plan_record['display_title']}]({plan_record['url']})"
         f"\n\n"
         # Horizontal line above footer
         "\n***\n"
@@ -33,6 +23,44 @@ def build_response_text(plan_record, post):
         f"If you'd like to join us, visit the campaign's "
         f"[Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer)."
     )
+
+
+def build_response_text_plan_cluster(plan_record, post):
+    """
+    Create response text with plan summary when plan is actually a plan cluster
+    """
+
+    return (
+        f"Senator Warren has quite a number of plans for that!"
+        f"\n\n"
+        # Links to learn more about the plan cluster
+        f"Learn more about her plans for {plan_record['display_title']}:"
+        f"\n\n"
+        f"{['[' + plan['display_title'] + '](' + plan['url'] + ')' for plan in plan_record['plans']]}\n"
+        f"{footer(post)}"
+    )
+
+
+def build_response_text_pure_plan(plan_record, post):
+    """
+    Create response text with plan summary
+    """
+
+    return (
+        f"Senator Warren has a plan for that!"
+        f"\n\n"
+        f"{plan_record['summary']}"
+        f"\n\n"
+        # Link to learn more about the plan
+        f"Learn more about her plan for [{plan_record['display_title']}]({plan_record['url']})"
+        f"{footer(post)}"
+    )
+
+
+def build_response_text(plan_record, post):
+    if plan_record.get("is_cluster"):
+        return build_response_text_plan_cluster(plan_record, post)
+    return build_response_text_pure_plan(plan_record, post)
 
 
 def reply(post, reply_string: str, send=False, simulate=False):
@@ -62,7 +90,7 @@ def process_post(
     send=False,
     simulate=False,
     skip_tracking=False,
-    matching_strategy=Strategy.token_sort_lsi_v1_composite,
+    matching_strategy=Strategy.lsa_gensim_v2,
 ):
     if post_ids_replied_to is None:
         post_ids_replied_to = []

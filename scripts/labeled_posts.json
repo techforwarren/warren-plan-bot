@@ -208,8 +208,8 @@
   {
     "text": "!WarrenPlanBot clean green energy",
     "source": "sh",
-    "match": "climate_risk_disclosure",
-    "alternate_matches": ["green_manufacturing"]
+    "match": "green_manufacturing",
+    "alternate_matches": ["climate_risk_disclosure", "climate_change"]
   },
   {
     "text": "!WarrenPlanBot what is her plan to stop gun deaths?",
@@ -222,16 +222,19 @@
     "match": "gun_violence"
   },
   {
+    "text": "!WarrenPlanBot mass shootings",
+    "source": "/r/WPBSandbox",
+    "match": "gun_violence"
+  },
+  {
     "text": "!WarrenPlanBot does she have a plan for public housing",
     "source": "/r/WPBSandbox",
-    "match": null,
-    "alternate_matches": ["affordable_housing"]
+    "match": "affordable_housing"
   },
   {
     "text": "!WarrenPlanBot public housing",
     "source": "sh",
-    "match": null,
-    "alternate_matches": ["affordable_housing"]
+    "match": "affordable_housing"
   },
   {
     "text": "!WarrenPlanBot what is her plan for affordable public housing?",
@@ -275,7 +278,7 @@
   {
     "text": "!WarrenPlanBot what's Senator Warren's plan for climate change?",
     "source": "/r/WPBSandbox",
-    "match": null,
+    "match": "climate_change",
     "alternate_matches": [
       "new_farm_economy",
       "national_security_climate_change",

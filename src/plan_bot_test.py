@@ -45,6 +45,26 @@ def mock_plan():
     }
 
 
+@pytest.fixture
+def mock_plan_cluster():
+    return {
+        "display_title": "Plan Title",
+        "is_cluster": True,
+        "plans": [
+            {
+                "summary": "a summary",
+                "display_title": "Plan Title",
+                "url": "http://plan.plan",
+            },
+            {
+                "summary": "another summary",
+                "display_title": "Plan 2 Title",
+                "url": "http://plan2.plan",
+            },
+        ],
+    }
+
+
 def test_reply_default(mock_comment):
     return_val = plan_bot.reply(mock_comment, "post body")
     mock_comment.reply.assert_not_called()
@@ -89,6 +109,18 @@ def test_build_response_text_to_submission(mock_submission, mock_plan):
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
+    assert mock_submission.permalink in response_text
+
+
+def test_build_response_text_to_submission_with_plan_cluster(
+    mock_submission, mock_plan_cluster
+):
+    response_text = plan_bot.build_response_text(mock_plan_cluster, mock_submission)
+    assert type(response_text) is str
+    assert mock_plan_cluster["display_title"] in response_text
+    for plan in mock_plan_cluster["plans"]:
+        assert plan["display_title"] in response_text
+        assert plan["url"] in response_text
     assert mock_submission.permalink in response_text
 
 
