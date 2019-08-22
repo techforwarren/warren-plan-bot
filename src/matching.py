@@ -4,15 +4,11 @@ from os import path
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
-from gensim.parsing.preprocessing import (
-    preprocess_string,
-    remove_stopwords,
-    stem_text,
-    strip_multiple_whitespaces,
-    strip_numeric,
-    strip_punctuation,
-    strip_short,
-)
+from gensim.parsing.preprocessing import (preprocess_string, remove_stopwords,
+                                          stem_text,
+                                          strip_multiple_whitespaces,
+                                          strip_numeric, strip_punctuation,
+                                          strip_short)
 from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
@@ -152,24 +148,6 @@ class Strategy:
             post,
             "lsi",
             models.LsiModel,
-            similarities.MatrixSimilarity,
-            threshold,
-        )
-
-    @staticmethod
-    def tfidf_gensim_v1(plans: list, post, threshold=20):
-        """
-        TFIDF – Term Frequency–Inverse Document Frequency
-
-        Using gensim
-
-        Models have been precomputed using ../scripts/update_gensim_models_v1.py
-        """
-        return Strategy._gensim_similarity(
-            plans,
-            post,
-            "tfidf",
-            models.TfidfModel,
             similarities.MatrixSimilarity,
             threshold,
         )

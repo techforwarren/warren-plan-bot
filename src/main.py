@@ -13,6 +13,7 @@ from plan_bot import process_post
 
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
+PLANS_CLUSTERS_FILE = "plan_clusters.json"
 
 click_kwargs = {"show_envvar": True, "show_default": True}
 
@@ -96,7 +97,19 @@ def run_plan_bot(
     reddit.read_only = not send_replies
 
     with open(PLANS_FILE) as json_file:
-        plans = json.load(json_file)
+        pure_plans = json.load(json_file)
+
+    with open(PLANS_CLUSTERS_FILE) as json_file:
+        plan_clusters = json.load(json_file)
+
+    for plan in plan_clusters:
+        plan["is_cluster"] = True
+        plan["plans"] = [
+            next(filter(lambda p: p["id"] == plan_id, pure_plans))
+            for plan_id in plan["plan_ids"]
+        ]
+
+    plans = pure_plans + plan_clusters
 
     if skip_tracking:
         posts_db = None

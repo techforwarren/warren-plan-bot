@@ -1,0 +1,13 @@
+[
+  {
+    "id": "climate_change",
+    "topic": "climate change",
+    "display_title": "Climate Change",
+    "plan_ids": [
+      "new_farm_economy",
+      "national_security_climate_change",
+      "green_manufacturing",
+      "climate_risk_disclosure"
+    ]
+  }
+]

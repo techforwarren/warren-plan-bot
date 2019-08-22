@@ -275,7 +275,7 @@
   {
     "text": "!WarrenPlanBot what's Senator Warren's plan for climate change?",
     "source": "/r/WPBSandbox",
-    "match": null,
+    "match": "climate_change",
     "alternate_matches": [
       "new_farm_economy",
       "national_security_climate_change",

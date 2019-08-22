@@ -62,12 +62,6 @@ def update_gensim_models():
     tfidf = models.TfidfModel(corpus)
 
     corpus_tfidf = tfidf[corpus]
-    tfidf_index = similarities.MatrixSimilarity(
-        tfidf[corpus], num_features=len(dictionary)
-    )
-
-    tfidf.save(path.join(OUTPUT_DIR, "tfidf.model"))
-    tfidf_index.save(path.join(OUTPUT_DIR, "tfidf.index"))
 
     # LSI
     lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=300)
