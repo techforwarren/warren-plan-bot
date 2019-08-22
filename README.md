@@ -81,9 +81,9 @@ This will allow you to run all the commands below
 
 `python scripts/parse_plans.py`
 
-#### Regenerate gensim models
+#### Regenerate models
 
-`python scripts/update_gensim_models_v1.py`
+`./scripts/update_models.sh`
 
 ### Test strategies for matching
 

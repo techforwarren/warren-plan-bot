@@ -109,7 +109,7 @@ def score_strategies():
     print("--Top Strategies--")
     print("")
 
-    for result in results[:5]:
+    for result in results[:10]:
         print(f"{result['name']}: TOTAL SCORE: {result['total_score']}")
 
 
