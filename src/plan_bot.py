@@ -120,15 +120,16 @@ def process_post(
     if post_ids_replied_to is None:
         post_ids_replied_to = []
 
-    if post.id in post_ids_replied_to:
-        return
-
-    # Make sure we're not replying to a deleted post
-    if not post.author:
-        return
-
-    # Make sure we're not replying to ourself
-    if "warrenplanbot" in post.author.name.lower():
+    if (
+        # Never try to reply if a post is locked
+        post.locked
+        # Never reply to a deleted post
+        or not post.author
+        # Make sure we're not replying to ourself
+        or "warrenplanbot" in post.author.name.lower()
+        # Make sure we don't reply to a post we've already replied to
+        or post.id in post_ids_replied_to
+    ):
         return
 
     # Ensure it's a post where someone summoned us
@@ -148,11 +149,7 @@ def process_post(
     # Create partial db entry from known values, placeholder defaults for mutable values
     db_data = create_db_record(post, match, plan_confidence, plan_id)
 
-    # If plan is matched with confidence, build and send reply if post not locked
-    # Never try to reply if a post is locked
-    if post.locked:
-        return
-
+    # If plan is matched with confidence, build and send reply
     if match:
         print("plan match: ", plan_id, post.id, plan_confidence)
 
