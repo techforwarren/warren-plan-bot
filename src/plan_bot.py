@@ -27,7 +27,7 @@ def footer(post):
 
 def _plan_links(plans):
     return "\n".join(
-        ["[" + plan["display_title"] + "](" + plan["url"] + ") " for plan in plans]
+        ["[" + plan["display_title"] + "](" + plan["url"] + ")  " for plan in plans]
     )
 
 
