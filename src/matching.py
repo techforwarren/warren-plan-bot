@@ -1,14 +1,18 @@
 import json
-from functools import partial
+from functools import lru_cache, partial
 from os import path
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
-from gensim.parsing.preprocessing import (preprocess_string, remove_stopwords,
-                                          stem_text,
-                                          strip_multiple_whitespaces,
-                                          strip_numeric, strip_punctuation,
-                                          strip_short)
+from gensim.parsing.preprocessing import (
+    preprocess_string,
+    remove_stopwords,
+    stem_text,
+    strip_multiple_whitespaces,
+    strip_numeric,
+    strip_punctuation,
+    strip_short,
+)
 from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
@@ -78,6 +82,18 @@ class Strategy:
         return match_info
 
     @staticmethod
+    @lru_cache(maxsize=8)
+    def _load_gensim_models(model_name, model, similarity, model_path):
+        plan_ids = json.load(open(path.join(model_path, "plan_ids.json")))
+
+        dictionary = corpora.Dictionary.load(path.join(model_path, "plans.dict"))
+
+        index = similarity.load(path.join(model_path, f"{model_name}.index"))
+        model = model.load(path.join(model_path, f"{model_name}.model"))
+
+        return plan_ids, dictionary, index, model
+
+    @staticmethod
     def _gensim_similarity(
         plans: list,
         post,
@@ -87,16 +103,13 @@ class Strategy:
         threshold,
         model_path=GENSIM_V1_MODELS_PATH,
     ):
-        plan_ids = json.load(open(path.join(model_path, "plan_ids.json")))
-
-        dictionary = corpora.Dictionary.load(path.join(model_path, "plans.dict"))
+        plan_ids, dictionary, index, model = Strategy._load_gensim_models(
+            model_name, model, similarity, model_path
+        )
 
         preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
 
         vec_post = dictionary.doc2bow(preprocessed_post)
-
-        index = similarity.load(path.join(model_path, f"{model_name}.index"))
-        model = model.load(path.join(model_path, f"{model_name}.model"))
 
         # find similar plans
         sims = index[model[vec_post]]
