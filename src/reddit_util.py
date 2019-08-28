@@ -17,7 +17,7 @@ class Submission(Wrapper):
 
     @property
     def text(self):
-        return self.selftext
+        return self.title + "\n" + self.selftext
 
 
 class Comment(Wrapper):
