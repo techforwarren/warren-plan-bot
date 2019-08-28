@@ -128,46 +128,54 @@ def process_post(
     if post_ids_replied_to is None:
         post_ids_replied_to = []
 
-    if post.id not in post_ids_replied_to:
-        # Do a case insensitive search
-        if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
-            match_info = RuleStrategy.match_display_title(
-                plans, post
-            ) or matching_strategy(plans, post)
+    if post.id in post_ids_replied_to:
+        return
 
-            match = match_info["match"]
-            plan_confidence = match_info["confidence"]
-            plan = match_info["plan"]
-            potential_matches = match_info.get("potential_matches")
-            plan_id = plan["id"]
+    # Make sure we're not replying to ourself
+    if "warrenplanbot" in post.author.name.lower():
+        return
 
-            # Create partial db entry from known values, placeholder defaults for mutable values
-            db_data = create_db_record(post, match, plan_confidence, plan_id)
+    # Ensure it's a post where someone summoned us
+    if not re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
+        return
 
-            # If plan is matched with confidence, build and send reply if post not locked
-            # Never try to reply if a post is locked
-            if post.locked:
-                return
+    match_info = RuleStrategy.match_display_title(plans, post) or matching_strategy(
+        plans, post
+    )
 
-            if match:
-                print("plan match: ", plan_id, post.id, plan_confidence)
+    match = match_info["match"]
+    plan_confidence = match_info["confidence"]
+    plan = match_info["plan"]
+    potential_matches = match_info.get("potential_matches")
+    plan_id = plan["id"]
 
-                reply_string = build_response_text(plan, post)
+    # Create partial db entry from known values, placeholder defaults for mutable values
+    db_data = create_db_record(post, match, plan_confidence, plan_id)
 
-                did_reply = reply(post, reply_string, send=send, simulate=simulate)
-            else:
-                print("topic mismatch: ", plan_id, post.id, plan_confidence)
+    # If plan is matched with confidence, build and send reply if post not locked
+    # Never try to reply if a post is locked
+    if post.locked:
+        return
 
-                reply_string = build_no_match_response_text(potential_matches, post)
+    if match:
+        print("plan match: ", plan_id, post.id, plan_confidence)
 
-                did_reply = reply(post, reply_string, send=send, simulate=simulate)
+        reply_string = build_response_text(plan, post)
 
-            if did_reply and not skip_tracking:
-                # Replace default None values in db_data record
-                db_data["replied"] = True
-                db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
+        did_reply = reply(post, reply_string, send=send, simulate=simulate)
+    else:
+        print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
-                posts_db.document(post.id).set(db_data)
+        reply_string = build_no_match_response_text(potential_matches, post)
+
+        did_reply = reply(post, reply_string, send=send, simulate=simulate)
+
+    if did_reply and not skip_tracking:
+        # Replace default None values in db_data record
+        db_data["replied"] = True
+        db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
+
+        posts_db.document(post.id).set(db_data)
 
 
 def create_db_record(

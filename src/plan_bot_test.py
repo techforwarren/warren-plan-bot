@@ -10,6 +10,11 @@ class MockSubreddit:
         self.name = "id2wpbsandbox"
 
 
+class MockAuthor:
+    def __init__(self):
+        self.name = "aredditusername"
+
+
 class MockSubmission:
     def __init__(self, text="text of submission", locked=False):
         self.id = "123"
@@ -20,6 +25,7 @@ class MockSubmission:
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
         self.locked = locked
+        self.author = MockAuthor()
 
 
 class MockComment:
@@ -237,3 +243,33 @@ def test_process_post_matches_real_plan(
     mock_reply.assert_called_once_with(
         post, "some response text", send=False, simulate=False
     )
+
+
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="some response text")
+@mock.patch("plan_bot.reply")
+@pytest.mark.parametrize(
+    "reddit_username", ["warrenplanbot", "warrenplanbotdev", "WarrenPlanBot"]
+)
+def test_process_post_wont_reply_to_warren_plan_bot(
+    mock_reply, mock_build_response_text, mock_create_db_record, reddit_username
+):
+    plans = [
+        {
+            "id": "universal_child_care",
+            "topic": "universal child care",
+            "summary": "We're the wealthiest country on the planet ...",
+            "display_title": "Universal Child Care",
+            "url": "https://medium.com/@teamwarren/my-plan-for-universal-child-care-762535e6c20a",
+        }
+    ]
+
+    post = MockSubmission(
+        "!WarrenPlanBot what's Senator Warren's plan to get child care to all the children who need it?"
+    )
+    post.author.name = reddit_username
+
+    plan_bot.process_post(post, plans, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_not_called()
+    mock_reply.assert_not_called()
