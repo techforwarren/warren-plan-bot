@@ -59,7 +59,7 @@ def build_response_text_pure_plan(plan_record, post):
         f"{plan_record['summary']}"
         f"\n\n"
         # Link to learn more about the plan
-        f"Learn more about her plan for [{plan_record['display_title']}]({plan_record['url']})"
+        f"Learn more about her plan: [{plan_record['display_title']}]({plan_record['url']})"
         f"{footer(post)}"
     )
 
