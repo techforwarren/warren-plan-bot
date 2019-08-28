@@ -118,8 +118,8 @@ class Strategy:
 
         potential_matches = [
             {
-                "plan_id": plan_ids[sim],
-                "plan": [p for p in plans if p["id"] == plan_ids[sim]][0],
+                "plan_id": plan_ids[sim[0]],
+                "plan": [p for p in plans if p["id"] == plan_ids[sim[0]]][0],
                 "confidence": sim[1] * 100,
             }
             for sim in sims
