@@ -5,25 +5,51 @@ import pytest
 import plan_bot
 
 
-class MockSubmission:
+class MockSubreddit:
     def __init__(self):
+        self.name = "id2wpbsandbox"
+
+
+class MockSubmission:
+    def __init__(self, text="text of submission", locked=False):
         self.id = "123"
-        self.text = "text of submission"
+        self.text = text
+        self.title = "title"
         self.type = "submission"
         self.permalink = "http://post.post"
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
+        self.locked = locked
 
 
 class MockComment:
-    def __init__(self):
+    def __init__(self, text="text of comment"):
         self.id = "456"
-        self.text = "text of comment"
+        self.text = text
         self.type = "comment"
         self.permalink = "http://post.post"
         self.submission = MockSubmission()
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
+        self.subreddit = MockSubreddit()
+
+
+PLANS = [
+    {
+        "id": "century_21",
+        "topic": "21st century title",
+        "summary": "The best century",
+        "display_title": "A Title for the 21st Century",
+        "url": "plan.plan",
+    },
+    {
+        "id": "another_plan",
+        "topic": "another plan",
+        "summary": "This is another plan",
+        "display_title": "Another Title To Really Make a Person Think",
+        "url": "anotherplan.plan",
+    },
+]
 
 
 @pytest.fixture
@@ -124,6 +150,73 @@ def test_build_response_text_to_submission_with_plan_cluster(
     assert mock_submission.permalink in response_text
 
 
-@pytest.mark.skip("Needs tests")
-def test_process_post():
-    pass
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.reply")
+@pytest.mark.parametrize(
+    ["post_text", "expected_matching_plan"],
+    [
+        ("!WarrenPlanBot A Title for the 21st Century", PLANS[0]),
+        ("!WarrenPlanBot Another Title To Really Make a Person Think", PLANS[1]),
+        ("!WarrenPlanBot  another title to really make a Person Think   ", PLANS[1]),
+    ],
+)
+def test_process_post_matches_display_title(
+    mock_reply,
+    mock_build_response_text,
+    mock_create_db_record,
+    post_text,
+    expected_matching_plan,
+):
+    post = MockSubmission(post_text)
+
+    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+    mock_reply.assert_called_once_with(
+        post, "response text", send=False, simulate=False
+    )
+
+
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text")
+@mock.patch("plan_bot.reply")
+def test_process_post_wont_reply_to_locked_post(
+    mock_reply, mock_build_response_text, mock_create_db_record
+):
+
+    post = MockSubmission("!WarrenPlanBot A Title for the 21st Century")
+    post.locked = True
+
+    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_not_called()
+    mock_reply.assert_not_called()
+
+
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="some response text")
+@mock.patch("plan_bot.reply")
+def test_process_post_matches_real_plan(
+    mock_reply, mock_build_response_text, mock_create_db_record
+):
+    plans = [
+        {
+            "id": "universal_child_care",
+            "topic": "universal child care",
+            "summary": "We're the wealthiest country on the planet ...",
+            "display_title": "Universal Child Care",
+            "url": "https://medium.com/@teamwarren/my-plan-for-universal-child-care-762535e6c20a",
+        }
+    ]
+
+    post = MockSubmission(
+        "!WarrenPlanBot what's Senator Warren's plan to get child care to all the children who need it?"
+    )
+
+    plan_bot.process_post(post, plans, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_called_once_with(plans[0], post)
+    mock_reply.assert_called_once_with(
+        post, "some response text", send=False, simulate=False
+    )

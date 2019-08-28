@@ -120,7 +120,9 @@ class Strategy:
         potential_matches_with_dups = [
             {
                 "plan_id": plan_ids[sim[0]],
-                "plan": [p for p in plans if p["id"] == plan_ids[sim[0]]][0],
+                "plan": next(
+                    filter(lambda p: p["id"] == plan_ids[sim[0]], plans), None
+                ),
                 "confidence": sim[1] * 100,
             }
             for sim in sims
@@ -225,6 +227,30 @@ class Strategy:
         )
 
 
+class RuleStrategy:
+    """
+    These are hardcoded matching rules that we want to make sure the bot respects, so that we can do human stuff
+    for example, tell a user to say a phrase to get a certain plan
+
+    They are otherwise similar to the functions in Strategy except that they don't accept a threshold argument,
+    and they return None when there is no match
+    """
+
+    @staticmethod
+    def match_display_title(plans: list, post):
+        """
+        Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,
+        or the user to include a stop word for some reason
+        """
+        preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
+        for plan in plans:
+            if (
+                Preprocess.preprocess_gensim_v1(plan["display_title"])
+                == preprocessed_post
+            ):
+                return {"match": plan["id"], "confidence": 100, "plan": plan}
+
+
 class Preprocess:
     """
     Defines strategies used for preprocessing text before model building and similarity scoring
@@ -246,6 +272,9 @@ class Preprocess:
                 "warrenplanbotdev",
                 "sen",
                 "senator",
+                "thanks",
+                "thank",
+                "you",
             }
         )
 

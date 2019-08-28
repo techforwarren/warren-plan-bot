@@ -2,7 +2,7 @@ import re
 
 from google.cloud import firestore
 
-from matching import Strategy
+from matching import RuleStrategy, Strategy
 
 
 def footer(post):
@@ -105,7 +105,9 @@ def process_post(
     if post.id not in post_ids_replied_to:
         # Do a case insensitive search
         if re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
-            match_info = matching_strategy(plans, post)
+            match_info = RuleStrategy.match_display_title(
+                plans, post
+            ) or matching_strategy(plans, post)
 
             match = match_info["match"]
             plan_confidence = match_info["confidence"]
