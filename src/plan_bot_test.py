@@ -149,8 +149,7 @@ def test_build_no_match_response_text(mock_submission, mock_plan):
         [{"plan": mock_plan}], mock_submission
     )
     assert type(response_text) is str
-    assert f"!WarrenPlanBot {mock_plan['display_title']}" in response_text
-    assert mock_plan["url"] not in response_text
+    assert f"[{mock_plan['display_title']}]({mock_plan['url']})" in response_text
     assert mock_plan["summary"] not in response_text
     assert mock_submission.permalink in response_text
 

@@ -25,17 +25,16 @@ def footer(post):
     )
 
 
+def _plan_links(plans):
+    return "\n".join(
+        ["[" + plan["display_title"] + "](" + plan["url"] + ")" for plan in plans]
+    )
+
+
 def build_response_text_plan_cluster(plan_record, post):
     """
     Create response text with plan summary when plan is actually a plan cluster
     """
-
-    plan_list_text = "\n".join(
-        [
-            "[" + plan["display_title"] + "](" + plan["url"] + ")"
-            for plan in plan_record["plans"]
-        ]
-    )
 
     return (
         f"Senator Warren has quite a number of plans for that!"
@@ -43,7 +42,7 @@ def build_response_text_plan_cluster(plan_record, post):
         # Links to learn more about the plan cluster
         f"Learn more about her plans for {plan_record['display_title']}:"
         f"\n\n"
-        f"{plan_list_text}"
+        f"{ _plan_links(plan_record['plans'])}"
         f"{footer(post)}"
     )
 
@@ -71,19 +70,12 @@ def build_response_text(plan_record, post):
 
 
 def build_no_match_response_text(potential_plan_matches, post):
-    suggested_replies = "\n".join(
-        [
-            f"!WarrenPlanBot {potential_match['plan']['display_title']}"
-            for potential_match in potential_plan_matches[:10]
-        ]
-    )
-
-    if suggested_replies:
+    if potential_plan_matches:
         return (
             f"I'm not sure exactly which plan you're looking for! "
-            f"My best guesses are below. Reply with any of the following to see the corresponding plan!"
+            f"My best guesses for what you were asking about are:"
             f"\n\n"
-            f"{suggested_replies}"
+            f"{ _plan_links(match['plan'] for match in potential_plan_matches[:8])}"
             f"{footer(post)}"
         )
     else:
