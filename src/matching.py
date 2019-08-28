@@ -35,6 +35,7 @@ class Strategy:
         "match": plan id if the plan is considered a match, otherwise None
         "confidence": the confidence that the plan is a match (0 - 100)
         "plan": the best matching plan
+        "potential_matches": [{plan_id, plan, confidence}] all potential matching plans, sorted from highest to lowest confidence
         # Can include other metadata about the match here
     }
     """
@@ -62,7 +63,6 @@ class Strategy:
             "match": match["id"] if match_confidence > threshold else None,
             "confidence": match_confidence,
             "plan": match,
-            # Can include other metadata about the match here
         }
 
     @staticmethod
@@ -103,18 +103,24 @@ class Strategy:
         # sort by descending match
         sims = list(sorted(enumerate(sims), key=lambda item: -item[1]))
 
-        top_similarity = sims[0]
+        potential_matches = [
+            {
+                "plan_id": plan_ids[sim],
+                "plan": [p for p in plans if p["id"] == plan_ids[sim]][0],
+                "confidence": sim[1] * 100,
+            }
+            for sim in sims
+        ]
 
-        matched_plan_id = plan_ids[top_similarity[0]]
-        match_confidence = top_similarity[1] * 100
-
-        match = [p for p in plans if p["id"] == matched_plan_id][0]
+        best_match_confidence = potential_matches[0]["confidence"]
+        best_match_plan = potential_matches[0]["plan"]
+        best_match_plan_id = potential_matches[0]["plan_id"]
 
         return {
-            "match": matched_plan_id if match_confidence > threshold else None,
-            "confidence": match_confidence,
-            "plan": match,
-            # Can include other metadata about the match here
+            "match": best_match_plan_id if best_match_confidence > threshold else None,
+            "confidence": best_match_confidence,
+            "plan": best_match_plan,
+            "potential_matches": potential_matches,
         }
 
     @staticmethod
