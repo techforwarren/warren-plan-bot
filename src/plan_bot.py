@@ -70,6 +70,32 @@ def build_response_text(plan_record, post):
     return build_response_text_pure_plan(plan_record, post)
 
 
+def build_no_match_response_text(potential_plan_matches, post):
+    suggested_replies = "\n".join(
+        [
+            f"!WarrenPlanBot {potential_match['plan']['display_title']}"
+            for potential_match in potential_plan_matches[:10]
+        ]
+    )
+
+    if suggested_replies:
+        return (
+            f"I'm not sure exactly which plan you're looking for! "
+            f"My best guesses are below. Reply with any of the following to see the corresponding plan!"
+            f"\n\n"
+            f"{suggested_replies}"
+            f"{footer(post)}"
+        )
+    else:
+        return (
+            f"I'm not sure the best plan to match your question, "
+            f"and I'm not feeling confident enough in any of my guesses to tell you about them!"
+            f"\n\n"
+            f"Could you kindly rephrase? ':D"
+            f"{footer(post)}"
+        )
+
+
 def reply(post, reply_string: str, send=False, simulate=False):
     """
     :param post: post to reply on
@@ -112,28 +138,34 @@ def process_post(
             match = match_info["match"]
             plan_confidence = match_info["confidence"]
             plan = match_info["plan"]
+            potential_matches = match_info.get("potential_matches")
             plan_id = plan["id"]
 
             # Create partial db entry from known values, placeholder defaults for mutable values
             db_data = create_db_record(post, match, plan_confidence, plan_id)
 
             # If plan is matched with confidence, build and send reply if post not locked
-            if match and not post.locked:
+            # Never try to reply if a post is locked
+            if post.locked:
+                return
+
+            if match:
                 print("plan match: ", plan_id, post.id, plan_confidence)
 
                 reply_string = build_response_text(plan, post)
 
                 did_reply = reply(post, reply_string, send=send, simulate=simulate)
-
-                if did_reply and not skip_tracking:
-                    # Replace default None values in db_data record
-                    db_data["replied"] = True
-                    db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
-
-                    posts_db.document(post.id).set(db_data)
-
-            elif not skip_tracking:
+            else:
                 print("topic mismatch: ", plan_id, post.id, plan_confidence)
+
+                reply_string = build_no_match_response_text(potential_matches, post)
+
+                did_reply = reply(post, reply_string, send=send, simulate=simulate)
+
+            if did_reply and not skip_tracking:
+                # Replace default None values in db_data record
+                db_data["replied"] = True
+                db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
 
                 posts_db.document(post.id).set(db_data)
 
