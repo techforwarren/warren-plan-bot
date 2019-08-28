@@ -178,7 +178,7 @@ def test_build_response_text_to_submission_with_plan_cluster(
         ("!WarrenPlanBot  another title to really make a Person Think   ", PLANS[1]),
     ],
 )
-def test_process_post_matches_display_title(
+def test_process_post_matches_by_display_title(
     mock_reply,
     mock_build_response_text,
     mock_create_db_record,
