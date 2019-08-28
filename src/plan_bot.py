@@ -123,6 +123,10 @@ def process_post(
     if post.id in post_ids_replied_to:
         return
 
+    # Make sure we're not replying to a deleted post
+    if not post.author:
+        return
+
     # Make sure we're not replying to ourself
     if "warrenplanbot" in post.author.name.lower():
         return
