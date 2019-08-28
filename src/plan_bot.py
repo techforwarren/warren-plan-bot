@@ -30,13 +30,20 @@ def build_response_text_plan_cluster(plan_record, post):
     Create response text with plan summary when plan is actually a plan cluster
     """
 
+    plan_list_text = "\n".join(
+        [
+            "[" + plan["display_title"] + "](" + plan["url"] + ")"
+            for plan in plan_record["plans"]
+        ]
+    )
+
     return (
         f"Senator Warren has quite a number of plans for that!"
         f"\n\n"
         # Links to learn more about the plan cluster
         f"Learn more about her plans for {plan_record['display_title']}:"
         f"\n\n"
-        f"{['[' + plan['display_title'] + '](' + plan['url'] + ')' for plan in plan_record['plans']]}\n"
+        f"{plan_list_text}"
         f"{footer(post)}"
     )
 
@@ -52,7 +59,7 @@ def build_response_text_pure_plan(plan_record, post):
         f"{plan_record['summary']}"
         f"\n\n"
         # Link to learn more about the plan
-        f"Learn more about her plan for [{plan_record['display_title']}]({plan_record['url']})"
+        f"Learn more about her plan: [{plan_record['display_title']}]({plan_record['url']})"
         f"{footer(post)}"
     )
 
