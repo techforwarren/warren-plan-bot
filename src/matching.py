@@ -39,6 +39,7 @@ class Strategy:
         "match": plan id if the plan is considered a match, otherwise None
         "confidence": the confidence that the plan is a match (0 - 100)
         "plan": the best matching plan
+        "potential_matches": [{plan_id, plan, confidence}] all potential matching plans, sorted from highest to lowest confidence
         # Can include other metadata about the match here
     }
     """
@@ -66,7 +67,6 @@ class Strategy:
             "match": match["id"] if match_confidence > threshold else None,
             "confidence": match_confidence,
             "plan": match,
-            # Can include other metadata about the match here
         }
 
     @staticmethod
@@ -101,6 +101,7 @@ class Strategy:
         model,
         similarity,
         threshold,
+        potential_plan_threshold=50,
         model_path=GENSIM_V1_MODELS_PATH,
     ):
         plan_ids, dictionary, index, model = Strategy._load_gensim_models(
@@ -116,18 +117,39 @@ class Strategy:
         # sort by descending match
         sims = list(sorted(enumerate(sims), key=lambda item: -item[1]))
 
-        top_similarity = sims[0]
+        potential_matches_with_dups = [
+            {
+                "plan_id": plan_ids[sim[0]],
+                "plan": next(
+                    filter(lambda p: p["id"] == plan_ids[sim[0]], plans), None
+                ),
+                "confidence": sim[1] * 100,
+            }
+            for sim in sims
+        ]
 
-        matched_plan_id = plan_ids[top_similarity[0]]
-        match_confidence = top_similarity[1] * 100
+        # dedupe potential matches
+        potential_plan_ids = set()
+        potential_matches = []
+        for potential_match in potential_matches_with_dups:
+            if potential_match["plan_id"] not in potential_plan_ids:
+                potential_matches.append(potential_match)
+                potential_plan_ids.add(potential_match["plan_id"])
 
-        match = [p for p in plans if p["id"] == matched_plan_id][0]
+        best_match_confidence = potential_matches[0]["confidence"]
+        best_match_plan = potential_matches[0]["plan"]
+        best_match_plan_id = potential_matches[0]["plan_id"]
 
         return {
-            "match": matched_plan_id if match_confidence > threshold else None,
-            "confidence": match_confidence,
-            "plan": match,
-            # Can include other metadata about the match here
+            "match": best_match_plan_id if best_match_confidence > threshold else None,
+            "confidence": best_match_confidence,
+            "plan": best_match_plan,
+            "potential_matches": list(
+                filter(
+                    lambda m: m["confidence"] > potential_plan_threshold,
+                    potential_matches,
+                )
+            ),
         }
 
     @staticmethod
@@ -205,6 +227,30 @@ class Strategy:
         )
 
 
+class RuleStrategy:
+    """
+    These are hardcoded matching rules that we want to make sure the bot respects, so that we can do human stuff
+    for example, tell a user to say a phrase to get a certain plan
+
+    They are otherwise similar to the functions in Strategy except that they don't accept a threshold argument,
+    and they return None when there is no match
+    """
+
+    @staticmethod
+    def match_display_title(plans: list, post):
+        """
+        Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,
+        or the user to include a stop word for some reason
+        """
+        preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
+        for plan in plans:
+            if (
+                Preprocess.preprocess_gensim_v1(plan["display_title"])
+                == preprocessed_post
+            ):
+                return {"match": plan["id"], "confidence": 100, "plan": plan}
+
+
 class Preprocess:
     """
     Defines strategies used for preprocessing text before model building and similarity scoring
@@ -226,6 +272,9 @@ class Preprocess:
                 "warrenplanbotdev",
                 "sen",
                 "senator",
+                "thanks",
+                "thank",
+                "you",
             }
         )
 
