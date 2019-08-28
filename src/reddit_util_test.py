@@ -8,6 +8,7 @@ import reddit_util
 class MockSubmission:
     def __init__(self):
         self.selftext = "text of submission"
+        self.title = "title of submission"
         self.reply = mock.Mock()
         self.reply.return_value = "a comment"
 
@@ -33,7 +34,9 @@ def mock_comment():
 class TestSubmission:
     def test_text(self, mock_submission):
         submission = reddit_util.Submission(mock_submission)
-        assert submission.text == "text of submission", "text attribute added"
+        assert (
+            submission.text == "title of submission\ntext of submission"
+        ), "text attribute added"
         assert submission.selftext == "text of submission", "selftext preserved"
 
     def test_type(self, mock_submission):
@@ -71,7 +74,6 @@ class TestComment:
     def test_submission(self, mock_comment):
         comment = reddit_util.Comment(mock_comment)
         assert type(comment.submission) == reddit_util.Submission
-        assert comment.submission.text == "text of submission"
         assert comment.submission.selftext == "text of submission"
 
     def test_nonexistent_attribute(self, mock_comment):
