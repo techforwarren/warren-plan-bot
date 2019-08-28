@@ -101,6 +101,7 @@ class Strategy:
         model,
         similarity,
         threshold,
+        potential_plan_threshold=50,
         model_path=GENSIM_V1_MODELS_PATH,
     ):
         plan_ids, dictionary, index, model = Strategy._load_gensim_models(
@@ -116,7 +117,7 @@ class Strategy:
         # sort by descending match
         sims = list(sorted(enumerate(sims), key=lambda item: -item[1]))
 
-        potential_matches = [
+        potential_matches_with_dups = [
             {
                 "plan_id": plan_ids[sim[0]],
                 "plan": [p for p in plans if p["id"] == plan_ids[sim[0]]][0],
@@ -124,6 +125,14 @@ class Strategy:
             }
             for sim in sims
         ]
+
+        # dedupe potential matches
+        potential_plan_ids = set()
+        potential_matches = []
+        for potential_match in potential_matches_with_dups:
+            if potential_match["plan_id"] not in potential_plan_ids:
+                potential_matches.append(potential_match)
+                potential_plan_ids.add(potential_match["plan_id"])
 
         best_match_confidence = potential_matches[0]["confidence"]
         best_match_plan = potential_matches[0]["plan"]
@@ -133,7 +142,12 @@ class Strategy:
             "match": best_match_plan_id if best_match_confidence > threshold else None,
             "confidence": best_match_confidence,
             "plan": best_match_plan,
-            "potential_matches": potential_matches,
+            "potential_matches": list(
+                filter(
+                    lambda m: m["confidence"] > potential_plan_threshold,
+                    potential_matches,
+                )
+            ),
         }
 
     @staticmethod
