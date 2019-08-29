@@ -3,34 +3,27 @@ variable "region" {
   default = "us-central"
 }
 
-variable "project_id" {
-  type = string
-  default = "wpb-dev"
+variable "send_replies" {
+  type = bool
+  default = true
 }
 
-variable "credentials_file" {
-  type = string
-  default = "~/.gcloud/wpb-dev-terraform-key.json"
+locals {
+  environment = terraform.workspace == "default" ? "dev" : terraform.workspace
 }
 
-variable "function_name" {
-  type = string
-  default = "run-plan-bot"
-}
-
-variable "function_storage_bucket" {
-  type = string
-  default = "wpb-cloud-function-dev"
-}
-
-variable "function_storage_bucket_object" {
-  type = string
-  default = "plan_bot.zip"
+locals {
+  project_id = "wpb-${local.environment}"
+  function_storage_bucket = "wpb-cloud-function-${local.environment}"
+  credentials_file = "~/.gcloud/wpb-${local.environment}-terraform-key.json"
+  function_name = "run-plan-bot"
+  function_storage_bucket_object = "plan_bot.zip"
+  limit = "50"
 }
 
 provider "google" {
-  credentials = file(var.credentials_file)
-  project = var.project_id
+  credentials = file(local.credentials_file)
+  project = local.project_id
   region = "us-central1"
 }
 
@@ -67,13 +60,13 @@ data "archive_file" "plan_bot_zip" {
 
 # create the storage bucket for function storage
 resource "google_storage_bucket" "plan_bot_function_storage" {
-  name = var.function_storage_bucket
+  name = local.function_storage_bucket
 }
 
 
 # place the zip-ed code in the bucket
 resource "google_storage_bucket_object" "plan_bot_zip" {
-  name = var.function_storage_bucket_object
+  name = local.function_storage_bucket_object
   bucket = google_storage_bucket.plan_bot_function_storage.name
   source = "${path.root}/dist/plan_bot.zip"
   depends_on = [
@@ -82,7 +75,7 @@ resource "google_storage_bucket_object" "plan_bot_zip" {
 }
 
 resource "google_cloudfunctions_function" "run_plan_bot" {
-  name = var.function_name
+  name = local.function_name
   description = "run the plan bot"
   runtime = "python37"
 
@@ -104,7 +97,9 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   }
 
   environment_variables = {
-    SEND_REPLIES = true
+    SEND_REPLIES = var.send_replies
+    PRAW_SITE = local.environment
+    LIMIT = local.limit
   }
 }
 
@@ -119,6 +114,6 @@ resource "null_resource" "update_cloud_function" {
   }
 
   provisioner "local-exec" {
-    command = "google_application_credentials=${var.credentials_file} gcloud functions deploy ${var.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
+    command = "google_application_credentials=${local.credentials_file} gcloud functions deploy ${local.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
   }
 }

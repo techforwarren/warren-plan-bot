@@ -186,9 +186,25 @@ Add the key for the Terraform service account to
 
 You'll need to get this key from @joegoldbeck
 
+##### And for prod
+
+You'll also need to key for the Terraform prod service account at
+
+`~/.gcloud/wpb-proed-terraform-key.json`
+
 #### All necessary Terraform modules
 
 `terraform init`
+
+### To switch between deployments
+
+#### Dev deployment
+
+`terraform workspace select default`
+
+#### Prod deployment
+
+`terraform workspace select prod`
 
 ### Update deployment
 
@@ -204,6 +220,9 @@ will upload the that folder as a .zip archive and deploy a new version of the cl
 To prevent the bot from running every minute, the simplest thing to do is to remove the Cloud Scheduler job
 
 `terraform destroy -target google_cloud_scheduler_job.run_plan_bot`
+
+Or you can do it via the UI: [dev](https://console.cloud.google.com/cloudscheduler?project=wpb-dev) [prod](https://console.cloud.google.com/cloudscheduler?project=wpb-prod)
+
 
 ### Pushshift Samples URL
 
