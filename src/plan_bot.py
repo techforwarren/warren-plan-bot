@@ -76,6 +76,11 @@ def build_no_match_response_text(potential_plan_matches, post):
             f"My best guesses for what you were asking about are:"
             f"\n\n"
             f"{ _plan_links(match['plan'] for match in potential_plan_matches[:8])}"
+            f"\n\n"
+            f"Or to get a list of all the plans available, reply with"
+            f"\n\n"
+            f"!WarrenPlanBot show me the plans"
+            f"\n\n"
             f"{footer(post)}"
         )
     else:
@@ -83,7 +88,11 @@ def build_no_match_response_text(potential_plan_matches, post):
             f"I'm not sure the best plan to match your question, "
             f"and I'm not feeling confident enough in any of my guesses to tell you about them!"
             f"\n\n"
-            f"Could you kindly rephrase? ':D"
+            f"To get a list of all the plans available, reply with"
+            f"\n\n"
+            f"!WarrenPlanBot show me the plans"
+            f"\n\n"
+            f"Or please kindly rephrase? ':D"
             f"{footer(post)}"
         )
 
