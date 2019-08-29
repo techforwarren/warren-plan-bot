@@ -80,18 +80,18 @@ def mock_plan():
 @pytest.fixture
 def mock_plan_cluster():
     return {
-        "display_title": "Plan Title",
+        "display_title": "Plan Cluster Title",
         "is_cluster": True,
         "plans": [
             {
                 "summary": "a summary",
-                "display_title": "Plan Title",
-                "url": "http://plan.plan",
+                "display_title": "SubPlan Title",
+                "url": "http://subplan.plan",
             },
             {
                 "summary": "another summary",
-                "display_title": "Plan 2 Title",
-                "url": "http://plan2.plan",
+                "display_title": "SubPlan 2 Title",
+                "url": "http://subplan2.plan",
             },
         ],
     }
@@ -161,9 +161,23 @@ def test_build_no_match_response_text_no_potential_matches(mock_submission, mock
 
 
 def test_build_response_text_to_submission_with_plan_cluster(
+    mock_submission, mock_plan_cluster
+):
+    response_text = plan_bot.build_response_text(mock_plan_cluster, mock_submission)
+    assert type(response_text) is str
+    assert mock_plan_cluster["display_title"] in response_text
+    for plan in mock_plan_cluster["plans"]:
+        assert plan["display_title"] in response_text
+        assert plan["url"] in response_text
+    assert mock_submission.permalink in response_text
+
+
+def test_build_response_text_to_all_the_plans_operation(
     mock_submission, mock_plan, mock_plan_cluster
 ):
-    response_text = plan_bot.build_all_plans_response_text([mock_plan] * 5 + [mock_plan_cluster] * 3, mock_submission)
+    response_text = plan_bot.build_all_plans_response_text(
+        [mock_plan] * 5 + [mock_plan_cluster] * 3, mock_submission
+    )
 
     assert type(response_text) is str
 
@@ -175,18 +189,6 @@ def test_build_response_text_to_submission_with_plan_cluster(
         assert plan["display_title"] not in response_text
         assert plan["url"] not in response_text
 
-    assert mock_submission.permalink in response_text
-
-
-def test_build_response_text_to_submission_with_plan_cluster(
-    mock_submission, mock_plan_cluster
-):
-    response_text = plan_bot.build_response_text(mock_plan_cluster, mock_submission)
-    assert type(response_text) is str
-    assert mock_plan_cluster["display_title"] in response_text
-    for plan in mock_plan_cluster["plans"]:
-        assert plan["display_title"] in response_text
-        assert plan["url"] in response_text
     assert mock_submission.permalink in response_text
 
 

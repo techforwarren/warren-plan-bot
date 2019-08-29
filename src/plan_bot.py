@@ -87,28 +87,27 @@ def build_no_match_response_text(potential_plan_matches, post):
             f"{footer(post)}"
         )
 
-def build_all_plans_response_text(plans):
-    pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans)
-    
+
+def build_all_plans_response_text(plans, post):
+    pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
+
     response = (
-            f"Here is the full list of plans that Sen. Warren has released so far:"
-            f"\n\n"
-            f"|[{pure_plans[0]['display_title']}]({pure_plans[0]['url']})|[{pure_plans[1]['display_title']}]({pure_plans[1]['url']})|[{pure_plans[2]['display_title']}]({pure_plans[2]['url']})|"
-            f"\n"
-            f"|:-:|:-:|:-:|"
-            f"\n"
-        )
-    for i, plan in enumurate(pure_plans[3:], start=3):
+        f"Here is the full list of plans that Sen. Warren has released so far:"
+        f"\n\n"
+        f"|[{pure_plans[0]['display_title']}]({pure_plans[0]['url']})|[{pure_plans[1]['display_title']}]({pure_plans[1]['url']})|[{pure_plans[2]['display_title']}]({pure_plans[2]['url']})|"
+        f"\n"
+        f"|:-:|:-:|:-:|"
+        f"\n"
+    )
+    for i, plan in enumerate(pure_plans[3:], start=3):
         response += f"|[{plan['display_title']}]({plan['url']})"
-        if (i+1)%3:
+        if (i + 1) % 3:
             response += "|\n"
 
-    response += (
-        f"\n\n"
-        f"{footer(post)}"
-    )
+    response += f"\n\n" f"{footer(post)}"
 
     return response
+
 
 def reply(post, reply_string: str, send=False, simulate=False):
     """
@@ -158,8 +157,10 @@ def process_post(
     if not re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
         return
 
-    match_info = RuleStrategy.request_plan_list(plans, post) or RuleStrategy.match_display_title(plans, post) or matching_strategy(
-        plans, post
+    match_info = (
+        RuleStrategy.request_plan_list(plans, post)
+        or RuleStrategy.match_display_title(plans, post)
+        or matching_strategy(plans, post)
     )
 
     match = match_info["match"]
