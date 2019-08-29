@@ -172,12 +172,12 @@ def process_post(
         or matching_strategy(plans, post)
     )
 
-    match = match_info["match"]
+    match = match_info.get("match")
     operation = match_info.get("operation")
-    plan_confidence = match_info["confidence"]
-    plan = match_info["plan"]
+    plan_confidence = match_info.get("confidence")
+    plan = match_info.get("plan", {})
     potential_matches = match_info.get("potential_matches")
-    plan_id = plan["id"]
+    plan_id = plan.get("id")
 
     # Create partial db entry from known values, placeholder defaults for mutable values
     db_data = create_db_record(post, match, plan_confidence, plan_id)
