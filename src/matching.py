@@ -256,12 +256,9 @@ class RuleStrategy:
         """
         Matches strictly to a request for the full list of all known plans
         """
-        #REGEX the full list request in the post text
-        list_request_pattern = re.compile("show me the plans")
-        if re.search(list_request_pattern, post.text, re.IGNORECASE):
-            return {
-                "operation": "all_the_plans"
-            }
+        if re.search("show me the plans", post.text, re.IGNORECASE):
+            return {"operation": "all_the_plans"}
+
 
 class Preprocess:
     """

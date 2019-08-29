@@ -173,7 +173,7 @@ def process_post(
     )
 
     match = match_info["match"]
-    operation = match_info["operation"]
+    operation = match_info.get("operation")
     plan_confidence = match_info["confidence"]
     plan = match_info["plan"]
     potential_matches = match_info.get("potential_matches")
