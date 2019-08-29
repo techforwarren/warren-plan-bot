@@ -110,7 +110,7 @@ def build_all_plans_response_text(plans, post):
     )
     for i, plan in enumerate(pure_plans[3:], start=3):
         response += f"|[{plan['display_title']}]({plan['url']})"
-        if (i + 1) % 3:
+        if (i + 1) % 3 == 0:
             response += "|\n"
 
     response += f"\n\n" f"{footer(post)}"
