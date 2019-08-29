@@ -18,7 +18,8 @@ locals {
   credentials_file = "~/.gcloud/wpb-${local.environment}-terraform-key.json"
   function_name = "run-plan-bot"
   function_storage_bucket_object = "plan_bot.zip"
-  limit = "50"
+  limit = "20"
+  timeout = 100
 }
 
 provider "google" {
@@ -88,7 +89,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
 
   source_archive_bucket = google_storage_bucket.plan_bot_function_storage.name
   source_archive_object = google_storage_bucket_object.plan_bot_zip.name
-  timeout = 60
+  timeout = local.timeout
   entry_point = "run_plan_bot_event_handler"
   max_instances = 1
   labels = {
