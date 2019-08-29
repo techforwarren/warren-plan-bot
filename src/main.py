@@ -127,7 +127,11 @@ def run_plan_bot(
         print("post ids previously replied to", post_ids_replied_to)
 
     # Get the subreddit
-    subreddit = reddit.subreddit("WPBSandbox")
+    subreddit = (
+        reddit.subreddit("ElizabethWarren")
+        if praw_site == "prod"
+        else reddit.subreddit("WPBSandbox")
+    )
 
     # Get the number of new posts up to the limit
     for submission in subreddit.new(limit=limit):
