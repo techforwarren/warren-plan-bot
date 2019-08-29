@@ -190,7 +190,7 @@ You'll need to get this key from @joegoldbeck
 
 You'll also need to key for the Terraform prod service account at
 
-`~/.gcloud/wpb-proed-terraform-key.json`
+`~/.gcloud/wpb-prod-terraform-key.json`
 
 #### All necessary Terraform modules
 
