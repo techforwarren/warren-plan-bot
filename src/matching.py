@@ -1,6 +1,7 @@
 import json
 from functools import lru_cache, partial
 from os import path
+import re
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
@@ -250,6 +251,17 @@ class RuleStrategy:
             ):
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
 
+    @staticmethod
+    def request_plan_list(plans: list, post):
+        """
+        Matches strictly to a request for the full list of all known plans
+        """
+        #REGEX the full list request in the post text
+        list_request_pattern = re.compile("show me all of the plans")
+        if re.search(list_request_pattern, post.text, re.IGNORECASE):
+            return {
+                "operation": "all_the_plans"
+            }
 
 class Preprocess:
     """
