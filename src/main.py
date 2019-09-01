@@ -8,6 +8,7 @@ import praw
 import praw.models
 from google.cloud import firestore
 
+import pushshift
 import reddit_util
 from plan_bot import process_post
 
@@ -126,15 +127,16 @@ def run_plan_bot(
 
         print("post ids previously replied to", post_ids_replied_to)
 
-    # Get the subreddit
-    subreddit = (
-        reddit.subreddit("ElizabethWarren")
-        if praw_site == "prod"
-        else reddit.subreddit("WPBSandbox")
-    )
+    subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
-    # Get the number of new posts up to the limit
-    for submission in subreddit.new(limit=limit):
+    # Get the subreddit
+    subreddit = reddit.subreddit(subreddit_name)
+
+    # Get the number of new submissions up to the limit
+    # Note: If this gets slow, we could switch this to pushshift
+    for submission in subreddit.search(
+        "warrenplanbot", sort="new", time_filter="all", limit=limit
+    ):
         # turn this into our more standardized class
         submission = reddit_util.Submission(submission)
         process_post(
@@ -147,20 +149,23 @@ def run_plan_bot(
             skip_tracking=skip_tracking,
         )
 
-        # Get comments for submission and search for trigger in comment body
-        submission.comments.replace_more(limit=None)
-        for comment in submission.comments.list():
-            # turn this into our more standardized class
-            comment = reddit_util.Comment(comment)
-            process_post(
-                comment,
-                plans,
-                posts_db,
-                post_ids_replied_to,
-                send=send_replies,
-                simulate=simulate_replies,
-                skip_tracking=skip_tracking,
-            )
+    for pushshift_comment in pushshift.search_comments(
+        "warrenplanbot", subreddit_name, limit=limit
+    ):
+
+        comment = reddit_util.Comment(
+            praw.models.Comment(reddit, _data=pushshift_comment)
+        )
+
+        process_post(
+            comment,
+            plans,
+            posts_db,
+            post_ids_replied_to,
+            send=send_replies,
+            simulate=simulate_replies,
+            skip_tracking=skip_tracking,
+        )
 
 
 def run_plan_bot_event_handler(event, context):
