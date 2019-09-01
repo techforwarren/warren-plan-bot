@@ -8,6 +8,7 @@ import praw
 import praw.models
 from google.cloud import firestore
 
+import pushshift
 import reddit_util
 from plan_bot import process_post
 
@@ -113,7 +114,7 @@ def run_plan_bot(
 
     if skip_tracking:
         posts_db = None
-        post_ids_replied_to = []
+        post_ids_processed = {}
     else:
         db = firestore.Client(project=project)
 
@@ -121,46 +122,55 @@ def run_plan_bot(
 
         # Load the list of posts replied to or start with empty list if none
         posts_replied_to = posts_db.where("replied", "==", True).stream()
+        # TODO migrate posts replied=True to have processed=True, and remove the query above (#84)
+        posts_processed = posts_db.where("processed", "==", True).stream()
 
-        post_ids_replied_to = [post.id for post in posts_replied_to]
+        # include processed posts in replied to
+        post_ids_processed = {post.id for post in posts_replied_to}.union(
+            {post.id for post in posts_processed}
+        )
 
-        print("post ids previously replied to", post_ids_replied_to)
+        print("post ids previously processed", post_ids_processed)
+
+    subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
     # Get the subreddit
-    subreddit = (
-        reddit.subreddit("ElizabethWarren")
-        if praw_site == "prod"
-        else reddit.subreddit("WPBSandbox")
-    )
+    subreddit = reddit.subreddit(subreddit_name)
 
-    # Get the number of new posts up to the limit
-    for submission in subreddit.new(limit=limit):
+    # Get the number of new submissions up to the limit
+    # Note: If this gets slow, we could switch this to pushshift
+    for submission in subreddit.search(
+        "warrenplanbot", sort="new", time_filter="all", limit=limit
+    ):
         # turn this into our more standardized class
         submission = reddit_util.Submission(submission)
         process_post(
             submission,
             plans,
             posts_db,
-            post_ids_replied_to,
+            post_ids_processed,
             send=send_replies,
             simulate=simulate_replies,
             skip_tracking=skip_tracking,
         )
 
-        # Get comments for submission and search for trigger in comment body
-        submission.comments.replace_more(limit=None)
-        for comment in submission.comments.list():
-            # turn this into our more standardized class
-            comment = reddit_util.Comment(comment)
-            process_post(
-                comment,
-                plans,
-                posts_db,
-                post_ids_replied_to,
-                send=send_replies,
-                simulate=simulate_replies,
-                skip_tracking=skip_tracking,
-            )
+    for pushshift_comment in pushshift.search_comments(
+        "warrenplanbot", subreddit_name, limit=limit
+    ):
+
+        comment = reddit_util.Comment(
+            praw.models.Comment(reddit, _data=pushshift_comment)
+        )
+
+        process_post(
+            comment,
+            plans,
+            posts_db,
+            post_ids_processed,
+            send=send_replies,
+            simulate=simulate_replies,
+            skip_tracking=skip_tracking,
+        )
 
 
 def run_plan_bot_event_handler(event, context):
