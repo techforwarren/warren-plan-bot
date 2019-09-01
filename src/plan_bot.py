@@ -145,14 +145,14 @@ def process_post(
     post,
     plans,
     posts_db,
-    post_ids_replied_to=None,
+    post_ids_processed=None,
     send=False,
     simulate=False,
     skip_tracking=False,
     matching_strategy=Strategy.lsa_gensim_v2,
 ):
-    if post_ids_replied_to is None:
-        post_ids_replied_to = []
+    if post_ids_processed is None:
+        post_ids_processed = {}
 
     if (
         # Never try to reply if a post is locked
@@ -162,7 +162,7 @@ def process_post(
         # Make sure we're not replying to ourself
         or "warrenplanbot" in post.author.name.lower()
         # Make sure we don't reply to a post we've already replied to
-        or post.id in post_ids_replied_to
+        or post.id in post_ids_processed
     ):
         return
 
@@ -184,38 +184,54 @@ def process_post(
     plan_id = plan.get("id")
 
     # Create partial db entry from known values, placeholder defaults for mutable values
-    db_data = create_db_record(post, match, plan_confidence, plan_id)
+    # Mark post as processed _before_ we reply to prevent double-posting
+    post_record = create_db_record(
+        post, match, plan_confidence, plan_id, processed=True
+    )
+
+    if not skip_tracking:
+        posts_db.document(post.id).set(post_record)
+
+    post_record_update = {}
 
     # If plan is matched with confidence, build and send reply
     if match:
         print("plan match: ", plan_id, post.id, plan_confidence)
 
         reply_string = build_response_text(plan, post)
-        db_data["reply_type"] = "plan_cluster" if plan.get("is_cluster") else "plan"
+        post_record_update["reply_type"] = (
+            "plan_cluster" if plan.get("is_cluster") else "plan"
+        )
     elif operation == "all_the_plans":
         print("all the plans requested: ", post.id)
 
         reply_string = build_all_plans_response_text(plans, post)
-        db_data["reply_type"] = "operation"
-        db_data["operation"] = "all_the_plans"
+        post_record_update["reply_type"] = "operation"
+        post_record_update["operation"] = "all_the_plans"
     else:
         print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
         reply_string = build_no_match_response_text(potential_matches, post)
-        db_data["reply_type"] = "no_match"
+        post_record_update["reply_type"] = "no_match"
 
     did_reply = reply(post, reply_string, send=send, simulate=simulate)
 
     if did_reply and not skip_tracking:
-        # Replace default None values in db_data record
-        db_data["replied"] = True
-        db_data["reply_timestamp"] = firestore.SERVER_TIMESTAMP
+        # Replace default None values in post_record_update record
+        post_record_update["replied"] = True
+        post_record_update["reply_timestamp"] = firestore.SERVER_TIMESTAMP
 
-        posts_db.document(post.id).set(db_data)
+        posts_db.document(post.id).update(post_record_update)
 
 
 def create_db_record(
-    post, match, plan_confidence, plan_id, reply_timestamp=None, reply_made=False
+    post,
+    match,
+    plan_confidence,
+    plan_id,
+    reply_timestamp=None,
+    reply_made=False,
+    processed=False,
 ) -> dict:
     # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
     post_parent_id = post.parent_id[3:] if post.type == "comment" else None
@@ -225,6 +241,7 @@ def create_db_record(
     # Return db_entry for Firestore
     entry = {
         "replied": reply_made,
+        "processed": processed,
         "type": post.type,
         "post_id": post.id,
         "post_author": "/u/" + post.author.name,

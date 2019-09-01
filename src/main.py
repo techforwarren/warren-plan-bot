@@ -114,7 +114,7 @@ def run_plan_bot(
 
     if skip_tracking:
         posts_db = None
-        post_ids_replied_to = []
+        post_ids_processed = {}
     else:
         db = firestore.Client(project=project)
 
@@ -122,10 +122,15 @@ def run_plan_bot(
 
         # Load the list of posts replied to or start with empty list if none
         posts_replied_to = posts_db.where("replied", "==", True).stream()
+        # TODO migrate posts replied=True to have processed=True, and remove the query above (#84)
+        posts_processed = posts_db.where("processed", "==", True).stream()
 
-        post_ids_replied_to = [post.id for post in posts_replied_to]
+        # include processed posts in replied to
+        post_ids_processed = {post.id for post in posts_replied_to}.union(
+            {post.id for post in posts_processed}
+        )
 
-        print("post ids previously replied to", post_ids_replied_to)
+        print("post ids previously processed", post_ids_processed)
 
     subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
@@ -143,7 +148,7 @@ def run_plan_bot(
             submission,
             plans,
             posts_db,
-            post_ids_replied_to,
+            post_ids_processed,
             send=send_replies,
             simulate=simulate_replies,
             skip_tracking=skip_tracking,
@@ -161,7 +166,7 @@ def run_plan_bot(
             comment,
             plans,
             posts_db,
-            post_ids_replied_to,
+            post_ids_processed,
             send=send_replies,
             simulate=simulate_replies,
             skip_tracking=skip_tracking,
