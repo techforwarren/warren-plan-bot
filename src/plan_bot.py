@@ -105,7 +105,7 @@ def build_all_plans_response_text(plans, post):
     pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
 
     response = (
-        f"Here's the full list of plans that Sen. Warren has released that I know about:"
+        f"Here's the full list of plans Sen. Warren has released that I know about:"
         f"\n\n"
         f"|[{pure_plans[0]['display_title']}]({pure_plans[0]['url']})|[{pure_plans[1]['display_title']}]({pure_plans[1]['url']})|[{pure_plans[2]['display_title']}]({pure_plans[2]['url']})|"
         f"\n"
