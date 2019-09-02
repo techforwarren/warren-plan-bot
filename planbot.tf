@@ -118,3 +118,15 @@ resource "null_resource" "update_cloud_function" {
     command = "google_application_credentials=${local.credentials_file} gcloud functions deploy ${local.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name} --project ${local.project_id}"
   }
 }
+
+output "project_id" {
+  value = local.project_id
+}
+
+output "function_storage_bucket" {
+  value = local.function_storage_bucket
+}
+
+output "praw_site" {
+  value = google_cloudfunctions_function.run_plan_bot.environment_variables.PRAW_SITE
+}
