@@ -115,6 +115,6 @@ resource "null_resource" "update_cloud_function" {
   }
 
   provisioner "local-exec" {
-    command = "google_application_credentials=${local.credentials_file} gcloud functions deploy ${local.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name}"
+    command = "google_application_credentials=${local.credentials_file} gcloud functions deploy ${local.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name} --project ${local.project_id}"
   }
 }
