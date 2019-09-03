@@ -2,6 +2,7 @@
 
 import json
 import os
+import time
 
 import click
 import praw
@@ -15,6 +16,10 @@ from plan_bot import process_post
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
 PLANS_CLUSTERS_FILE = "plan_clusters.json"
+
+TIME_IN_LOOP = os.getenv(
+    "TIME_IN_LOOP", 40
+)  # seconds to spend in loop when calling from event handler. this should be less than the time between running iterations of the cloud function
 
 click_kwargs = {"show_envvar": True, "show_default": True}
 
@@ -30,6 +35,7 @@ click_kwargs = {"show_envvar": True, "show_default": True}
 )
 @click.option(
     "--skip-tracking",
+    envvar="SKIP_TRACKING",
     default=False,
     is_flag=True,
     help="whether to check whether replies have already been posted",
@@ -83,6 +89,8 @@ def run_plan_bot(
     - Reply to any unreplied matching comments (If replies are on)
     - Update replied_to list (If replies and tracking is on)
     """
+    print("Running a single pass of plan bot")
+    pass_start_time = time.time()
 
     if simulate_replies and send_replies:
         raise ValueError(
@@ -172,16 +180,24 @@ def run_plan_bot(
             skip_tracking=skip_tracking,
         )
 
+    print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
+
 
 def run_plan_bot_event_handler(event, context):
-    # Click exits with return code 0 when everything worked. Skip that behavior
-    try:
-        run_plan_bot(
-            prog_name="run_that_plan_bot"
-        )  # need to set prog_name to avoid weird click behavior in cloud fn
-    except SystemExit as e:
-        if e.code != 0:
-            raise
+    start_time = time.time()
+    print("Starting plan bot loop")
+    while time.time() - start_time < TIME_IN_LOOP:
+        # Click exits with return code 0 when everything worked. Skip that behavior
+        try:
+            run_plan_bot(
+                prog_name="run_that_plan_bot"
+            )  # need to set prog_name to avoid weird click behavior in cloud fn
+        except SystemExit as e:
+            if e.code != 0:
+                raise
+        # add a sleep so things don't go crazy if we make things very fast at some point
+        # for example, pushshift has a rate limit that we don't want to hit https://api.pushshift.io/meta
+        time.sleep(1)
 
 
 if __name__ == "__main__":
