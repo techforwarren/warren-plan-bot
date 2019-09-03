@@ -271,6 +271,11 @@
     ]
   },
   {
+    "text": "!WarrenPlanBot this won't match anything ideally",
+    "source": "jg",
+    "match": null
+  },
+  {
     "text": "!WarrenPlanBot what are Warren's thoughts on universal basic income?",
     "source": "/r/WPBSandbox",
     "match": null
