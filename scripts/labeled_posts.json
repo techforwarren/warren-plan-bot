@@ -285,5 +285,23 @@
       "green_manufacturing",
       "climate_risk_disclosure"
     ]
+  },
+  {
+    "text": "!WarrenPlanBot what is Senator Warren's plan for health care?",
+    "source": "/r/ElizabethWarren",
+    "match": "medicare_for_all_act_2019",
+    "alternate_matches": [
+      "black_maternal_mortality",
+      "invest_in_rural_america",
+      "reproductive_rights"
+    ]
+  },
+  {
+    "text": "!WarrenPlanBot what is Senator Warren's plan for Medicare for all?",
+    "source": "/r/ElizabethWarren",
+    "match": "medicare_for_all_act_2019",
+    "alternate_matches": [
+      "invest_in_rural_america"
+    ]
   }
 ]
