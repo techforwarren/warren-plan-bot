@@ -1,7 +1,8 @@
 import json
+import logging
+import re
 from functools import lru_cache, partial
 from os import path
-import re
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
@@ -20,6 +21,9 @@ DIRNAME = path.dirname(path.realpath(__file__))
 
 GENSIM_V1_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v1"))
 GENSIM_V2_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v2"))
+
+# suppress gensim logs
+logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
 class Strategy:
