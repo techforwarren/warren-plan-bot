@@ -154,8 +154,26 @@ def parse_plans():
 
         with open(plan_file_path) as plan_file:
             plan = json.load(plan_file)
-
         plan_id = plan["id"]
+
+        filename = path.join(OUTPUT_DIR, f"{plan_id}.json")
+
+        # if we already have the "full text" of a plan in plans.json for some reason or another
+        if plan.get("full_text"):
+            logger.info(f"Full text already available. Writing to {filename}")
+            with open(filename, "w") as plan_text_file:
+                json.dump(
+                    {
+                        "text": plan.get("full_text"),
+                        "url": plan["url"],
+                        "id": plan["id"],
+                    },
+                    plan_text_file,
+                    sort_keys=True,
+                    indent=4,
+                    separators=(",", ": "),
+                )
+            continue
 
         html = plan["html"]
 
@@ -172,8 +190,6 @@ def parse_plans():
                 f"Failure to parse {plan_id}. Hostname: {plan_hostname} is not yet supported"
             )
             continue
-
-        filename = path.join(OUTPUT_DIR, f"{plan_id}.json")
 
         # replace smart quotes and em-dashes ... with their ascii equivalents
         text = unidecode(text)

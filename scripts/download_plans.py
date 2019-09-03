@@ -41,6 +41,25 @@ def download_plans():
 
     # Iterate through plans_dict, download html
     for plan in plans:
+        filename = path.join(OUTPUT_DIR, f"{plan['id']}.json")
+
+        # if we already have the "full text" of a plan in plans.json for some reason or another
+        if plan.get("full_text"):
+            logger.info(
+                f"Full text available for {plan['id']}. Saving and skipping download"
+            )
+
+            with open(filename, "w") as plan_text_file:
+                json.dump(
+                    {
+                        "full_text": plan["full_text"],
+                        "url": plan["url"],
+                        "id": plan["id"],
+                    },
+                    plan_text_file,
+                )
+            continue
+
         logger.info(f"Downloading {plan['url']}")
 
         resp = requests.get(
@@ -57,14 +76,12 @@ def download_plans():
             )
             continue
 
-        page = resp.text
-
-        filename = path.join(OUTPUT_DIR, f"{plan['id']}.json")
+        html = resp.text
 
         logger.info(f"Writing plan html to {filename}")
         with open(filename, "w") as plan_text_file:
             json.dump(
-                {"html": page, "url": plan["url"], "id": plan["id"]}, plan_text_file
+                {"html": html, "url": plan["url"], "id": plan["id"]}, plan_text_file
             )
 
 
