@@ -3,6 +3,8 @@
 import json
 from os import path
 
+import click
+
 from matching import Strategy
 
 DIRNAME = path.dirname(path.realpath(__file__))
@@ -53,10 +55,6 @@ def score_match(post, match_info):
 
 def score_strategy(strategy):
     strategy_name = strategy.__name__
-    print(f"")
-    print(f"")
-    print(f"--SCORING STRATEGY: {strategy_name}--")
-    print(f"")
     match_scoring = []
     for post in labeled_posts:
         match_info = strategy(plans, post)
@@ -75,29 +73,24 @@ def score_strategy(strategy):
     bulk_score = sum(m["score"] for m in match_scoring)
     total_score = bulk_score / len(labeled_posts) * 100
 
-    print(f"{strategy_name}: NO MATCHES FOR:{'' if no_matches else ' None!'}\n")
-    for m in no_matches:
-        print(f"{strategy_name}: {m}")
-    print(f"")
-
-    print(f"{strategy_name}: WRONG MATCHES FOR{'' if wrong_matches else ' None!'}:\n")
-    for m in wrong_matches:
-        print(f"{strategy_name}: {m}")
-    print(f"")
-
-    print(
-        f"{strategy_name}: ALTERNATE MATCHES FOR{'' if alternate_matches else ' None!'}:\n"
-    )
-    for m in alternate_matches:
-        print(f"{strategy_name}: {m}")
-    print(f"")
-
-    print(f"{strategy_name}: TOTAL SCORE: {total_score}")
-
-    return {"name": strategy_name, "total_score": total_score}
+    return {
+        "name": strategy_name,
+        "total_score": total_score,
+        "no_matches": no_matches,
+        "wrong_matches": wrong_matches,
+        "alternate_matches": alternate_matches,
+    }
 
 
-def score_strategies():
+@click.command()
+@click.option(
+    "-v",
+    "--verbose",
+    default=False,
+    is_flag=True,
+    help="scoring details of all strategies, rather than only the top one",
+)
+def score_strategies(verbose=False):
     strategies = [
         getattr(Strategy, func_name)
         for func_name in dir(Strategy)
@@ -105,17 +98,52 @@ def score_strategies():
         if not func_name.startswith("_")
     ]
 
-    results = [score_strategy(strategy) for strategy in strategies]
+    scored_strategies = [score_strategy(strategy) for strategy in strategies]
 
-    results.sort(key=lambda x: -x["total_score"])
+    scored_strategies.sort(key=lambda x: -x["total_score"])
+
+    if verbose:
+        for strategy in scored_strategies:
+            _print_strategy_scoring_details(strategy)
+    else:
+        _print_strategy_scoring_details(scored_strategies[0])
 
     print("")
     print("")
     print("--Top Strategies--")
     print("")
 
-    for result in results[:10]:
-        print(f"{result['name']}: TOTAL SCORE: {result['total_score']}")
+    for strategy in scored_strategies[:10]:
+        print(f"{strategy['name']}: TOTAL SCORE: {strategy['total_score']}")
+
+
+def _print_strategy_scoring_details(strategy):
+    print(f"")
+    print(f"")
+    print(f"--SCORING STRATEGY: {strategy['name']}--")
+    print(f"")
+    print(
+        f"{strategy['name']}: NO MATCHES FOR:{'' if strategy['no_matches'] else ' None!'}\n"
+    )
+    for m in strategy["no_matches"]:
+        print(f"{strategy['name']}: {m}")
+    print(f"")
+
+    print(
+        f"{strategy['name']}: WRONG MATCHES FOR{'' if strategy['wrong_matches'] else ' None!'}:\n"
+    )
+    for m in strategy["wrong_matches"]:
+        print(f"{strategy['name']}: {m}")
+    print(f"")
+
+    print(
+        f"{strategy['name']}: ALTERNATE MATCHES FOR{'' if strategy['alternate_matches'] else ' None!'}:\n"
+    )
+    for m in strategy["alternate_matches"]:
+        print(f"{strategy['name']}: {m}")
+    print(f"")
+
+    print(f"{strategy['name']}: TOTAL SCORE: {strategy['total_score']}")
 
 
 if __name__ == "__main__":
