@@ -313,5 +313,46 @@
     "text": "!WarrenPlanBot what is her plan for ending private prisons??",
     "source": "jg",
     "match": "private_prison_reform"
+  },
+  {
+    "text": "!WarrenPlanBot show me the plans for healthcare",
+    "source": "/r/ElizabethWarren",
+    "match": "medicare_for_all_act_2019",
+    "alternate_matches": [
+      "black_maternal_mortality",
+      "invest_in_rural_america",
+      "reproductive_rights"
+    ]
+  },
+  {
+    "text": "!WarrenPlanBot global authoritarians",
+    "source": "/r/ElizabethWarren",
+    "match": null,
+    "alternative_matches": [
+      "foreign_service"
+    ]
+  },{
+    "text": "!WarrenPlanBot how will we pay for her plans?",
+    "source": "/r/ElizabethWarren",
+    "match": "ultra_millionaire_tax",
+    "alternative_matches": [
+      "corporate_taxes"
+    ]
+  },{
+    "text": "!warrenplanbot What will she do about prison overcrowding and understaffing problems?",
+    "source": "/r/ElizabethWarren",
+    "match": "private_prison_reform"
+  },{
+    "text": "!WarrenPlanBot, what her criminal justice reform plan?",
+    "source": "/r/ElizabethWarren",
+    "match": "comprehensive_criminal_justice_reform"
+  },{
+    "text": "!WarrenPlanBot what's her plan regarding climate change?",
+    "source": "/r/ElizabethWarren",
+    "match": "climate_change"
+  },{
+    "text": "!WarrenPlanBot what is her plan for getting me a significant other?",
+    "source": "/r/ElizabethWarren",
+    "match": null
   }
 ]
