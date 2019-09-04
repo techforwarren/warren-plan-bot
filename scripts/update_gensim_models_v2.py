@@ -19,6 +19,8 @@ DIRNAME = path.dirname(path.realpath(__file__))
 
 OUTPUT_DIR = GENSIM_V2_MODELS_PATH
 
+logging.getLogger("gensim").setLevel(logging.INFO)
+
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
