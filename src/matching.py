@@ -256,7 +256,7 @@ class RuleStrategy:
         """
         Matches strictly to a request at the end of a line for the full list of all known plans
         """
-        if re.search(r"show me the plans" + "\Z", post.text, re.IGNORECASE):
+        if re.search(r"show me the plans\W*\Z", post.text, re.IGNORECASE):
             return {"operation": "all_the_plans"}
 
     @staticmethod
@@ -264,7 +264,7 @@ class RuleStrategy:
         """
         Matches strictly to a request for help at the end of the line.
         """
-        if re.search(r"warrenplanbot\s+help" + "\Z", post.text, re.IGNORECASE):
+        if re.search(r"warrenplanbot\s+help\W*\Z", post.text, re.IGNORECASE):
             return {"operation": "help"}
 
 
