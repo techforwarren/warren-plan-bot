@@ -308,5 +308,10 @@
     "alternate_matches": [
       "invest_in_rural_america"
     ]
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for ending private prisons??",
+    "source": "jg",
+    "match": "private_prison_reform"
   }
 ]
