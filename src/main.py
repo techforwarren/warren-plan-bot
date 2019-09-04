@@ -138,8 +138,6 @@ def run_plan_bot(
             {post.id for post in posts_processed}
         )
 
-        print("post ids previously processed", post_ids_processed)
-
     subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
     # Get the subreddit
