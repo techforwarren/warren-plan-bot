@@ -254,17 +254,17 @@ class RuleStrategy:
     @staticmethod
     def request_plan_list(plans: list, post):
         """
-        Matches strictly to a request for the full list of all known plans
+        Matches strictly to a request at the end of the post for the full list of all known plans
         """
-        if re.search("show me the plans", post.text, re.IGNORECASE):
+        if re.search(r"show me the plans\W*\Z", post.text, re.IGNORECASE):
             return {"operation": "all_the_plans"}
 
     @staticmethod
     def request_help(plans: list, post):
         """
-        Matches strictly to a request for help
+        Matches strictly to a request for help at the end of the post.
         """
-        if re.search(r"warrenplanbot\s+help", post.text, re.IGNORECASE):
+        if re.search(r"warrenplanbot\s+help\W*\Z", post.text, re.IGNORECASE):
             return {"operation": "help"}
 
 
