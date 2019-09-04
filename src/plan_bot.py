@@ -11,7 +11,7 @@ def footer(post):
         # Horizontal line above footer
         "\n***\n"
         # Error reporting info
-        f"Wrong topic or another problem?  [Send a report to my creator]"
+        f"Wrong topic or another problem?  [Send a report to my creators]"
         f"(https://www.reddit.com/message/compose?to=WarrenPlanBotDev&"
         f"subject=BotReport&"
         f"message=Issue with bot response to: {post.permalink}).  "
