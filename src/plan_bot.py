@@ -122,6 +122,34 @@ def build_all_plans_response_text(plans, post):
     return response
 
 
+def build_help_response_text():
+    return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
+
+You can call me like this:  
+`!WarrenPlanBot [plan_topic]`  
+and I’ll reply with the plan she has for that.
+
+For example, if you wanted to learn about Elizabeth’s plan for immigration reform, you could write  
+`!WarrenPlanBot immigration reform`
+
+You can even be a little more conversational if you’d like, and say  
+`!WarrenPlanBot what is her plan for ending private prisons?`
+
+I’ll do my best to find the correct plan, but sometimes I have to guess, which means I might make mistakes (I’m just a bot!). I’ll get better, though, as I learn more about the topics that matter to you most 😄
+
+To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`  
+To display this help: `!WarrenPlanBot help`
+
+I hope to see you around!
+
+***
+
+Have another question or run into any problems?  [Send a report to my creators](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue%20with%20bot%20response%20to:%20/r/WPBSandbox/comments/cts9e1/what_will_she_do_about_climate_change_testing/).  
+This bot was independently created by volunteers for Sen. Warren’s 2020 campaign.  
+If you’d like to join us, visit the campaign’s [Volunteer Sign-Up Page](https://my.elizabethwarren.com/page/s/web-volunteer).
+"""
+
+
 def reply(post, reply_string: str, send=False, simulate=False):
     """
     :param post: post to reply on
@@ -171,7 +199,8 @@ def process_post(
         return
 
     match_info = (
-        RuleStrategy.request_plan_list(plans, post)
+        RuleStrategy.request_help(plans, post)
+        or RuleStrategy.request_plan_list(plans, post)
         or RuleStrategy.match_display_title(plans, post)
         or matching_strategy(plans, post)
     )
@@ -208,6 +237,12 @@ def process_post(
         reply_string = build_all_plans_response_text(plans, post)
         post_record_update["reply_type"] = "operation"
         post_record_update["operation"] = "all_the_plans"
+    elif operation == "help":
+        print("help requested: ", post.id)
+
+        reply_string = build_help_response_text()
+        post_record_update["reply_type"] = "operation"
+        post_record_update["operation"] = "help"
     else:
         print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
