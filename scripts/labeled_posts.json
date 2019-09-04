@@ -208,8 +208,8 @@
   {
     "text": "!WarrenPlanBot clean green energy",
     "source": "sh",
-    "match": "green_manufacturing",
-    "alternate_matches": ["climate_risk_disclosure", "climate_change"]
+    "match": "clean_energy_for_america",
+    "alternate_matches": ["climate_risk_disclosure", "climate_change", "green_manufacturing"]
   },
   {
     "text": "!WarrenPlanBot what is her plan to stop gun deaths?",

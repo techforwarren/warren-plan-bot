@@ -276,10 +276,16 @@
         "keyword_synonyms": []
     }, {
         "id": "medicare_for_all_act_2019",
-        "topic": "medicare for all",
+        "topic": "medicare for all health care",
         "display_title": "Medicare for All Act of 2019",
         "summary": "Sen. Warren is a co-sponsor of the Medicare for All Act of 2019, which would establish a national health insurance program.",
         "full_text": "medicare for all m4a health care",
         "url": "https://www.congress.gov/bill/116th-congress/senate-bill/1129"
+    }, {
+        "id": "clean_energy_for_america",
+        "topic": "clean energy",
+        "display_title": "100% Clean Energy for America",
+        "summary": "The climate crisis will leave no one untouched. But it also represents a once-in-a-generation opportunity: to create millions of good American jobs in clean and renewable energy, infrastructure, and manufacturing; to unleash the best of American innovation and creativity; to rebuild our unions and create real progress and justice for workers; and to directly confront the racial and economic inequality embedded in our fossil fuel economy. If we work together to make smart investments in our clean energy future, we will grow our economy, improve our health, and reduce structural inequalities embedded in our existing fossil fuel system.",
+        "url": "https://medium.com/@teamwarren/100-clean-energy-for-america-de75ee39887d"
     }
 ]

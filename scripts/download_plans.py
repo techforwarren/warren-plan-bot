@@ -5,6 +5,7 @@ import logging
 import os
 from os import path
 
+import click
 import requests
 
 logging.basicConfig(format="%(levelname)s : %(message)s", level=logging.INFO)
@@ -29,7 +30,14 @@ def clear_output_dir():
         os.remove(path.join(OUTPUT_DIR, file_path))
 
 
-def download_plans():
+@click.command()
+@click.option(
+    "--force-redownload",
+    default=False,
+    is_flag=True,
+    help="force all plans to re-download",
+)
+def download_plans(force_redownload=False):
     """
     Download all plans as html
 
@@ -37,11 +45,16 @@ def download_plans():
     with open(PLANS_FILE) as json_file:
         plans = json.load(json_file)
 
-    clear_output_dir()
+    if force_redownload:
+        clear_output_dir()
 
     # Iterate through plans_dict, download html
     for plan in plans:
         filename = path.join(OUTPUT_DIR, f"{plan['id']}.json")
+
+        if os.path.exists(filename):
+            logger.info(f"Plan already downloaded. Skipping {plan['id']}")
+            continue
 
         # if we already have the "full text" of a plan in plans.json for some reason or another
         if plan.get("full_text"):
