@@ -429,5 +429,10 @@
     "text": "!WarrenPlanBot corruption",
     "source": "/r/ElizabethWarren",
     "match": "anti_corruption"
+  },
+  {
+    "text": "!WarrenPlanBot postal banking",
+    "source": "sh",
+    "match": "wall_street_reform"
   }
 ]
