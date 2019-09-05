@@ -10,5 +10,16 @@
       "green_manufacturing",
       "climate_risk_disclosure"
     ]
+  },
+  {
+    "id": "health_care",
+    "topic": "health care",
+    "display_title": "Health Care",
+    "plan_ids": [
+      "medicare_for_all_act_2019",
+      "invest_in_rural_america",
+      "black_maternal_mortality",
+      "reproductive_rights"
+    ]
   }
 ]
