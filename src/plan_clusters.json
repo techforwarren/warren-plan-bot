@@ -10,5 +10,40 @@
       "green_manufacturing",
       "climate_risk_disclosure"
     ]
+  },
+  {
+    "id": "green_new_deal",
+    "topic": "green new deal",
+    "display_title": "The Green New Deal",
+    "plan_ids": [
+      "clean_energy_for_america",
+      "new_farm_economy",
+      "national_security_climate_change",
+      "green_manufacturing",
+      "climate_risk_disclosure"
+    ]
+  },
+  {
+    "id": "health_care",
+    "topic": "health care",
+    "display_title": "Health Care",
+    "plan_ids": [
+      "medicare_for_all_act_2019",
+      "invest_in_rural_america",
+      "black_maternal_mortality",
+      "reproductive_rights"
+    ]
+  },
+  {
+    "id": "anti_corruption",
+    "topic": "corruption",
+    "display_title": "Anti-Corruption",
+    "plan_ids": [
+      "presidential_accountability",
+      "corporate_executive_accountability",
+      "defense_lobbyists",
+      "foreign_service",
+      "private_prison_reform"
+    ]
   }
 ]

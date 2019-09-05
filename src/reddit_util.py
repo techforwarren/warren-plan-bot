@@ -1,3 +1,6 @@
+import praw.models
+
+
 class Wrapper:
     def __init__(self, wrapped):
         self.wrapped = wrapped
@@ -36,3 +39,12 @@ class Comment(Wrapper):
     @property
     def submission(self):
         return Submission(self.wrapped.submission)
+
+
+def standardize(post):
+    if isinstance(post, praw.models.Comment):
+        return Comment(post)
+    elif isinstance(post, praw.models.Submission):
+        return Submission(post)
+    else:
+        raise NotImplementedError(post)
