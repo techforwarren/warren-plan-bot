@@ -62,7 +62,10 @@
   {
     "text": "!WarrenPlanBot green energy jobs",
     "source": "sh",
-    "match": "green_manufacturing"
+    "match": "green_manufacturing",
+    "alternative_matches": [
+      "green_new_deal"
+    ]
   },
   {
     "text": "!WarrenPlanBot crimes by the president",
@@ -196,11 +199,6 @@
     "match": "reproductive_rights"
   },
   {
-    "text": "!WarrenPlanBot green new deal",
-    "source": "jg",
-    "match": "green_manufacturing"
-  },
-  {
     "text": "!WarrenPlanBot immigration",
     "source": "jg",
     "match": "immigration_reform"
@@ -209,7 +207,7 @@
     "text": "!WarrenPlanBot clean green energy",
     "source": "sh",
     "match": "clean_energy_for_america",
-    "alternate_matches": ["climate_risk_disclosure", "climate_change", "green_manufacturing"]
+    "alternate_matches": ["green_new_deal", "climate_risk_disclosure", "climate_change", "green_manufacturing"]
   },
   {
     "text": "!WarrenPlanBot what is her plan to stop gun deaths?",
@@ -395,8 +393,9 @@
   {
     "text": "!WarrenPlanBot Green New Deal",
     "source": "/r/ElizabethWarren",
-    "match": "climate_change",
+    "match": "green_new_deal",
     "alternative_matches": [
+      "climate_change",
       "clean_energy_for_america",
       "green_manufacturing"
     ]

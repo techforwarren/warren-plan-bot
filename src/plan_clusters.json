@@ -1,8 +1,20 @@
 [
   {
     "id": "climate_change",
-    "topic": "climate change green new deal",
+    "topic": "climate change",
     "display_title": "Climate Change",
+    "plan_ids": [
+      "clean_energy_for_america",
+      "new_farm_economy",
+      "national_security_climate_change",
+      "green_manufacturing",
+      "climate_risk_disclosure"
+    ]
+  },
+  {
+    "id": "green_new_deal",
+    "topic": "green new deal",
+    "display_title": "The Green New Deal",
     "plan_ids": [
       "clean_energy_for_america",
       "new_farm_economy",
