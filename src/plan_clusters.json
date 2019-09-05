@@ -21,5 +21,17 @@
       "black_maternal_mortality",
       "reproductive_rights"
     ]
+  },
+  {
+    "id": "anti_corruption",
+    "topic": "corruption",
+    "display_title": "Anti-Corruption",
+    "plan_ids": [
+      "presidential_accountability",
+      "corporate_executive_accountability",
+      "defense_lobbyists",
+      "foreign_service",
+      "private_prison_reform"
+    ]
   }
 ]
