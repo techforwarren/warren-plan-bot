@@ -1,4 +1,8 @@
 # wpb-bot
+==================
+
+[![Build Status](https://travis-ci.com/joegoldbeck/wpb-bot.svg?branch=master)](https://travis-ci.com/joegoldbeck/wpb-bot)
+
 
 ## Development
 
