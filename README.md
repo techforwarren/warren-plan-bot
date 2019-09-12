@@ -67,6 +67,10 @@ This will allow you to run all the commands below
 
 `docker exec -it planbot bash`
 
+### Run tests
+
+`pytest`
+
 ### Format code
 
 `./scripts/autoformat.sh`
