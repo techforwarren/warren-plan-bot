@@ -246,7 +246,7 @@ If there's any info you find missing or incorrect, please make a PR to update it
 
 ### Development workflow
 
-1. Create your branch from `master`.
+1. Create your branch off of `master`.
 
 1. Follow the [development instructions above](#development) to set up your working environment, if you haven't already.
 
