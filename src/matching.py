@@ -189,7 +189,7 @@ class Strategy:
         )
 
     @staticmethod
-    def lsa_gensim_v2(plans: list, post, threshold=80):
+    def lsa_gensim_v2(plans: list, post, threshold=82):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
