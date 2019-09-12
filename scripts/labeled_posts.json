@@ -63,7 +63,7 @@
     "text": "!WarrenPlanBot green energy jobs",
     "source": "sh",
     "match": "green_manufacturing",
-    "alternative_matches": [
+    "alternate_matches": [
       "green_new_deal"
     ]
   },
@@ -294,7 +294,6 @@
     "source": "/r/ElizabethWarren",
     "match": "health_care",
     "alternate_matches": [
-      "medicare_for_all_act_2019",
       "black_maternal_mortality",
       "invest_in_rural_america",
       "reproductive_rights"
@@ -303,7 +302,7 @@
   {
     "text": "!WarrenPlanBot what is Senator Warren's plan for Medicare for all?",
     "source": "/r/ElizabethWarren",
-    "match": "medicare_for_all_act_2019",
+    "match": "health_care",
     "alternate_matches": [
       "invest_in_rural_america"
     ]
@@ -318,7 +317,6 @@
     "source": "/r/ElizabethWarren",
     "match": "health_care",
     "alternate_matches": [
-      "medicare_for_all_act_2019",
       "black_maternal_mortality",
       "invest_in_rural_america",
       "reproductive_rights"
@@ -328,14 +326,14 @@
     "text": "!WarrenPlanBot global authoritarians",
     "source": "/r/ElizabethWarren",
     "match": null,
-    "alternative_matches": [
+    "alternate_matches": [
       "foreign_service"
     ]
   },{
     "text": "!WarrenPlanBot how will we pay for her plans?",
     "source": "/r/ElizabethWarren",
     "match": "ultra_millionaire_tax",
-    "alternative_matches": [
+    "alternate_matches": [
       "corporate_taxes"
     ]
   },{
@@ -358,7 +356,7 @@
     "text": "!WarrenPlanBot reparations",
     "source": "/r/ElizabethWarren",
     "match": null,
-    "alternative_matches": [
+    "alternate_matches": [
       "minority_businesses"
     ]
   },
@@ -394,7 +392,7 @@
     "text": "!WarrenPlanBot Green New Deal",
     "source": "/r/ElizabethWarren",
     "match": "green_new_deal",
-    "alternative_matches": [
+    "alternate_matches": [
       "climate_change",
       "clean_energy_for_america",
       "green_manufacturing"
@@ -434,5 +432,52 @@
     "text": "!WarrenPlanBot postal banking",
     "source": "sh",
     "match": "wall_street_reform"
+  },
+  {
+    "text": "!WarrenPlanBot climate",
+    "source": "/r/ElizabethWarren",
+    "match": "climate_change"
+  },
+  {
+    "text": "!WarrenPlanBot threat of automation",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot what's her plan for extending or improving elder care ?",
+    "source": "/r/ElizabethWarren",
+    "match": null,
+    "alternate_matches": ["health_care", "expanding_social_security"]
+  },
+  {
+    "text": "!WarrenPlanBot [fracking]",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot Labor Unions",
+    "source": "/r/ElizabethWarren",
+    "match": null,
+    "alternate_matches": [
+      "trade_on_our_terms"
+    ]
+  },
+  {
+    "text": "!WarrenPlanBot trade unions",
+    "source": "/r/ElizabethWarren",
+    "match": null,
+    "alternate_matches": [
+      "trade_on_our_terms"
+    ]
+  },
+  {
+    "text": "!WarrenPlanBot LGBT",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot What is your plan on video games?",
+    "source": "/r/ElizabethWarren",
+    "match": null
   }
 ]
