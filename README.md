@@ -3,14 +3,13 @@ wpb-bot
 
 [![Build Status](https://travis-ci.com/joegoldbeck/wpb-bot.svg?branch=master)](https://travis-ci.com/joegoldbeck/wpb-bot)
 
-
 ## Development
 
 ### praw.ini file
 
 You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. You'll need to get the client_id and client_secret from the Reddit application
 
-### the virtualenv way
+### Option 1: the virtualenv way
 
 There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
 
@@ -34,7 +33,6 @@ There are several ways to do this, one way is to extend your env/bin/activate fi
 
 `echo -e "\nexport PYTHONPATH=\$PYTHONPATH:$(pwd)/src" >> env/bin/activate`
 
-
 #### Other requirements
 
 ##### Gcloud
@@ -49,7 +47,7 @@ or visit https://cloud.google.com/sdk/docs/quickstarts
 
 or visit https://www.java.com/download/
 
-### The Docker way
+### Option 2: The Docker way
 
 #### Start the container
 
@@ -235,3 +233,25 @@ Or you can do it via the UI: [dev](https://console.cloud.google.com/cloudschedul
 ### Pushshift Samples URL
 
 https://api.pushshift.io/reddit/search/?q=elizabeth%20warren%20plan&dataviz=false&aggs=false&subreddit=elizabethwarren&searchtype=posts,comments&search=true&start=1565112951&end=1565717751&size=100
+
+## Contributing
+
+A good place to start is to join our Slack channel #warren-plan-bot and introduce yourself!
+
+If you're looking for good issues to start tackling as you get familiar with the repo, 
+look for those tagged with [help wanted](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [good first issue](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+
+This README should also contain all the info you should need to know to get up and running, and otherwise operate the bot locally. 
+If there's any info you find missing or incorrect, please make a PR to update it :D  
+
+### Development workflow
+
+1. Create your branch off of `master`.
+
+1. Follow the [development instructions above](#development) to set up your working environment, if you haven't already.
+
+1. You can test out any code changes you've made by [running the tests](#run-tests) or [running the bot in safe mode](#safely-and-statelessly)
+
+1. If you've added code that should be tested, add tests.
+
+1. If you've changed or created any new scripts or major functionality, remember to update the documentation in this file.
