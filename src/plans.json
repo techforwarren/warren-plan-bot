@@ -322,5 +322,23 @@
         "display_title": "Fighting for Service Members, Veterans, and Military Families",
         "summary": "Our government continues to fall short of the responsibilities it owes to our veterans. Our government must deliver care and services worthy of the veterans it serves.",
         "url": "https://elizabethwarren.com/plans/veterans"
+    },{
+        "id": "foreign_policy",
+        "topic": "foreign policy",
+        "display_title": "Foreign Policy",
+        "summary": "Washington’s foreign policy today serves the wealthy and well-connected at the expense of everyone else. It’s long past time to take an honest look at the full costs and risks of our military spending and overseas actions.",
+        "url": "https://elizabethwarren.com/plans/foreign-policy"
+    },{
+        "id": "climate_change",
+        "topic": "climate change",
+        "display_title": "Tackling the Climate Crisis Head On",
+        "summary": "Elizabeth is committed to addressing climate change, because our planet depends on it",
+        "url": "https://elizabethwarren.com/plans/climate-change"
+    },{
+        "id": "wall_street_accountable",
+        "topic": "wall street",
+        "display_title": "Holding Wall Street Accountable",
+        "summary": "Elizabeth has spent her career fighting for American families and holding big banks and corporate executives accountable. It’s time to fundamentally transform the financial sector’s role in our economy.",
+        "url": "https://elizabethwarren.com/plans/holding-wall-street-accountable"
     }
 ]
