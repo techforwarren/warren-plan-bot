@@ -238,15 +238,20 @@ https://api.pushshift.io/reddit/search/?q=elizabeth%20warren%20plan&dataviz=fals
 
 A good place to start is to join our Slack channel #warren-plan-bot and introduce yourself!
 
+This README should also contain all the info you should need to know to get up and running, and otherwise operate the bot locally. 
+If there's any info you find missing or incorrect, please make a PR to update it :D
+
 If you're looking for good issues to start tackling as you get familiar with the repo, 
 look for those tagged with [help wanted](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [good first issue](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-This README should also contain all the info you should need to know to get up and running, and otherwise operate the bot locally. 
-If there's any info you find missing or incorrect, please make a PR to update it :D  
+If you want to start with one of those issues, you're welcome to go ahead and just get started, but if you'd like further clarity, 
+want to bite off something larger, or have new ideas for contribution, start a conversation with the projects leads 
+@joegoldbeck and @Hucxley in the project slack channel!
 
 ### Development workflow
 
-1. Create your branch off of `master`.
+1. Create a branch off of `master` using the naming convention `[your_initials]/[topic]-[issue_number_if_applicable]` (e.g. `jg/create-readme-1`). 
+(You'll first need to [fork the repo](https://help.github.com/en/articles/fork-a-repo) entirely if you're not an existing contributor) 
 
 1. Follow the [development instructions above](#development) to set up your working environment, if you haven't already.
 
@@ -255,3 +260,5 @@ If there's any info you find missing or incorrect, please make a PR to update it
 1. If you've added code that should be tested, add tests.
 
 1. If you've changed or created any new scripts or major functionality, remember to update the documentation in this file.
+
+1. Submit a [pull request](https://github.com/joegoldbeck/wpb-bot/compare)
