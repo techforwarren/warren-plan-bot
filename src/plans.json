@@ -292,5 +292,35 @@
         "display_title": "Health Care is a Basic Human Right",
         "summary": "Health care is a basic human right – and we fight for basic human rights. Elizabeth won’t stop fighting until everyone is covered and no one goes broke paying a medical bill or filling a prescription.",
         "url": "https://elizabethwarren.com/plans/health-care"
+    },{
+        "id": "lgtbtq_equality",
+        "topic": "lgtbtq equality",
+        "display_title": "LGBTQ+ Rights",
+        "summary": "Every day, LGBTQ+ individuals continue to face discrimination at work, at school, and in their communities. Elizabeth is committed to standing side-by-side with LGBTQ+ people until each and every person has a fighting chance to build a brighter future for themselves and feels safe to be who they are. Equal is equal.",
+        "url": "https://elizabethwarren.com/plans/lgtbtq-equality"
+    },{
+        "id": "disability_justice",
+        "topic": "disability",
+        "display_title": "Fighting for an Accessible & Inclusive America",
+        "summary": "Elizabeth is committed to a Democracy that is accessible to and represents all Americans - including those with disabilities. Elizabeth’s first job out of college was teaching students with speech and learning disabilities at a public school. This role reaffirmed for her how important it is to live a life of independence and dignity. She will always stand up for the policies that help make that possible for all Americans, including Americans with disabilities.",
+        "url": "https://elizabethwarren.com/plans/disability-justice"
+    },{
+        "id": "competitive_markets",
+        "topic": "competitive markets",
+        "display_title": "Promoting Competitive Markets",
+        "summary": "Markets work when there are rules and competition - but corporate monopolies have taken over in sector after sector. It’s time to bring back serious antitrust enforcement.",
+        "url": "https://elizabethwarren.com/plans/promoting-competitive-markets"
+    },{
+        "id": "accountable_capitalism",
+        "topic": "workers accountable capitalism",
+        "display_title": "Empowering Workers Through Accountable Capitalism",
+        "summary": "Wealthy shareholders of giant corporations have gobbled up trillions of dollars in surging profits. Giant corporations must focus more on the interests of their workers – not just their wealthy shareholders.",
+        "url": "https://elizabethwarren.com/plans/accountable-capitalism"
+    },{
+        "id": "veterans",
+        "topic": "veterans",
+        "display_title": "Fighting for Service Members, Veterans, and Military Families",
+        "summary": "Our government continues to fall short of the responsibilities it owes to our veterans. Our government must deliver care and services worthy of the veterans it serves.",
+        "url": "https://elizabethwarren.com/plans/veterans"
     }
 ]
