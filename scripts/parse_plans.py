@@ -46,12 +46,12 @@ def unwrap_and_smooth(soup, tag):
     soup.smooth()
 
 
-def decompose_and_smooth(soup, tag):
+def decompose_and_smooth(soup, tag, **kwargs):
     """
     Remove html tag including any contents
     """
     # remove tag
-    for t in soup.findAll(tag):
+    for t in soup.findAll(tag, **kwargs):
         t.decompose()
     # smooth together the text that was in those tags with neighboring text
     soup.smooth()
@@ -84,6 +84,10 @@ def parse_article(soup):
 
     for tag in ["noscript", "img", "button"]:
         decompose_and_smooth(article, tag)
+
+    decompose_and_smooth(
+        article, "div", class_=re.compile(r".*PlanSignupInterruptorBlocks.*")
+    )
 
     remove_html_comments(article)
 
