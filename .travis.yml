@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r requirements-dev.txt
 script:
-  - pytest
+  - PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest
