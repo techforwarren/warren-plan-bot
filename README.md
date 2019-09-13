@@ -1,7 +1,14 @@
-wpb-bot
+Warren Plan Bot
 ==================
 
-[![Build Status](https://travis-ci.com/joegoldbeck/wpb-bot.svg?branch=master)](https://travis-ci.com/joegoldbeck/wpb-bot)
+[![Build Status](https://travis-ci.org/techforwarren/warren-plan-bot.svg?branch=master)](https://travis-ci.org/techforwarren/warren-plan-bot)
+
+Reddit bot to help you learn about Senator Elizabeth Warren's plans
+
+Currently active on the following subreddits
+- [/r/ElizabethWarren](https://www.reddit.com/r/ElizabethWarren/)
+
+It can be summoned via !WarrenPlanBot [plan_topic_goes_here]
 
 ## Development
 
