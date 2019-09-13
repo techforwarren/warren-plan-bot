@@ -249,7 +249,7 @@ This README should also contain all the info you should need to know to get up a
 If there's any info you find missing or incorrect, please make a PR to update it :D
 
 If you're looking for good issues to start tackling as you get familiar with the repo, 
-look for those tagged with [help wanted](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [good first issue](https://github.com/joegoldbeck/wpb-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+look for those tagged with [help wanted](https://github.com/techforwarren/warren-plan-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [good first issue](https://github.com/techforwarren/warren-plan-bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 If you want to start with one of those issues, you're welcome to go ahead and just get started, but if you'd like further clarity, 
 want to bite off something larger, or have new ideas for contribution, start a conversation with the projects leads 
@@ -268,4 +268,4 @@ want to bite off something larger, or have new ideas for contribution, start a c
 
 1. If you've changed or created any new scripts or major functionality, remember to update the documentation in this file.
 
-1. Submit a [pull request](https://github.com/joegoldbeck/wpb-bot/compare)
+1. Submit a [pull request](https://github.com/techforwarren/warren-plan-bot/compare)
