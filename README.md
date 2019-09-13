@@ -7,7 +7,7 @@ wpb-bot
 
 ### praw.ini file
 
-You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. You'll need to get the client_id and client_secret from the Reddit application
+You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. You'll need to get the client_id and client_secret from the owners of the project.
 
 ### Option 1: the virtualenv way
 
