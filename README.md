@@ -8,7 +8,7 @@ Reddit bot to help you learn about Senator Elizabeth Warren's plans
 Currently active on the following subreddits
 - [/r/ElizabethWarren](https://www.reddit.com/r/ElizabethWarren/)
 
-The bot can be summoned by making a comment of the form `!WarrenPlanBot [plan_topic_goes_here]`
+The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here`
 
 ## Development
 
