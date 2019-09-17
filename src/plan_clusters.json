@@ -4,11 +4,12 @@
     "topic": "corruption",
     "display_title": "Anti-Corruption",
     "plan_ids": [
+      "accountable_capitalism",
+      "private_prison_reform",
       "presidential_accountability",
-      "corporate_executive_accountability",
+      "comprehensive_criminal_justice_reform",
+      "wall_street_reform",
       "defense_lobbyists",
-      "foreign_service",
-      "private_prison_reform"
     ]
   }
 ]
