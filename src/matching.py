@@ -256,7 +256,7 @@ class RuleStrategy:
         """
         Matches strictly to a request at the end of the post for the full list of all known plans
         """
-        if re.search(r"show me the plans\W*\Z", post.text, re.IGNORECASE):
+        if re.search(r"show me the plans\W*$", post.text, re.IGNORECASE | re.MULTILINE):
             return {"operation": "all_the_plans"}
 
     @staticmethod
