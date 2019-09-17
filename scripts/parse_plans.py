@@ -68,7 +68,16 @@ def remove_html_comments(soup):
     soup.smooth()
 
 
-def parse_article(soup):
+def parse_articles(soup):
+    """
+    Parse any plans that have a nice article tags
+
+    Warren.com, Medium posts and WashingtonPost fall under this category neatly
+    """
+    return "\n".join(parse_article(article) for article in soup.findAll("article"))
+
+
+def parse_article(article):
     """
     Parse any plans that have a nice article tag
 
@@ -77,8 +86,6 @@ def parse_article(soup):
     Essence has some very minor issues here because they have the first word of a paragraph
     often separated from the rest of the paragraph
     """
-    article = soup.find("article")
-
     for tag in ["a", "b", "i", "u", "em", "strong"]:
         unwrap_and_smooth(article, tag)
 
@@ -186,7 +193,7 @@ def parse_plans():
         page_soup = BeautifulSoup(html, "lxml")
 
         if page_soup.find("article"):
-            text = parse_article(page_soup)
+            text = parse_articles(page_soup)
         elif "elizabethwarren" in plan_hostname:
             text = parse_e_warren_dot_com(page_soup)
         else:
