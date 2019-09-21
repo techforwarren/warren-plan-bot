@@ -575,5 +575,13 @@
     "text": "!warrenplanbot what is Warren's plan for health care?",
     "source": "/r/ElizabethWarren",
     "match": "health_care"
+  },
+  {
+    "text": "!warrenplanbot what is her plan to invest in public education?",
+    "source": "/r/ElizabethWarren",
+    "match": "student_debt_free_college",
+    "alternative_matches": [
+      "universal_child_care"
+    ]
   }
 ]
