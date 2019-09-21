@@ -6,11 +6,15 @@ from os import path
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
-from gensim.parsing.preprocessing import (preprocess_string, remove_stopwords,
-                                          stem_text,
-                                          strip_multiple_whitespaces,
-                                          strip_numeric, strip_punctuation,
-                                          strip_short)
+from gensim.parsing.preprocessing import (
+    preprocess_string,
+    remove_stopwords,
+    stem_text,
+    strip_multiple_whitespaces,
+    strip_numeric,
+    strip_punctuation,
+    strip_short,
+)
 from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
