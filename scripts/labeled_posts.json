@@ -221,11 +221,6 @@
     "match": "affordable_housing"
   },
   {
-    "text": "!WarrenPlanBot public housing",
-    "source": "sh",
-    "match": "affordable_housing"
-  },
-  {
     "text": "!WarrenPlanBot what is her plan for affordable public housing?",
     "source": "sh",
     "match": "affordable_housing"
