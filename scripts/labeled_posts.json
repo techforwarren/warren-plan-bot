@@ -20,11 +20,6 @@
     "match": "wall_street_reform"
   },
   {
-    "text": "!WarrenPlanBot strong economy",
-    "source": "sh",
-    "match": "stop_economy_crash"
-  },
-  {
     "text": "!WarrenPlanBot climate risk disclosure",
     "source": "jg",
     "match": "climate_risk_disclosure"
@@ -81,11 +76,6 @@
     "text": "!WarrenPlanBot military lobbyists",
     "source": "sh",
     "match": "defense_lobbyists"
-  },
-  {
-    "text": "!WarrenPlanBot national security climate change",
-    "source": "sh",
-    "match": "national_security_climate_change"
   },
   {
     "text": "!WarrenPlanBot opioid crisis",
@@ -156,11 +146,6 @@
     "text": "!WarrenPlanBot farming economy",
     "source": "sh",
     "match": "new_farm_economy"
-  },
-  {
-    "text": "!WarrenPlanBot gun violence mass shootings",
-    "source": "sh",
-    "match": "gun_violence"
   },
   {
     "text": "!WarrenPlanBot free college",
