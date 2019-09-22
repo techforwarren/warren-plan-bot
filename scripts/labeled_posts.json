@@ -59,7 +59,7 @@
     "source": "sh",
     "match": "green_manufacturing",
     "alternate_matches": [
-      "green_new_deal"
+      "climate_change"
     ]
   },
   {
@@ -195,7 +195,6 @@
     "source": "sh",
     "match": "clean_energy_for_america",
     "alternate_matches": [
-      "green_new_deal",
       "climate_risk_disclosure",
       "climate_change",
       "green_manufacturing"
@@ -389,9 +388,8 @@
   {
     "text": "!WarrenPlanBot Green New Deal",
     "source": "/r/ElizabethWarren",
-    "match": "green_new_deal",
+    "match": "climate_change",
     "alternate_matches": [
-      "climate_change",
       "clean_energy_for_america",
       "green_manufacturing"
     ]
