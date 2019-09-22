@@ -67,6 +67,7 @@ def score_strategy(strategy):
         }
         match_scoring.append(match)
 
+    correct_matches = [m for m in match_scoring if m["score"] == CORRECT_MATCH]
     alternate_matches = [m for m in match_scoring if m["score"] == ALTERNATE_MATCH]
     wrong_matches = [m for m in match_scoring if m["score"] == WRONG_MATCH]
     no_matches = [m for m in match_scoring if m["score"] == NO_MATCH]
@@ -79,6 +80,7 @@ def score_strategy(strategy):
         "no_matches": no_matches,
         "wrong_matches": wrong_matches,
         "alternate_matches": alternate_matches,
+        "correct_matches": correct_matches,
     }
 
 
@@ -104,9 +106,9 @@ def score_strategies(verbose=False):
 
     if verbose:
         for strategy in scored_strategies:
-            _print_strategy_scoring_details(strategy)
+            _print_strategy_scoring_details(strategy, verbose=verbose)
     else:
-        _print_strategy_scoring_details(scored_strategies[0])
+        _print_strategy_scoring_details(scored_strategies[0], verbose=verbose)
 
     print("")
     print("")
@@ -114,10 +116,10 @@ def score_strategies(verbose=False):
     print("")
 
     for strategy in scored_strategies[:10]:
-        print(f"{strategy['name']}: TOTAL SCORE: {strategy['total_score']}")
+        print(f"{strategy['name']}: TOTAL SCORE: {round(strategy['total_score'],1)}")
 
 
-def _print_strategy_scoring_details(strategy):
+def _print_strategy_scoring_details(strategy, verbose=False):
     print(f"")
     print(f"")
     print(f"--SCORING STRATEGY: {strategy['name']}--")
@@ -142,6 +144,14 @@ def _print_strategy_scoring_details(strategy):
     for m in strategy["alternate_matches"]:
         print(f"{strategy['name']}: {m}")
     print(f"")
+
+    if verbose:
+        print(
+            f"{strategy['name']}: CORRECT MATCHES FOR{'' if strategy['correct_matches'] else ' None!'}:\n"
+        )
+        for m in strategy["correct_matches"]:
+            print(f"{strategy['name']}: {m}")
+        print(f"")
 
     print(f"{strategy['name']}: TOTAL SCORE: {strategy['total_score']}")
 

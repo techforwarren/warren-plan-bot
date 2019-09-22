@@ -20,11 +20,6 @@
     "match": "wall_street_reform"
   },
   {
-    "text": "!WarrenPlanBot strong economy",
-    "source": "sh",
-    "match": "stop_economy_crash"
-  },
-  {
     "text": "!WarrenPlanBot climate risk disclosure",
     "source": "jg",
     "match": "climate_risk_disclosure"
@@ -64,7 +59,7 @@
     "source": "sh",
     "match": "green_manufacturing",
     "alternate_matches": [
-      "green_new_deal"
+      "climate_change"
     ]
   },
   {
@@ -81,11 +76,6 @@
     "text": "!WarrenPlanBot military lobbyists",
     "source": "sh",
     "match": "defense_lobbyists"
-  },
-  {
-    "text": "!WarrenPlanBot national security climate change",
-    "source": "sh",
-    "match": "national_security_climate_change"
   },
   {
     "text": "!WarrenPlanBot opioid crisis",
@@ -158,11 +148,6 @@
     "match": "new_farm_economy"
   },
   {
-    "text": "!WarrenPlanBot gun violence mass shootings",
-    "source": "sh",
-    "match": "gun_violence"
-  },
-  {
     "text": "!WarrenPlanBot free college",
     "source": "jg",
     "match": "student_debt_free_college"
@@ -176,7 +161,9 @@
     "text": "!WarrenPlanBot voting",
     "source": "jg",
     "match": "election_reform",
-    "alternate_matches": ["electoral_college"]
+    "alternate_matches": [
+      "electoral_college"
+    ]
   },
   {
     "text": "!WarrenPlanBot amazon",
@@ -207,7 +194,11 @@
     "text": "!WarrenPlanBot clean green energy",
     "source": "sh",
     "match": "clean_energy_for_america",
-    "alternate_matches": ["green_new_deal", "climate_risk_disclosure", "climate_change", "green_manufacturing"]
+    "alternate_matches": [
+      "climate_risk_disclosure",
+      "climate_change",
+      "green_manufacturing"
+    ]
   },
   {
     "text": "!WarrenPlanBot what is her plan to stop gun deaths?",
@@ -227,11 +218,6 @@
   {
     "text": "!WarrenPlanBot does she have a plan for public housing",
     "source": "/r/WPBSandbox",
-    "match": "affordable_housing"
-  },
-  {
-    "text": "!WarrenPlanBot public housing",
-    "source": "sh",
     "match": "affordable_housing"
   },
   {
@@ -329,30 +315,36 @@
     "alternate_matches": [
       "foreign_service"
     ]
-  },{
+  },
+  {
     "text": "!WarrenPlanBot how will we pay for her plans?",
     "source": "/r/ElizabethWarren",
     "match": "ultra_millionaire_tax",
     "alternate_matches": [
       "corporate_taxes"
     ]
-  },{
+  },
+  {
     "text": "!warrenplanbot What will she do about prison overcrowding and understaffing problems?",
     "source": "/r/ElizabethWarren",
     "match": "private_prison_reform"
-  },{
+  },
+  {
     "text": "!WarrenPlanBot, what her criminal justice reform plan?",
     "source": "/r/ElizabethWarren",
     "match": "comprehensive_criminal_justice_reform"
-  },{
+  },
+  {
     "text": "!WarrenPlanBot what's her plan regarding climate change?",
     "source": "/r/ElizabethWarren",
     "match": "climate_change"
-  },{
+  },
+  {
     "text": "!WarrenPlanBot what is her plan for getting me a significant other?",
     "source": "/r/ElizabethWarren",
     "match": null
-  },{
+  },
+  {
     "text": "!WarrenPlanBot reparations",
     "source": "/r/ElizabethWarren",
     "match": null,
@@ -391,9 +383,8 @@
   {
     "text": "!WarrenPlanBot Green New Deal",
     "source": "/r/ElizabethWarren",
-    "match": "green_new_deal",
+    "match": "climate_change",
     "alternate_matches": [
-      "climate_change",
       "clean_energy_for_america",
       "green_manufacturing"
     ]
@@ -447,12 +438,15 @@
     "text": "!WarrenPlanBot what's her plan for extending or improving elder care ?",
     "source": "/r/ElizabethWarren",
     "match": null,
-    "alternate_matches": ["health_care", "expanding_social_security"]
+    "alternate_matches": [
+      "health_care",
+      "expanding_social_security"
+    ]
   },
   {
     "text": "!WarrenPlanBot [fracking]",
     "source": "/r/ElizabethWarren",
-    "match": null
+    "match": "public_land"
   },
   {
     "text": "!WarrenPlanBot Labor Unions",
@@ -479,5 +473,93 @@
     "text": "!WarrenPlanBot What is your plan on video games?",
     "source": "/r/ElizabethWarren",
     "match": null
+  },
+  {
+    "text": "!WarrenPlanBot mental health",
+    "source": "/r/ElizabethWarren",
+    "match": "health_care"
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for transportation?",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot medicare for all",
+    "source": "/r/ElizabethWarren",
+    "match": "health_care"
+  },
+  {
+    "text": "I'm always glad to hear good news! Hope she does well this weekend, too.\n\n!WarrenPlanBot rural",
+    "source": "/r/ElizabethWarren",
+    "match": "invest_in_rural_america"
+  },
+  {
+    "text": "!WarrenPlanBot rebuilding the state department.",
+    "source": "/r/ElizabethWarren",
+    "match": "foreign_service"
+  },
+  {
+    "text": "!WarrenPlanBot millionaire tax",
+    "source": "/r/ElizabethWarren",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "!WarrenPlanBot What will Warren do to end corruption?",
+    "source": "/r/ElizabethWarren",
+    "match": "anti_corruption"
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for helping millions of displaced workers transition careers after automation, AI & machine learning become too embedded in our economy to be ignored any longer?",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot What is Warren's plan to make anime real?",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot trans rights",
+    "source": "/r/ElizabethWarren",
+    "match": "lgbtq_equality"
+  },
+  {
+    "text": "!warrenplanbot How would Warren pay for Medicare for All?",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "!WarrenPlanBot cancer research",
+    "source": "/r/ElizabethWarren",
+    "match": null
+  },
+  {
+    "text": "Some enterprising Warren supporters put together a bot to pull up information about her positions on different issues.  You can activate it as follows:\n\n!WarrenPlanBot what is her plan for gun violence?",
+    "source": "/r/ElizabethWarren",
+    "match": "gun_violence"
+  },
+  {
+    "text": "Also, !warrenplanbot what is her plan to rebuild the state department to improve our diplomacy worldwide?",
+    "source": "/r/ElizabethWarren",
+    "match": "foreign_service"
+  },
+  {
+    "text": "!WarrenPlanBot social security",
+    "source": "/r/ElizabethWarren",
+    "match": "expanding_social_security"
+  },
+  {
+    "text": "!warrenplanbot what is Warren's plan for health care?",
+    "source": "/r/ElizabethWarren",
+    "match": "health_care"
+  },
+  {
+    "text": "!warrenplanbot what is her plan to invest in public education?",
+    "source": "/r/ElizabethWarren",
+    "match": "student_debt_free_college",
+    "alternative_matches": [
+      "universal_child_care"
+    ]
   }
 ]
