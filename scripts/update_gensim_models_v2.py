@@ -53,19 +53,25 @@ def update_gensim_models():
             raise ValueError(f"Plans don't match {parsed_plan} {plan_from_repo}")
 
     documents_for_training = [
-        p["text"] + "\n" + p2.get("additional_training_text", "")
+        p["text"]
+        + "\n"
+        + p2.get("additional_training_text", "")
+        + "\n"
+        + p2.get("display_title", "")
         for p, p2 in zip(parsed_plans, plans_from_repo)
-    ] + [p["topic"] for p in plan_clusters]
+    ]
 
     documents_for_matching = (
         [p["text"] for p in parsed_plans]
         + [p["topic"] for p in plan_clusters]
         + [p["topic"] for p in plans_from_repo]
+        + [p["display_title"] for p in plans_from_repo]
     )
 
     plan_ids_for_matching = (
         [p["id"] for p in parsed_plans]
         + [p["id"] for p in plan_clusters]
+        + [p["id"] for p in plans_from_repo]
         + [p["id"] for p in plans_from_repo]
     )
 
