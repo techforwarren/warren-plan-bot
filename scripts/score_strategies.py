@@ -116,7 +116,7 @@ def score_strategies(verbose=False):
     print("")
 
     for strategy in scored_strategies[:10]:
-        print(f"{strategy['name']}: TOTAL SCORE: {strategy['total_score']}")
+        print(f"{strategy['name']}: TOTAL SCORE: {round(strategy['total_score'],1)}")
 
 
 def _print_strategy_scoring_details(strategy, verbose=False):
