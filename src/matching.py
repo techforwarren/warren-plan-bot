@@ -250,7 +250,7 @@ class RuleStrategy:
         preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
         for plan in plans:
             if (
-                Preprocess.preprocess_gensim_v1(plan["display_title"])
+                Preprocess.preprocess_gensim_v1(plan["display_title"], trigger_word="")
                 == preprocessed_post
             ):
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
@@ -304,12 +304,12 @@ class Preprocess:
         )
 
     @staticmethod
-    def preprocess_gensim_v1(doc):
+    def preprocess_gensim_v1(doc, trigger_word="warrenplanbot"):
         # Run preprocessing
         preprocessing_filters = [
             unidecode,
             lambda x: x.lower(),
-            get_trigger_line,
+            partial(get_trigger_line, trigger_word=trigger_word),
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
@@ -324,11 +324,11 @@ class Preprocess:
     # TODO try a preprocessed that does lemmatization
 
 
-def get_trigger_line(text):
+def get_trigger_line(text, trigger_word="warrenplanbot"):
     """
     Get the last line that WarrenPlanBot occurs on,
     only returning the part of that line which occurs _after_ WarrenPlamBot
     """
-    matches = re.findall(r"warrenplanbot\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    matches = re.findall(fr"{trigger_word}\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
 
     return matches[-1] if matches else ""
