@@ -250,7 +250,7 @@ class RuleStrategy:
         preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
         for plan in plans:
             if (
-                Preprocess.preprocess_gensim_v1(plan["display_title"])
+                Preprocess.preprocess_gensim_v1(plan["display_title"], trigger_word="")
                 == preprocessed_post
             ):
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
@@ -258,17 +258,21 @@ class RuleStrategy:
     @staticmethod
     def request_plan_list(plans: list, post):
         """
-        Matches strictly to a request at the end of the post for the full list of all known plans
+        Matches strictly to a request at the end of the trigger line for the full list of all known plans
         """
-        if re.search(r"show me the plans\W*$", post.text, re.IGNORECASE | re.MULTILINE):
+        if re.search(
+            r"show me the plans\W*$",
+            get_trigger_line(post.text),
+            re.IGNORECASE | re.MULTILINE,
+        ):
             return {"operation": "all_the_plans"}
 
     @staticmethod
     def request_help(plans: list, post):
         """
-        Matches strictly to a request for help at the end of the post.
+        Matches strictly to a request for help at the trigger line.
         """
-        if re.search(r"warrenplanbot\s+help\W*\Z", post.text, re.IGNORECASE):
+        if re.search(r"help\W*$", get_trigger_line(post.text), re.IGNORECASE):
             return {"operation": "help"}
 
 
@@ -300,11 +304,12 @@ class Preprocess:
         )
 
     @staticmethod
-    def preprocess_gensim_v1(doc):
+    def preprocess_gensim_v1(doc, trigger_word="warrenplanbot"):
         # Run preprocessing
         preprocessing_filters = [
             unidecode,
             lambda x: x.lower(),
+            partial(get_trigger_line, trigger_word=trigger_word),
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
@@ -317,3 +322,13 @@ class Preprocess:
         return preprocess_string(doc, preprocessing_filters)
 
     # TODO try a preprocessed that does lemmatization
+
+
+def get_trigger_line(text, trigger_word="warrenplanbot"):
+    """
+    Get the last line that WarrenPlanBot occurs on,
+    only returning the part of that line which occurs _after_ WarrenPlamBot
+    """
+    matches = re.findall(fr"{trigger_word}\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+
+    return matches[-1] if matches else ""
