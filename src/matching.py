@@ -258,17 +258,21 @@ class RuleStrategy:
     @staticmethod
     def request_plan_list(plans: list, post):
         """
-        Matches strictly to a request at the end of the post for the full list of all known plans
+        Matches strictly to a request at the end of the trigger line for the full list of all known plans
         """
-        if re.search(r"show me the plans\W*$", post.text, re.IGNORECASE | re.MULTILINE):
+        if re.search(
+            r"show me the plans\W*$",
+            get_trigger_line(post.text),
+            re.IGNORECASE | re.MULTILINE,
+        ):
             return {"operation": "all_the_plans"}
 
     @staticmethod
     def request_help(plans: list, post):
         """
-        Matches strictly to a request for help at the end of the post.
+        Matches strictly to a request for help at the trigger line.
         """
-        if re.search(r"warrenplanbot\s+help\W*\Z", post.text, re.IGNORECASE):
+        if re.search(r"help\W*$", get_trigger_line(post.text), re.IGNORECASE):
             return {"operation": "help"}
 
 
@@ -305,6 +309,7 @@ class Preprocess:
         preprocessing_filters = [
             unidecode,
             lambda x: x.lower(),
+            get_trigger_line,
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
@@ -317,3 +322,13 @@ class Preprocess:
         return preprocess_string(doc, preprocessing_filters)
 
     # TODO try a preprocessed that does lemmatization
+
+
+def get_trigger_line(text):
+    """
+    Get the last line that WarrenPlanBot occurs on,
+    only returning the part of that line which occurs _after_ WarrenPlamBot
+    """
+    matches = re.findall(r"warrenplanbot\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+
+    return matches[-1] if matches else ""
