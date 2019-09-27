@@ -1,9 +1,13 @@
 import json
 import logging
+import os
 import re
 from functools import lru_cache, partial
 from os import path
 
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+from elasticsearch_dsl.query import MultiMatch
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
 from gensim.parsing.preprocessing import (
@@ -24,6 +28,22 @@ GENSIM_V2_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_
 
 # suppress gensim logs
 logging.getLogger("gensim").setLevel(logging.WARNING)
+
+
+ES_HOST = os.getenv("ES_HOST")
+ES_POST = os.getenv("ES_POST")
+ES_USER = os.getenv("ES_USER")
+ES_PASSWORD = os.getenv("ES_PASSWORD")
+es = Elasticsearch(
+    [
+        {
+            "host": ES_HOST,
+            "port": ES_POST,
+            "use_ssl": True,
+            "http_auth": f"{ES_USER}:{ES_PASSWORD}",
+        }
+    ]
+)
 
 
 class Strategy:
@@ -48,6 +68,33 @@ class Strategy:
         # Can include other metadata about the match here
     }
     """
+
+    @staticmethod
+    def es_multi_match(plans: list, post, threshold=5.5):
+        s = (
+            Search(using=es, index="plan")
+            .query("multi_match", query=post.text, fields=["text.english", "topic"])
+            .source(["id"])
+        )
+
+        response = s.execute()
+
+        try:
+            match = response.hits[0]
+
+        except IndexError:
+            return {"match": None, "confidence": 0, "plan": None}
+
+        for _plan in plans:
+            if _plan["id"] == match.id:
+                plan = _plan
+                break
+
+        return {
+            "match": match["id"] if match.meta.score > threshold else None,
+            "confidence": match.meta.score,
+            "plan": _plan,
+        }
 
     @staticmethod
     def token_sort_ratio(plans: list, post, threshold=50):
