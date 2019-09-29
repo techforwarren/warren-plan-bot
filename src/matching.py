@@ -113,7 +113,7 @@ class Strategy:
             model_name, model, similarity, model_path
         )
 
-        preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
+        preprocessed_post = Preprocess.preprocess_gensim_v1(get_trigger_line(post.text))
 
         vec_post = dictionary.doc2bow(preprocessed_post)
 
@@ -247,10 +247,10 @@ class RuleStrategy:
         Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,
         or the user to include a stop word for some reason
         """
-        preprocessed_post = Preprocess.preprocess_gensim_v1(post.text)
+        preprocessed_post = Preprocess.preprocess_gensim_v1(get_trigger_line(post.text))
         for plan in plans:
             if (
-                Preprocess.preprocess_gensim_v1(plan["display_title"], trigger_word="")
+                Preprocess.preprocess_gensim_v1(plan["display_title"])
                 == preprocessed_post
             ):
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
@@ -304,12 +304,11 @@ class Preprocess:
         )
 
     @staticmethod
-    def preprocess_gensim_v1(doc, trigger_word="warrenplanbot"):
+    def preprocess_gensim_v1(doc):
         # Run preprocessing
         preprocessing_filters = [
             unidecode,
             lambda x: x.lower(),
-            partial(get_trigger_line, trigger_word=trigger_word),
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
