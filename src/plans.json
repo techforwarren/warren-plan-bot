@@ -270,7 +270,7 @@
     }, {
         "id": "trade_on_our_terms",
         "topic": "trade",
-        "summary": "Sen. Warren's plan represents a new approach to trade — one that uses America’s leverage to boost American workers and raise the standard of living across the globe. The President has a lot of authority to remake trade policy herself. When she's elected, she intends to use it.",
+        "summary": "For decades, big multinational corporations have been dictating America’s trade policy at the expense of everyone else. We need to use America’s enormous leverage to completely transform our approach to trade.",
         "display_title": "A New Approach to Trade",
         "url": "https://elizabethwarren.com/plans/new-approach-trade",
         "keyword_synonyms": []
@@ -347,5 +347,11 @@
         "display_title": "End Washington Corruption",
         "summary": "The Trump administration is the most corrupt administration of our lifetime. But the problem of Washington corruption is much bigger than Trump. We need big, structural change to root out Washington corruption and make government work for all of us.",
         "url": "https://elizabethwarren.com/plans/end-washington-corruption"
+    },{
+        "id": "congressional_independence",
+        "topic": "congressional independence lobbyists",
+        "display_title": "Strengthening Congressional Independence from Corporate Lobbyists",
+        "summary": "When Elizabeth fought for the Consumer Financial Protection Bureau, she saw firsthand how lobbyists use their resources and expertise to overpower the needs and wishes of ordinary people. It's time to give Congress the resources it needs to fight back against corporate lobbyists.",
+        "url": "https://elizabethwarren.com/plans/congressional-independence"
     }
 ]
