@@ -18,14 +18,14 @@ PLANS_FILE = path.join(DIRNAME, "../src/plans.json")
 
 OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../data/raw/plan_html"))
 
-
-def clear_output_dir():
+def create_output_dir():
     """
     Make empty output directory
     """
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
+def clear_output_dir():
     for file_path in os.listdir(OUTPUT_DIR):
         os.remove(path.join(OUTPUT_DIR, file_path))
 
@@ -99,4 +99,5 @@ def download_plans(force_redownload=False):
 
 
 if __name__ == "__main__":
+    create_output_dir()
     download_plans()
