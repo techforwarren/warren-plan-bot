@@ -191,36 +191,25 @@ def process_post(
 
     # Never try to reply if a post is locked
     if post.locked:
-        posts_db.document(post.id).update(
-            create_db_record(
-                post, processed=True, skipped=True, skip_reason="post_locked"
-            )
-        )
-        return
-
+        skip_reason = "post_locked"
     # Never reply to a deleted post
-    if not post.author:
-        posts_db.document(post.id).update(
-            create_db_record(
-                post, processed=True, skipped=True, skip_reason="no_author"
-            )
-        )
-        return
-
+    elif not post.author:
+        skip_reason = "no_author"
     # Make sure we're not replying to ourself
-    if "warrenplanbot" in post.author.name.lower():
-        posts_db.document(post.id).update(
-            create_db_record(post, processed=True, skipped=True, skip_reason="own_post")
-        )
-        return
-
+    elif "warrenplanbot" in post.author.name.lower():
+        skip_reason = "own_post"
     # Ensure it's a post where someone summoned us
-    if not re.search("!warrenplanbot", post.text, re.IGNORECASE):
-        posts_db.document(post.id).update(
-            create_db_record(
-                post, processed=True, skipped=True, skip_reason="trigger_not_found"
-            )
+    elif not re.search("!warrenplanbot", post.text, re.IGNORECASE):
+        skip_reason = "trigger_not_found"
+    else:
+        skip_reason = None
+
+    if skip_reason:
+        post_record = create_db_record(
+            post, processed=True, skipped=True, skip_reason=skip_reason
         )
+        if not skip_tracking:
+            posts_db.document(post.id).set(post_record)
         return
 
     match_info = (
