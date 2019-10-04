@@ -213,7 +213,7 @@ class Strategy:
         )
 
     @staticmethod
-    def tfidf_gensim_v2(plans: list, post, threshold=20):
+    def tfidf_gensim_v2(plans: list, post, threshold=15):
         """
         TFIDF – Term Frequency–Inverse Document Frequency
 
@@ -230,6 +230,27 @@ class Strategy:
             threshold,
             model_path=GENSIM_V2_MODELS_PATH,
         )
+
+    @staticmethod
+    def lsa_tfidf_composite_gensim_v2(plans: list, post, threshold=94):
+        """
+        Composite of LSA and TFIDF methods
+
+        Using gensim
+
+        Models have been precomputed using ../scripts/update_gensim_models_v2.py
+        """
+        lsa_match = Strategy.lsa_gensim_v2(plans, post, threshold)
+
+        if lsa_match["match"]:
+            return lsa_match
+
+        tfidf_match = Strategy.tfidf_gensim_v2(plans, post)
+
+        if tfidf_match["match"]:
+            return tfidf_match
+
+        return lsa_match
 
 
 class RuleStrategy:
@@ -300,6 +321,7 @@ class Preprocess:
                 "thanks",
                 "thank",
                 "you",
+                "show",
             }
         )
 

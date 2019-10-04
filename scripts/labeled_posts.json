@@ -441,18 +441,12 @@
   {
     "text": "!WarrenPlanBot Labor Unions",
     "source": "/r/ElizabethWarren",
-    "match": null,
-    "alternate_matches": [
-      "trade_on_our_terms"
-    ]
+    "match": "american_workers_raising_wages"
   },
   {
     "text": "!WarrenPlanBot trade unions",
     "source": "/r/ElizabethWarren",
-    "match": null,
-    "alternate_matches": [
-      "trade_on_our_terms"
-    ]
+    "match": "american_workers_raising_wages"
   },
   {
     "text": "!WarrenPlanBot LGBT",
@@ -556,5 +550,88 @@
     "text": "It’s difficult to answer complex foreign policy questions on the campaign trail. This style of questioning is helpful for outlining an approach but each situation has a million unique variables, some of which are hidden from the public.\nIn a broader sense; I think we make a mistake when we separate foreign and domestic policy. Problems overseas are only overseas until they aren’t. (The deterioration in the Northern Triangle countries over the last several years is what’s causing our immigration influx now.) We’ve been using the military as the main driver of American interests abroad and that’s no good for anyone. Diplomacy is a much better investment than bombs. It seems like Warren gets that.\nFurther reading: !WarrenPlanBot Rebuilding the state department.",
     "source": "/r/ElizabethWarren",
     "match": "foreign_service"
+  },{
+    "text": "!warrenplanbot lobbying",
+    "source": "/r/ElizabethWarren",
+    "match": "excessive_lobbying_tax"
+  },{
+    "text": "!warrenplanbot Raising Wages?",
+    "source": "/r/ElizabethWarren",
+    "match": "american_workers_raising_wages"
+  },{
+    "text": "!warrenplanbot Native Americans?",
+    "source": "/r/ElizabethWarren",
+    "match": "tribal_nations_and_indigenous_peoples"
+  },{
+    "text": "!warrenplanbot Have anything on election reform?",
+    "source": "/r/ElizabethWarren",
+    "match": "election_reform"
+  },{
+    "text": "!WarrenPlanBot wealth tax\n\nThis is from the creators: http://gabriel-zucman.eu/policy-debates/\n\nThe fine details:\n\n* [How Would a Progressive Wealth Tax Work? Evidence from the Economics Literature](http://gabriel-zucman.eu/files/saez-zucman-wealthtaxobjections.pdf)\n\n* [Scoring of Senator Elizabeth Warren’s wealth tax proposal](http://gabriel-zucman.eu/files/saez-zucman-wealthtax-warren.pdf)\n\n* [Response to Natasha Sarin’s and Larry Summers’ critique of our scoring](https://gabriel-zucman.eu/files/saez-zucman-responseto-summers-sarin.pdf)\n\nEdit: To add, assets about yachts from their Response above:\n\nTo hit Warren's ~$2.75T number by ~2030, it isn't using collectibles. \n\n>More broadly, 80% of the wealth of the top 0.1% wealthiest families is in the form of assets that are traded and have a clear market price: publicly traded stock, bonds, and real estate. Only about 20% of their assets are in private businesses that do not have a directly observable market price. Valuing such businesses, and especially the largest ones, is anything but impossible. That is what the financial sector routinely does, and the IRS could mandate financial institutions to report their valuations of private businesses for the purpose of enforcing the wealth tax. **Art, valuable (gold, jewelry, etc.), and durables (yachts, cars, etc.) are a negligible fraction of wealth at the top.**\n\nOne thing I would note is I thought when it came to the wealth tax, it was based on each additional $0.03 for every dollar earned. Instead, it is 3% of total wealth taxed yearly. That means they're giving up 30% of their total wealth in 10 years. [Number 1717 on the list of Forbes billionaires is Steve Case](https://www.forbes.com/profile/steve-case/?list=billionaires#2749fe3718f3), who is worth $1.5B, earning an additional $200M in the last 6 months. At 1.5B, he would have to give up $450M of his assets over 10 years, assuming he continuously increases an average of 3% of his wealth/year.  But he'd still be worth $1.5B after the tax and most likely would make a lot more money than 3%.",
+    "source": "/r/ElizabethWarren",
+    "match": "ultra_millionaire_tax"
+  },{
+    "text": "!WarrenPlanBot internet\n\nInternet companies usually donate a _lot_ to the DNC, so I don't know how this will affect the next election.",
+    "source": "/r/ElizabethWarren",
+    "match": "break_up_big_tech"
+  },
+  {
+    "text": "!WarrenPlanBot show me Warren's position on trade.",
+    "source": "/r/ElizabethWarren",
+    "match": "trade_on_our_terms"
+  },
+  {
+    "text": "!WarrenPlanBot foreign policy",
+    "source": "/r/ElizabethWarren",
+    "match": "foreign_policy"
+  },
+  {
+    "text": "So the fundamental issue is not automation, it is the fact that corporations will use not pass on the cost savings to their low level employees, but will siphon off wealth to their executives. I believe Warren has a plan for that -\n\n !WarrenPlanBot accountable capitalism.",
+    "source": "/r/ElizabethWarren",
+    "match": "accountable_capitalism"
+  },
+  {
+    "text": "Have you contacted her Policy Director, Jon Donenberg? He would really be the best person to get the dirty details of her plans for discussion.  https://www.cnn.com/videos/us/2019/06/23/warren-policy-director-orig.cnn\n\n\n\n!WarrenPlanBot racism",
+    "source": "/r/ElizabethWarren",
+    "match": null,
+    "alternative_matches": [
+      "minority_businesses",
+      "black_maternal_mortality"
+    ]
+  },
+  {
+    "text": "!WarrenPlanBot tax\n\nThis is from the creators: http://gabriel-zucman.eu/policy-debates/\n\nThe fine details:\n\n* [How Would a Progressive Wealth Tax Work? Evidence from the Economics Literature](http://gabriel-zucman.eu/files/saez-zucman-wealthtaxobjections.pdf)\n\n* [Scoring of Senator Elizabeth Warren\u2019s wealth tax proposal](http://gabriel-zucman.eu/files/saez-zucman-wealthtax-warren.pdf)\n\n* [Response to Natasha Sarin\u2019s and Larry Summers\u2019 critique of our scoring](https://gabriel-zucman.eu/files/saez-zucman-responseto-summers-sarin.pdf)\n\nEdit: To add, assets about yachts from their Response above:\n\nTo hit Warren's ~$2.75T number by ~2030, it isn't using collectibles. \n\n>More broadly, 80% of the wealth of the top 0.1% wealthiest families is in the form of assets that are traded and have a clear market price: publicly traded stock, bonds, and real estate. Only about 20% of their assets are in private businesses that do not have a directly observable market price. Valuing such businesses, and especially the largest ones, is anything but impossible. That is what the financial sector routinely does, and the IRS could mandate financial institutions to report their valuations of private businesses for the purpose of enforcing the wealth tax. **Art, valuable (gold, jewelry, etc.), and durables (yachts, cars, etc.) are a negligible fraction of wealth at the top.**\n\nOne thing I would note is I thought when it came to the wealth tax, it was based on each additional $0.03 for every dollar earned. Instead, it is 3% of total wealth taxed yearly. That means they're giving up 30% of their total wealth in 10 years. [Number 1717 on the list of Forbes billionaires is Steve Case](https://www.forbes.com/profile/steve-case/?list=billionaires#2749fe3718f3), who is worth $1.5B, earning an additional $200M in the last 6 months. At 1.5B, he would have to give up $450M of his assets over 10 years, assuming he continuously increases an average of 3% of his wealth/year.  But he'd still be worth $1.5B after the tax and most likely would make a lot more money than 3%.",
+    "source": "/r/ElizabethWarren",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "!WarrenPlanBot what is the plan for social security?\n\n(I think it needs the question mark)",
+    "source": "/r/ElizabethWarren",
+    "match": "expanding_social_security"
+  },
+  {
+    "text": "She really changes how we should think about free trade. Imagine if NAFTA included a provision that Mexican companies would have to offer a living wage and safe working conditions. That could have really changed things. I was only a kid when NAFTA passed, I wonder if the Democrats even attempted that. It always boggled my mind why Clinton would sign that agreement without anything to uplift American jobs and those around the world. It was all about corporate profits and cheap goods. It was fair to say that a lot of those American jobs wouldn't be coming back, but it just feels like a Democrat President would have done more. \n\n!WarrenPlanBot trade",
+    "source": "/r/ElizabethWarren",
+    "match": "trade_on_our_terms"
+  },
+  {
+    "text": "!WarrenPlanBot what's her plan to end corruption?",
+    "source": "/r/ElizabethWarren",
+    "match": "anti_corruption"
+  },
+  {
+    "text": "!warrenplanbot Show me the wealth tax!",
+    "source": "/r/ElizabethWarren",
+    "match": "ultra_millionaire_tax"
+  },
+  {
+    "text": "It\u2019s difficult to answer complex foreign policy questions on the campaign trail. This style of questioning is helpful for outlining an approach but each situation has a million unique variables, some of which are hidden from the public. \n\nIn a broader sense; I think we make a mistake when we separate foreign and domestic policy. Problems overseas are only overseas until  they aren\u2019t. (The deterioration in the Northern Triangle countries over the last several years is what\u2019s causing our immigration influx now.) We\u2019ve been using the military as the main driver of American interests abroad and that\u2019s no good for anyone. Diplomacy is a much better investment than bombs. It seems like Warren gets that.\n\nFurther reading: !WarrenPlanBot Rebuilding the state department.",
+    "source": "/r/ElizabethWarren",
+    "match": "foreign_service"
+  },
+  {
+    "text": "!WarrenPlanBot what is her plan for college?",
+    "source": "/r/ElizabethWarren",
+    "match": "student_debt_free_college"
   }
 ]

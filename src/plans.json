@@ -288,17 +288,18 @@
         "url": "https://elizabethwarren.com/plans/social-security"
     },{
         "id": "health_care",
-        "topic": "health care",
+        "topic": "health care healthcare",
         "display_title": "Health Care is a Basic Human Right",
         "summary": "Health care is a basic human right – and we fight for basic human rights. Elizabeth won’t stop fighting until everyone is covered and no one goes broke paying a medical bill or filling a prescription.",
-        "url": "https://elizabethwarren.com/plans/health-care"
+        "url": "https://elizabethwarren.com/plans/health-care",
+        "additional_training_text": "healthcare"
     },{
         "id": "lgbtq_equality",
         "topic": "lgbtq lgbt lgb equality",
         "display_title": "LGBTQ+ Rights",
         "summary": "Every day, LGBTQ+ individuals continue to face discrimination at work, at school, and in their communities. Elizabeth is committed to standing side-by-side with LGBTQ+ people until each and every person has a fighting chance to build a brighter future for themselves and feels safe to be who they are. Equal is equal.",
         "url": "https://elizabethwarren.com/plans/lgtbtq-equality",
-        "additional_training_text": "lgbtq lgbt lgb trans"
+        "additional_training_text": "lgbtq lgbt lgb trans trans"
     },{
         "id": "disability_justice",
         "topic": "disability",
@@ -353,5 +354,17 @@
         "display_title": "Strengthening Congressional Independence from Corporate Lobbyists",
         "summary": "When Elizabeth fought for the Consumer Financial Protection Bureau, she saw firsthand how lobbyists use their resources and expertise to overpower the needs and wishes of ordinary people. It's time to give Congress the resources it needs to fight back against corporate lobbyists.",
         "url": "https://elizabethwarren.com/plans/congressional-independence"
+    },{
+        "id": "excessive_lobbying_tax",
+        "topic": "lobbying tax congress",
+        "display_title": "Excessive Lobbying Tax",
+        "summary": "Corporate interests spend more on lobbying than we spend to fund both houses of Congress – more than $2.8 billion in lobbying last year alone. It's time for a tax on excessive lobbying.",
+        "url": "https://elizabethwarren.com/plans/excessive-lobbying-tax"
+    },{
+        "id": "american_workers_raising_wages",
+        "topic": "raising wages unions",
+        "display_title": "Empowering American Workers and Raising Wages",
+        "summary": "Returning power to working people will be the overarching goal of my presidency. It's time for the most progressive and comprehensive agenda for workers since the New Deal.",
+        "url": "https://elizabethwarren.com/plans/empowering-american-workers"
     }
 ]
