@@ -59,6 +59,16 @@ class TestRuleStrategy:
         assert (
             RuleStrategy.request_plan_list(
                 [],
+                mock_comment(
+                    "Welcome! Warren has won me over simply because her policies are concrete.\n\n!WarrenPlanBot show me the plans\n\nE: It looks like /u/WarrenPlanBot is offline"
+                ),
+            )
+            == self.show_me_the_plans_operation
+        )
+
+        assert (
+            RuleStrategy.request_plan_list(
+                [],
                 mock_comment("!WarrenPlanBot show me the plans about something I love"),
             )
             is None
@@ -102,3 +112,9 @@ def test_get_trigger_line():
 
     assert get_trigger_line("!WarrenPlanBot, what's up?") == "what's up?"
     assert get_trigger_line("!WarrenPlanBot,what's good?") == "what's good?"
+    assert (
+        get_trigger_line(
+            "/u/WarrenPlanBot hi\n!WarrenPlanBot,what's good?\n/u/WarrenPlanBot hi\nwarrenplanbot ho"
+        )
+        == "what's good?"
+    )
