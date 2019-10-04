@@ -300,6 +300,7 @@ class Preprocess:
                 "thanks",
                 "thank",
                 "you",
+                "show",
             }
         )
 
