@@ -160,13 +160,14 @@ def reply(post, reply_string: str, send=False, simulate=False):
     """
 
     if simulate:
-        print(f"[simulated] Bot replying to {post.type}: ", post.id)
+        print(f"[simulated] Bot replying to {post.type}: {post.id}")
         return True
     if send:
+        print(f"Bot replying to {post.type}: {post.id}")
         post.reply(reply_string)
         return True
 
-    print(f"Bot would have replied to {post.type}: ", post.id)
+    print(f"Bot would have replied to {post.type}: {post.id}")
 
 
 def process_post(
@@ -182,21 +183,44 @@ def process_post(
     if post_ids_processed is None:
         post_ids_processed = {}
 
-    if (
-        # Never try to reply if a post is locked
-        post.locked
-        # Never reply to a deleted post
-        or not post.author
-        # Make sure we're not replying to ourself
-        or "warrenplanbot" in post.author.name.lower()
-        # Make sure we don't reply to a post we've already replied to
-        or post.id in post_ids_processed
-    ):
+    print(f"Processing post {post.type}: {post.id}")
+
+    # Make sure we don't reply to a post we've already processed
+    if post.id in post_ids_processed:
+        return
+
+    # Never try to reply if a post is locked
+    if post.locked:
+        posts_db.document(post.id).update(
+            create_db_record(
+                post, processed=True, skipped=True, skip_reason="post_locked"
+            )
+        )
+        return
+
+    # Never reply to a deleted post
+    if not post.author:
+        posts_db.document(post.id).update(
+            create_db_record(
+                post, processed=True, skipped=True, skip_reason="no_author"
+            )
+        )
+        return
+
+    # Make sure we're not replying to ourself
+    if "warrenplanbot" in post.author.name.lower():
+        posts_db.document(post.id).update(
+            create_db_record(post, processed=True, skipped=True, skip_reason="own_post")
+        )
         return
 
     # Ensure it's a post where someone summoned us
     if not re.search("!warrenplanbot", post.text, re.IGNORECASE):
-        posts_db.document(post.id).update(create_db_record(post, processed=True))
+        posts_db.document(post.id).update(
+            create_db_record(
+                post, processed=True, skipped=True, skip_reason="trigger_not_found"
+            )
+        )
         return
 
     match_info = (
@@ -268,6 +292,8 @@ def create_db_record(
     reply_timestamp=None,
     reply_made=False,
     processed=False,
+    skipped=False,
+    skip_reason=None,
 ) -> dict:
     # Reddit 3-digit code prefix removed for each id, leaving only the ID itself
     post_parent_id = post.parent_id[3:] if post.type == "comment" else None
@@ -276,8 +302,11 @@ def create_db_record(
     post_title = post.title if post.type == "submission" else None
     # Return db_entry for Firestore
     entry = {
-        "replied": reply_made,
         "processed": processed,
+        "processed_timestamp": firestore.SERVER_TIMESTAMP,
+        "replied": reply_made,
+        "skipped": skipped,
+        "skip_reason": skip_reason,
         "type": post.type,
         "post_id": post.id,
         "post_author": "/u/" + post.author.name,
