@@ -441,18 +441,12 @@
   {
     "text": "!WarrenPlanBot Labor Unions",
     "source": "/r/ElizabethWarren",
-    "match": null,
-    "alternate_matches": [
-      "trade_on_our_terms"
-    ]
+    "match": "american_workers_raising_wages"
   },
   {
     "text": "!WarrenPlanBot trade unions",
     "source": "/r/ElizabethWarren",
-    "match": null,
-    "alternate_matches": [
-      "trade_on_our_terms"
-    ]
+    "match": "american_workers_raising_wages"
   },
   {
     "text": "!WarrenPlanBot LGBT",

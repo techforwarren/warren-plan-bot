@@ -62,7 +62,7 @@ def update_gensim_models():
     ]
 
     documents_for_matching = (
-        [p["text"] for p in parsed_plans]
+        documents_for_training
         + [p["topic"] for p in plan_clusters]
         + [p["topic"] for p in plans_from_repo]
         + [p["display_title"] for p in plans_from_repo]
