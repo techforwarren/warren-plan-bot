@@ -195,7 +195,8 @@ def process_post(
         return
 
     # Ensure it's a post where someone summoned us
-    if not re.search("!warrenplanbot|/u/WarrenPlanBot", post.text, re.IGNORECASE):
+    if not re.search("!warrenplanbot", post.text, re.IGNORECASE):
+        posts_db.document(post.id).update(create_db_record(post, processed=True))
         return
 
     match_info = (
@@ -261,9 +262,9 @@ def process_post(
 
 def create_db_record(
     post,
-    match,
-    plan_confidence,
-    plan_id,
+    match=None,
+    plan_confidence=None,
+    plan_id=None,
     reply_timestamp=None,
     reply_made=False,
     processed=False,
