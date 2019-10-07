@@ -1,6 +1,7 @@
 import re
 
 from google.cloud import firestore
+from praw.exceptions import APIException
 
 from matching import RuleStrategy, Strategy
 
@@ -263,13 +264,22 @@ def process_post(
         reply_string = build_no_match_response_text(potential_matches, post)
         post_record_update["reply_type"] = "no_match"
 
-    did_reply = reply(post, reply_string, send=send, simulate=simulate)
+    try:
+        did_reply = reply(post, reply_string, send=send, simulate=simulate)
+    except APIException as e:
+        if e.error_type == "DELETED_COMMENT":
+            did_reply = False
+            post_record_update["skipped"] = True
+            post_record_update["skip_reason"] = "deleted_comment"
+        else:
+            raise
 
-    if did_reply and not skip_tracking:
+    post_record_update["replied"] = did_reply
+    if did_reply:
         # Replace default None values in post_record_update record
-        post_record_update["replied"] = True
         post_record_update["reply_timestamp"] = firestore.SERVER_TIMESTAMP
 
+    if not skip_tracking:
         posts_db.document(post.id).update(post_record_update)
 
 
