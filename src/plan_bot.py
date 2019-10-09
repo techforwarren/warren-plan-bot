@@ -136,7 +136,7 @@ I hope to see you around!
 ***
 
 This bot was independently created by volunteers for Warren’s 2020 campaign. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
-Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue%20with%20bot%20response%20to:%20/r/WPBSandbox/comments/cts9e1/what_will_she_do_about_climate_change_testing/).  
+Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
 """
 
 
