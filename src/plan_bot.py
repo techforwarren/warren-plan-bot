@@ -13,12 +13,6 @@ def footer(post):
         "\n***\n"
         # Disclaimer
         f"This bot was independently created by volunteers for Warren's 2020 campaign. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer) "
-        f"\n"
-        # Error reporting info
-        f"Wrong topic or another problem?  [Send a report]"
-        f"(https://www.reddit.com/message/compose?to=WarrenPlanBotDev&"
-        f"subject=BotReport&"
-        f"message=Issue with bot response to: {post.permalink}).  "
     )
 
 
