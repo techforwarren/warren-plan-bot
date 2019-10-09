@@ -12,7 +12,7 @@ def footer(post):
         # Horizontal line above footer
         "\n***\n"
         # Disclaimer
-        f"This bot was independently created by volunteers for Warren's 2020 campaign. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer) "
+        f"This bot was independently created by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer) "
     )
 
 
@@ -135,7 +135,7 @@ I hope to see you around!
 
 ***
 
-This bot was independently created by volunteers for Warren’s 2020 campaign. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+This bot was independently created by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
 """
 
