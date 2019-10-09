@@ -132,7 +132,6 @@ def test_build_response_text_to_comment(mock_comment, mock_plan):
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-    assert mock_comment.permalink in response_text
 
 
 def test_build_response_text_to_submission(mock_submission, mock_plan):
@@ -141,7 +140,6 @@ def test_build_response_text_to_submission(mock_submission, mock_plan):
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-    assert mock_submission.permalink in response_text
 
 
 def test_build_no_match_response_text(mock_submission, mock_plan):
@@ -151,13 +149,11 @@ def test_build_no_match_response_text(mock_submission, mock_plan):
     assert type(response_text) is str
     assert f"[{mock_plan['display_title']}]({mock_plan['url']})" in response_text
     assert mock_plan["summary"] not in response_text
-    assert mock_submission.permalink in response_text
 
 
 def test_build_no_match_response_text_no_potential_matches(mock_submission, mock_plan):
     response_text = plan_bot.build_no_match_response_text([], mock_submission)
     assert type(response_text) is str
-    assert mock_submission.permalink in response_text
 
 
 def test_build_response_text_to_submission_with_plan_cluster(
@@ -169,7 +165,6 @@ def test_build_response_text_to_submission_with_plan_cluster(
     for plan in mock_plan_cluster["plans"]:
         assert plan["display_title"] in response_text
         assert plan["url"] in response_text
-    assert mock_submission.permalink in response_text
 
 
 def test_build_response_text_to_all_the_plans_operation(
@@ -188,8 +183,6 @@ def test_build_response_text_to_all_the_plans_operation(
     for plan in mock_plan_cluster["plans"]:
         assert plan["display_title"] not in response_text
         assert plan["url"] not in response_text
-
-    assert mock_submission.permalink in response_text
 
 
 @mock.patch("plan_bot.create_db_record")
