@@ -63,8 +63,8 @@ def build_response_text(plan_record, post):
 def build_no_match_response_text(potential_plan_matches, post):
     if potential_plan_matches:
         return (
-            f"I'm not sure exactly which plan you're looking for! "
-            f"My best guesses for what you were asking about are:"
+            f"I'm not sure I have an exact match for you! "
+            f"Here are the plans that seem most relevant:"
             f"\n\n"
             f"{ _plan_links(match['plan'] for match in potential_plan_matches[:8])}"
             f"\n\n"
