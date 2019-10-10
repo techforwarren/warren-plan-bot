@@ -232,7 +232,7 @@ class Strategy:
         )
 
     @staticmethod
-    def lsa_tfidf_composite_gensim_v2(plans: list, post, threshold=94):
+    def lsa_tfidf_composite_gensim_v2(plans: list, post, threshold=81):
         """
         Composite of LSA and TFIDF methods
 
