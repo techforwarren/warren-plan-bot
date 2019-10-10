@@ -245,6 +245,16 @@
     ]
   },
   {
+    "text": "!WarrenPlanBot environmental justice",
+    "source": "jg",
+    "match": "environmental_justice"
+  },
+  {
+    "text": "!WarrenPlanBot climate justice",
+    "source": "jg",
+    "match": "environmental_justice"
+  },
+  {
     "text": "!WarrenPlanBot this won't match anything ideally",
     "source": "jg",
     "match": null
