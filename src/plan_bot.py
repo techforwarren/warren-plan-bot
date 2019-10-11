@@ -114,7 +114,7 @@ def build_all_plans_response_text(plans, post):
     return response
 
 
-def build_help_response_text():
+def build_help_response_text(plans, post):
     return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
 
 You can call me like this:  
@@ -131,6 +131,7 @@ I’ll do my best to find the correct plan, but sometimes I have to guess, which
 
 To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`  
 To display this help: `!WarrenPlanBot help`
+For advanced usage: `!WarrenPlanBot advanced help`
 
 I hope to see you around!
 
@@ -138,6 +139,23 @@ I hope to see you around!
 
 This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
+"""
+
+def build_advanced_response_text(plans, post):
+    return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
+
+If you start your message with `-p` or `--parent` like this:
+`!WarrenPlanBot --parent [plan_topic]`,
+I'll reply directly to the parent message.
+
+To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`
+To display basic help: `!WarrenPlanBot help`
+To display this advanced usage: `!WarrenPlanBot advanced help`
+
+***
+
+This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).
 """
 
 
@@ -231,6 +249,18 @@ def process_post(
     if not skip_tracking:
         posts_db.document(post.id).set(post_record)
 
+    operations_map = {
+        'all_the_plans': {
+            'response': build_all_plans_response_text
+        },
+        'help': {
+            'response': build_help_response_text
+        },
+        'advanced_help': {
+            'response': build_advanced_response_text
+        }
+    }
+
     post_record_update = {}
 
     # If plan is matched with confidence, build and send reply
@@ -241,18 +271,13 @@ def process_post(
         post_record_update["reply_type"] = (
             "plan_cluster" if plan.get("is_cluster") else "plan"
         )
-    elif operation == "all_the_plans":
-        print("all the plans requested: ", post.id)
+    elif operation and operation in operations_map:
+        print(operation, "requested: ", post.id)
 
-        reply_string = build_all_plans_response_text(plans, post)
+        response_fn = operations_map[operation]['response']
+        reply_string = response_fn(plans, post)
         post_record_update["reply_type"] = "operation"
-        post_record_update["operation"] = "all_the_plans"
-    elif operation == "help":
-        print("help requested: ", post.id)
-
-        reply_string = build_help_response_text()
-        post_record_update["reply_type"] = "operation"
-        post_record_update["operation"] = "help"
+        post_record_update["operation"] = operation
     else:
         print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
