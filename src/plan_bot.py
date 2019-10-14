@@ -352,7 +352,7 @@ def get_trigger_line(text, trigger_word="!warrenplanbot"):
     Get the last line that !WarrenPlanBot occurs on,
     only returning the part of that line which occurs _after_ !WarrenPlamBot
     """
-    matches = re.findall(fr"{trigger_word}\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    matches = re.findall(fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
 
     return matches[-1] if matches else ""
 
@@ -366,7 +366,7 @@ def process_flags(text):
         "parent": False
     }
 
-    match = re.match(r"^(?:-p|--parent)\s+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    match = re.match(r"^(?:-p|--parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
     if match:
         options["parent"] = True
         text = match.group(1)
