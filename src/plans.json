@@ -399,5 +399,12 @@
         "display_title": "Fighting For Justice As We Combat The Climate Crisis",
         "summary": "Justice must be at the center of our response to climate change. And we need big, bottom-up change - focused on, and led by, the communities who have been in this fight since the beginning.",
         "url": "https://elizabethwarren.com/plans/environmental-justice"
+    },
+    {
+        "id": "campaign_finance_reform",
+        "topic": "campaign finance reform",
+        "display_title": "Getting Big Money Out of Politics",
+        "summary": "Our democracy shouldn’t be bought and paid for by the wealthy and powerful. We need big structural changes to campaign finance laws to get big money out of politics.",
+        "url": "https://elizabethwarren.com/plans/campaign-finance-reform"
     }
 ]
