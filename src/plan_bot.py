@@ -13,7 +13,7 @@ def footer(post):
         # Horizontal line above footer
         "\n***\n"
         # Disclaimer
-        f"This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer) "
+        f"This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us) "
     )
 
 
@@ -137,9 +137,10 @@ I hope to see you around!
 
 ***
 
-This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
 """
+
 
 def build_advanced_response_text(plans, post):
     return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
@@ -154,7 +155,7 @@ To display this advanced usage: `!WarrenPlanBot advanced help`
 
 ***
 
-This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).
 """
 
@@ -168,7 +169,7 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
     :return: did_reply – whether an actual or simulated reply was made
     """
 
-    if parent and hasattr(post, 'parent'):
+    if parent and hasattr(post, "parent"):
         post = standardize(post.parent())
 
     if simulate:
@@ -250,15 +251,9 @@ def process_post(
         posts_db.document(post.id).set(post_record)
 
     operations_map = {
-        'all_the_plans': {
-            'response': build_all_plans_response_text
-        },
-        'help': {
-            'response': build_help_response_text
-        },
-        'advanced_help': {
-            'response': build_advanced_response_text
-        }
+        "all_the_plans": {"response": build_all_plans_response_text},
+        "help": {"response": build_help_response_text},
+        "advanced_help": {"response": build_advanced_response_text},
     }
 
     post_record_update = {}
@@ -274,7 +269,7 @@ def process_post(
     elif operation and operation in operations_map:
         print(operation, "requested: ", post.id)
 
-        response_fn = operations_map[operation]['response']
+        response_fn = operations_map[operation]["response"]
         reply_string = response_fn(plans, post)
         post_record_update["reply_type"] = "operation"
         post_record_update["operation"] = operation
@@ -285,7 +280,9 @@ def process_post(
         post_record_update["reply_type"] = "no_match"
 
     try:
-        did_reply = reply(post, reply_string, parent=options["parent"], send=send, simulate=simulate)
+        did_reply = reply(
+            post, reply_string, parent=options["parent"], send=send, simulate=simulate
+        )
     except APIException as e:
         if e.error_type == "DELETED_COMMENT":
             did_reply = False
@@ -352,7 +349,9 @@ def get_trigger_line(text, trigger_word="!warrenplanbot"):
     Get the last line that !WarrenPlanBot occurs on,
     only returning the part of that line which occurs _after_ !WarrenPlamBot
     """
-    matches = re.findall(fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    matches = re.findall(
+        fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
+    )
 
     return matches[-1] if matches else ""
 
@@ -362,11 +361,11 @@ def process_flags(text):
     Identifies flags in the text. Removes the flags from the text and
     returns the tuple (remaining_text, options).
     """
-    options = {
-        "parent": False
-    }
+    options = {"parent": False}
 
-    match = re.match(r"^(?:--parent|--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    match = re.match(
+        r"^(?:--parent|--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
+    )
     if match:
         options["parent"] = True
         text = match.group(1)
