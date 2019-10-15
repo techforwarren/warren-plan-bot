@@ -327,6 +327,21 @@ def test_process_flags():
     )
 
     assert (
+        plan_bot.process_flags("--parent what's up")
+        == ("what's up", {"parent": True})
+    )
+
+    assert (
+        plan_bot.process_flags("-parent what's up")
+        == ("-parent what's up", {"parent": False})
+    )
+
+    assert (
+        plan_bot.process_flags("--parnet what's up")
+        == ("--parnet what's up", {"parent": False})
+    )
+
+    assert (
         plan_bot.process_flags("--tell-parent, what's up")
         == ("what's up", {"parent": True})
     )

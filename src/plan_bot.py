@@ -144,8 +144,8 @@ Have another question or run into any problems?  [Send a report](https://www.red
 def build_advanced_response_text(plans, post):
     return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
 
-If you start your message with `--tell-parent` like this:
-`!WarrenPlanBot --tell-parent [plan_topic]`,
+If you start your message with `--tell-parent` or `--parent` like this:
+`!WarrenPlanBot --tell-parent [plan_topic]` OR `!WarrenPlanBot --parent [plan_topic]`,
 I'll reply directly to the parent message.
 
 To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`
@@ -366,7 +366,7 @@ def process_flags(text):
         "parent": False
     }
 
-    match = re.match(r"^(?:--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+    match = re.match(r"^(?:--parent|--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
     if match:
         options["parent"] = True
         text = match.group(1)
