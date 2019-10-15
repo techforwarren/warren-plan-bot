@@ -11,7 +11,7 @@ def parent_reply_prefix(post):
     return f"/u/{post.author.name} asked me to chime in!" f"\n\n"
 
 
-def footer(post):
+def footer():
     return (
         f"\n\n"
         # Horizontal line above footer
@@ -39,7 +39,7 @@ def build_response_text_plan_cluster(plan_record, post):
         f"Learn more about her plans for {plan_record['display_title']}:"
         f"\n\n"
         f"{ _plan_links(plan_record['plans'])}"
-        f"{footer(post)}"
+        f"{footer()}"
     )
 
 
@@ -55,7 +55,7 @@ def build_response_text_pure_plan(plan_record, post):
         f"\n\n"
         # Link to learn more about the plan
         f"Learn more about her plan: [{plan_record['display_title']}]({plan_record['url']})"
-        f"{footer(post)}"
+        f"{footer()}"
     )
 
 
@@ -79,7 +79,7 @@ def build_no_match_response_text(potential_plan_matches, post):
             f"!WarrenPlanBot show me the plans"
             f"```"
             f"\n\n"
-            f"{footer(post)}"
+            f"{footer()}"
         )
     else:
         return (
@@ -93,7 +93,7 @@ def build_no_match_response_text(potential_plan_matches, post):
             f"```"
             f"\n\n"
             f"Or please kindly rephrase? ':D"
-            f"{footer(post)}"
+            f"{footer()}"
         )
 
 
@@ -113,7 +113,7 @@ def build_all_plans_response_text(plans, post):
         if (i + 1) % 3 == 0:
             response += "|\n"
 
-    response += f"\n\n" f"{footer(post)}"
+    response += f"\n\n" f"{footer()}"
 
     return response
 
