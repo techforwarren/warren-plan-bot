@@ -6,6 +6,7 @@ from os import path
 import click
 
 from matching import Strategy
+import plan_bot
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
@@ -57,7 +58,8 @@ def score_strategy(strategy):
     strategy_name = strategy.__name__
     match_scoring = []
     for post in labeled_posts:
-        match_info = strategy(plans, post)
+        post_text, _ = plan_bot.process_flags(plan_bot.get_trigger_line(post.text))
+        match_info = strategy(plans, post_test, post=post)
         match = {
             "post_text": post.text,
             "post_source": post.source,
