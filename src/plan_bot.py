@@ -7,6 +7,10 @@ from matching import RuleStrategy, Strategy
 from reddit_util import standardize
 
 
+def parent_reply_prefix(post):
+    return f"/u/{post.author.name} asked me to chime in!" f"\n\n"
+
+
 def footer(post):
     return (
         f"\n\n"
@@ -278,6 +282,10 @@ def process_post(
 
         reply_string = build_no_match_response_text(potential_matches, post)
         post_record_update["reply_type"] = "no_match"
+
+    # add prefix with info about calling post if this is a parent operation
+    if options["parent"]:
+        reply_string = parent_reply_prefix(post) + reply_string
 
     try:
         did_reply = reply(
