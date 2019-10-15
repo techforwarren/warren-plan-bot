@@ -189,12 +189,11 @@ def test_build_response_text_to_all_the_plans_operation(
 @mock.patch("plan_bot.build_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
-    ["post_text", "expected_matching_plan", "is_parent"],
+    ["post_text", "expected_matching_plan"],
     [
-        ("!WarrenPlanBot A Title for the 21st Century", PLANS[0], False),
-        ("!WarrenPlanBot Another Title To Really Make a Person Think", PLANS[1], False),
-        ("!WarrenPlanBot  another title to really make a Person Think   ", PLANS[1], False),
-        ("!WarrenPlanBot --tell-parent another title to really make a Person Think   ", PLANS[1], True),
+        ("!WarrenPlanBot A Title for the 21st Century", PLANS[0]),
+        ("!WarrenPlanBot Another Title To Really Make a Person Think", PLANS[1]),
+        ("!WarrenPlanBot  another title to really make a Person Think   ", PLANS[1]),
     ],
 )
 def test_process_post_matches_by_display_title(
@@ -203,7 +202,6 @@ def test_process_post_matches_by_display_title(
     mock_create_db_record,
     post_text,
     expected_matching_plan,
-    is_parent
 ):
     post = MockSubmission(post_text)
 
@@ -211,7 +209,45 @@ def test_process_post_matches_by_display_title(
 
     mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
     mock_reply.assert_called_once_with(
-        post, "response text", send=False, simulate=False, parent=is_parent
+        post, "response text", send=False, simulate=False, parent=False
+    )
+
+
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.reply")
+@pytest.mark.parametrize(
+    ["post_text", "expected_matching_plan"],
+    [
+        (
+            "!WarrenPlanBot --tell-parent another title to really make a Person Think   ",
+            PLANS[1],
+        ),
+        (
+            "!WarrenPlanBot --parent another title to really make a Person Think   ",
+            PLANS[1],
+        ),
+    ],
+)
+def test_process_post_matches_by_display_title_with_parent_option(
+    mock_reply,
+    mock_build_response_text,
+    mock_create_db_record,
+    post_text,
+    expected_matching_plan,
+):
+    post = MockSubmission(post_text)
+
+    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+
+    mock_reply.assert_called_once_with(
+        post,
+        "/u/aredditusername asked me to chime in!\n\nresponse text",
+        send=False,
+        simulate=False,
+        parent=True,
     )
 
 
@@ -288,6 +324,7 @@ def test_process_post_wont_reply_to_warren_plan_bot(
     mock_build_response_text.assert_not_called()
     mock_reply.assert_not_called()
 
+
 def test_get_trigger_line():
     assert (
         plan_bot.get_trigger_line(
@@ -312,36 +349,40 @@ def test_get_trigger_line():
         == "what's good?"
     )
 
-    assert plan_bot.get_trigger_line("!WarrenPlanBot, --tell-parent what's up?") == "--tell-parent what's up?"
-    assert plan_bot.get_trigger_line("!WarrenPlanBot,--tell-parent what's up?") == "--tell-parent what's up?"
+    assert (
+        plan_bot.get_trigger_line("!WarrenPlanBot, --tell-parent what's up?")
+        == "--tell-parent what's up?"
+    )
+    assert (
+        plan_bot.get_trigger_line("!WarrenPlanBot,--tell-parent what's up?")
+        == "--tell-parent what's up?"
+    )
+
 
 def test_process_flags():
-    assert (
-        plan_bot.process_flags("what's up")
-        == ("what's up", {"parent": False})
+    assert plan_bot.process_flags("what's up") == ("what's up", {"parent": False})
+
+    assert plan_bot.process_flags("--tell-parent what's up") == (
+        "what's up",
+        {"parent": True},
     )
 
-    assert (
-        plan_bot.process_flags("--tell-parent what's up")
-        == ("what's up", {"parent": True})
+    assert plan_bot.process_flags("--parent what's up") == (
+        "what's up",
+        {"parent": True},
     )
 
-    assert (
-        plan_bot.process_flags("--parent what's up")
-        == ("what's up", {"parent": True})
+    assert plan_bot.process_flags("-parent what's up") == (
+        "-parent what's up",
+        {"parent": False},
     )
 
-    assert (
-        plan_bot.process_flags("-parent what's up")
-        == ("-parent what's up", {"parent": False})
+    assert plan_bot.process_flags("--parnet what's up") == (
+        "--parnet what's up",
+        {"parent": False},
     )
 
-    assert (
-        plan_bot.process_flags("--parnet what's up")
-        == ("--parnet what's up", {"parent": False})
-    )
-
-    assert (
-        plan_bot.process_flags("--tell-parent, what's up")
-        == ("what's up", {"parent": True})
+    assert plan_bot.process_flags("--tell-parent, what's up") == (
+        "what's up",
+        {"parent": True},
     )
