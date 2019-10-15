@@ -17,7 +17,7 @@ def footer():
         # Horizontal line above footer
         "\n***\n"
         # Disclaimer
-        f"This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer) "
+        f"This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us) "
     )
 
 
@@ -141,7 +141,7 @@ I hope to see you around!
 
 ***
 
-This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
 """
 
@@ -159,7 +159,7 @@ To display this advanced usage: `!WarrenPlanBot advanced help`
 
 ***
 
-This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
+This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).
 """
 
