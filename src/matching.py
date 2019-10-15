@@ -36,11 +36,10 @@ class Strategy:
 
     :param plans: List of plan dicts
     :type plans: list of dict
-    :param post_text: The text to interpret
-    :type post: str
+    :param post: Post object
+    :type post: reddit_util.Comment/reddit_util.Submission
     :param threshold: Confidence threshold between 0-100. If confidence > threshold, then the plan is considered a match
     :type threshold: int
-    :param \**kwargs: See below
     :return: {
         "match": plan id if the plan is considered a match, otherwise None
         "confidence": the confidence that the plan is a match (0 - 100)
@@ -48,13 +47,10 @@ class Strategy:
         "potential_matches": [{plan_id, plan, confidence}] all potential matching plans, sorted from highest to lowest confidence
         # Can include other metadata about the match here
     }
-
-    :Keyword Arguments:
-      * *post* (`reddit_util.Comment/reddit_util.Submission`)
     """
 
     @staticmethod
-    def token_sort_ratio(plans: list, post_text, threshold=50, **kwargs):
+    def token_sort_ratio(plans: list, post, threshold=50):
         """
         Match plans based on hardcoded plan topics, using fuzzywuzzy's token_sort_ratio for fuzzy matching
         """
@@ -64,7 +60,7 @@ class Strategy:
 
         for plan in plans:
             plan_match_confidence = fuzz.token_sort_ratio(
-                post_text.lower(), plan["topic"].lower()
+                post.text.lower(), plan["topic"].lower()
             )
 
             if plan_match_confidence > match_confidence:
@@ -80,12 +76,12 @@ class Strategy:
 
     @staticmethod
     # TODO allow thresholds
-    def _composite_strategy(plans: list, post_text: str, strategies: list, **kwargs):
+    def _composite_strategy(plans: list, post, strategies: list):
         """
         Run strategies in order until one has a match
         """
         for strategy in strategies:
-            match_info = strategy(plans, post_text)
+            match_info = strategy(plans, post)
             if match_info["match"]:
                 return match_info
         return match_info
@@ -105,20 +101,19 @@ class Strategy:
     @staticmethod
     def _gensim_similarity(
         plans: list,
-        post_text: str,
+        post,
         model_name,
         model,
         similarity,
         threshold,
         potential_plan_threshold=50,
         model_path=GENSIM_V1_MODELS_PATH,
-        **kwargs,
     ):
         plan_ids, dictionary, index, model = Strategy._load_gensim_models(
             model_name, model, similarity, model_path
         )
 
-        preprocessed_post = Preprocess.preprocess_gensim_v1(post_text)
+        preprocessed_post = Preprocess.preprocess_gensim_v1(get_trigger_line(post.text))
 
         vec_post = dictionary.doc2bow(preprocessed_post)
 
@@ -163,7 +158,7 @@ class Strategy:
         }
 
     @staticmethod
-    def token_sort_lsi_v1_composite(plans: list, post_text: str, threshold=60, **kwargs):
+    def token_sort_lsi_v1_composite(plans: list, post, threshold=60):
         """
         Tries the following strategies in order:
          1) fuzzy matching based on hardcoded topics
@@ -172,16 +167,15 @@ class Strategy:
 
         return Strategy._composite_strategy(
             plans,
-            post_text,
+            post,
             [
                 partial(Strategy.token_sort_ratio, threshold=threshold),
                 partial(Strategy.lsi_gensim_v1, threshold=80),
             ],
-            **kwargs
         )
 
     @staticmethod
-    def lsi_gensim_v1(plans: list, post_text, threshold=80, **kwargs):
+    def lsi_gensim_v1(plans: list, post, threshold=80):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
@@ -191,16 +185,15 @@ class Strategy:
         """
         return Strategy._gensim_similarity(
             plans,
-            post_text,
+            post,
             "lsi",
             models.LsiModel,
             similarities.MatrixSimilarity,
             threshold,
-            **kwargs,
         )
 
     @staticmethod
-    def lsa_gensim_v2(plans: list, post_text: str, threshold=82, **kwargs):
+    def lsa_gensim_v2(plans: list, post, threshold=82):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
@@ -211,17 +204,16 @@ class Strategy:
         """
         return Strategy._gensim_similarity(
             plans,
-            post_text,
+            post,
             "lsa",
             models.LsiModel,
             similarities.MatrixSimilarity,
             threshold,
             model_path=GENSIM_V2_MODELS_PATH,
-            **kwargs,
         )
 
     @staticmethod
-    def tfidf_gensim_v2(plans: list, post_text: str, threshold=15, **kwargs):
+    def tfidf_gensim_v2(plans: list, post, threshold=15):
         """
         TFIDF – Term Frequency–Inverse Document Frequency
 
@@ -231,17 +223,16 @@ class Strategy:
         """
         return Strategy._gensim_similarity(
             plans,
-            post_text,
+            post,
             "tfidf",
             models.TfidfModel,
             similarities.MatrixSimilarity,
             threshold,
             model_path=GENSIM_V2_MODELS_PATH,
-            **kwargs,
         )
 
     @staticmethod
-    def lsa_tfidf_composite_gensim_v2(plans: list, post_text: str, threshold=82, **kwargs):
+    def lsa_tfidf_composite_gensim_v2(plans: list, post, threshold=82):
         """
         Composite of LSA and TFIDF methods
 
@@ -249,12 +240,12 @@ class Strategy:
 
         Models have been precomputed using ../scripts/update_gensim_models_v2.py
         """
-        lsa_match = Strategy.lsa_gensim_v2(plans, post_text, threshold, **kwargs)
+        lsa_match = Strategy.lsa_gensim_v2(plans, post, threshold)
 
         if lsa_match["match"]:
             return lsa_match
 
-        tfidf_match = Strategy.tfidf_gensim_v2(plans, post_text, **kwargs)
+        tfidf_match = Strategy.tfidf_gensim_v2(plans, post)
 
         if tfidf_match["match"]:
             return tfidf_match
@@ -272,12 +263,12 @@ class RuleStrategy:
     """
 
     @staticmethod
-    def match_display_title(plans: list, post_text: str, **kwargs):
+    def match_display_title(plans: list, post):
         """
         Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,
         or the user to include a stop word for some reason
         """
-        preprocessed_post = Preprocess.preprocess_gensim_v1(post_text)
+        preprocessed_post = Preprocess.preprocess_gensim_v1(get_trigger_line(post.text))
         for plan in plans:
             if (
                 Preprocess.preprocess_gensim_v1(plan["display_title"])
@@ -286,25 +277,25 @@ class RuleStrategy:
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
 
     @staticmethod
-    def request_plan_list(plans: list, post_text: str, **kwargs):
+    def request_plan_list(plans: list, post):
         """
         Matches strictly to a request at the end of the trigger line for the full list of all known plans
         """
         if re.search(
             r"show me the plans\W*$",
-            post_text,
+            get_trigger_line(post.text),
             re.IGNORECASE | re.MULTILINE,
         ):
             return {"operation": "all_the_plans"}
 
     @staticmethod
-    def request_help(plans: list, post_text: str, **kwargs):
+    def request_help(plans: list, post):
         """
         Matches strictly to a request for help at the trigger line.
         """
-        match = re.match(r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE)
-        if match:
-            return {"operation": "advanced_help" if match.group(1) else "help"}
+        if re.search(r"help\W*$", get_trigger_line(post.text), re.IGNORECASE):
+            return {"operation": "help"}
+
 
 class Preprocess:
     """
@@ -352,3 +343,13 @@ class Preprocess:
         return preprocess_string(doc, preprocessing_filters)
 
     # TODO try a preprocessed that does lemmatization
+
+
+def get_trigger_line(text, trigger_word="!warrenplanbot"):
+    """
+    Get the last line that !WarrenPlanBot occurs on,
+    only returning the part of that line which occurs _after_ !WarrenPlamBot
+    """
+    matches = re.findall(fr"{trigger_word}\W+(.*)$", text, re.IGNORECASE | re.MULTILINE)
+
+    return matches[-1] if matches else ""

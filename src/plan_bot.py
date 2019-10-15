@@ -4,7 +4,6 @@ from google.cloud import firestore
 from praw.exceptions import APIException
 
 from matching import RuleStrategy, Strategy
-from reddit_util import standardize
 
 
 def footer(post):
@@ -114,7 +113,7 @@ def build_all_plans_response_text(plans, post):
     return response
 
 
-def build_help_response_text(plans, post):
+def build_help_response_text():
     return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
 
 You can call me like this:  
@@ -131,7 +130,6 @@ I’ll do my best to find the correct plan, but sometimes I have to guess, which
 
 To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`  
 To display this help: `!WarrenPlanBot help`
-For advanced usage: `!WarrenPlanBot advanced help`
 
 I hope to see you around!
 
@@ -141,25 +139,8 @@ This bot was created independently by volunteers. [Join us!](https://my.elizabet
 Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
 """
 
-def build_advanced_response_text(plans, post):
-    return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
 
-If you start your message with `-p` or `--parent` like this:
-`!WarrenPlanBot --parent [plan_topic]`,
-I'll reply directly to the parent message.
-
-To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`
-To display basic help: `!WarrenPlanBot help`
-To display this advanced usage: `!WarrenPlanBot advanced help`
-
-***
-
-This bot was created independently by volunteers. [Join us!](https://my.elizabethwarren.com/page/s/web-volunteer)
-Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).
-"""
-
-
-def reply(post, reply_string: str, parent=False, send=False, simulate=False):
+def reply(post, reply_string: str, send=False, simulate=False):
     """
     :param post: post to reply on
     :param reply_string: string to reply with
@@ -167,9 +148,6 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
     :param simulate: whether to simulate sending an actual reply to reddit
     :return: did_reply – whether an actual or simulated reply was made
     """
-
-    if parent and hasattr(post, 'parent'):
-        post = standardize(post.parent())
 
     if simulate:
         print(f"[simulated] Bot replying to {post.type}: {post.id}")
@@ -224,13 +202,11 @@ def process_post(
             posts_db.document(post.id).set(post_record)
         return
 
-    post_text, options = process_flags(get_trigger_line(post.text))
-
     match_info = (
-        RuleStrategy.request_help(plans, post_text, post=post)
-        or RuleStrategy.request_plan_list(plans, post_text, post=post)
-        or RuleStrategy.match_display_title(plans, post_text, post=post)
-        or matching_strategy(plans, post_text, post=post)
+        RuleStrategy.request_help(plans, post)
+        or RuleStrategy.request_plan_list(plans, post)
+        or RuleStrategy.match_display_title(plans, post)
+        or matching_strategy(plans, post)
     )
 
     match = match_info.get("match")
@@ -249,18 +225,6 @@ def process_post(
     if not skip_tracking:
         posts_db.document(post.id).set(post_record)
 
-    operations_map = {
-        'all_the_plans': {
-            'response': build_all_plans_response_text
-        },
-        'help': {
-            'response': build_help_response_text
-        },
-        'advanced_help': {
-            'response': build_advanced_response_text
-        }
-    }
-
     post_record_update = {}
 
     # If plan is matched with confidence, build and send reply
@@ -271,13 +235,18 @@ def process_post(
         post_record_update["reply_type"] = (
             "plan_cluster" if plan.get("is_cluster") else "plan"
         )
-    elif operation and operation in operations_map:
-        print(operation, "requested: ", post.id)
+    elif operation == "all_the_plans":
+        print("all the plans requested: ", post.id)
 
-        response_fn = operations_map[operation]['response']
-        reply_string = response_fn(plans, post)
+        reply_string = build_all_plans_response_text(plans, post)
         post_record_update["reply_type"] = "operation"
-        post_record_update["operation"] = operation
+        post_record_update["operation"] = "all_the_plans"
+    elif operation == "help":
+        print("help requested: ", post.id)
+
+        reply_string = build_help_response_text()
+        post_record_update["reply_type"] = "operation"
+        post_record_update["operation"] = "help"
     else:
         print("topic mismatch: ", plan_id, post.id, plan_confidence)
 
@@ -285,7 +254,7 @@ def process_post(
         post_record_update["reply_type"] = "no_match"
 
     try:
-        did_reply = reply(post, reply_string, send=send, simulate=simulate, parent=options["parent"])
+        did_reply = reply(post, reply_string, send=send, simulate=simulate)
     except APIException as e:
         if e.error_type == "DELETED_COMMENT":
             did_reply = False
@@ -345,30 +314,3 @@ def create_db_record(
     }
 
     return entry
-
-
-def get_trigger_line(text, trigger_word="!warrenplanbot"):
-    """
-    Get the last line that !WarrenPlanBot occurs on,
-    only returning the part of that line which occurs _after_ !WarrenPlamBot
-    """
-    matches = re.findall(fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
-
-    return matches[-1] if matches else ""
-
-
-def process_flags(text):
-    """
-    Identifies flags in the text. Removes the flags from the text and
-    returns the tuple (remaining_text, options).
-    """
-    options = {
-        "parent": False
-    }
-
-    match = re.match(r"^(?:-p|--parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE)
-    if match:
-        options["parent"] = True
-        text = match.group(1)
-
-    return (text, options)
