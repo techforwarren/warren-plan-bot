@@ -194,7 +194,7 @@ def test_build_response_text_to_all_the_plans_operation(
         ("!WarrenPlanBot A Title for the 21st Century", PLANS[0], False),
         ("!WarrenPlanBot Another Title To Really Make a Person Think", PLANS[1], False),
         ("!WarrenPlanBot  another title to really make a Person Think   ", PLANS[1], False),
-        ("!WarrenPlanBot --parent another title to really make a Person Think   ", PLANS[1], True),
+        ("!WarrenPlanBot --tell-parent another title to really make a Person Think   ", PLANS[1], True),
     ],
 )
 def test_process_post_matches_by_display_title(
@@ -312,8 +312,8 @@ def test_get_trigger_line():
         == "what's good?"
     )
 
-    assert plan_bot.get_trigger_line("!WarrenPlanBot, --parent what's up?") == "--parent what's up?"
-    assert plan_bot.get_trigger_line("!WarrenPlanBot,--parent what's up?") == "--parent what's up?"
+    assert plan_bot.get_trigger_line("!WarrenPlanBot, --tell-parent what's up?") == "--tell-parent what's up?"
+    assert plan_bot.get_trigger_line("!WarrenPlanBot,--tell-parent what's up?") == "--tell-parent what's up?"
 
 def test_process_flags():
     assert (
@@ -322,11 +322,11 @@ def test_process_flags():
     )
 
     assert (
-        plan_bot.process_flags("--parent what's up")
+        plan_bot.process_flags("--tell-parent what's up")
         == ("what's up", {"parent": True})
     )
 
     assert (
-        plan_bot.process_flags("--parent, what's up")
+        plan_bot.process_flags("--tell-parent, what's up")
         == ("what's up", {"parent": True})
     )
