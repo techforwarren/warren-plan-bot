@@ -295,11 +295,11 @@
     },
     {
         "id": "health_care",
-        "topic": "health care healthcare",
+        "topic": "health care healthcare healthcare healthcare",
         "display_title": "Health Care is a Basic Human Right",
         "summary": "Health care is a basic human right – and we fight for basic human rights. Elizabeth won’t stop fighting until everyone is covered and no one goes broke paying a medical bill or filling a prescription. We need Medicare for All.",
         "url": "https://elizabethwarren.com/plans/health-care",
-        "additional_training_text": "healthcare"
+        "additional_training_text": "healthcare healthcare healthcare healthcare healthcare"
     },
     {
         "id": "lgbtq_equality",

@@ -549,6 +549,11 @@
     "match": "health_care"
   },
   {
+    "text": "!warrenplanbot healthcare",
+    "source": "jg",
+    "match": "health_care"
+  },
+  {
     "text": "!warrenplanbot what is her plan to invest in public education?",
     "source": "/r/ElizabethWarren",
     "match": "student_debt_free_college",
