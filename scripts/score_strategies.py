@@ -59,7 +59,7 @@ def score_strategy(strategy):
     match_scoring = []
     for post in labeled_posts:
         post_text, _ = plan_bot.process_flags(plan_bot.get_trigger_line(post.text))
-        match_info = strategy(plans, post_test, post=post)
+        match_info = strategy(plans, post_text, post=post)
         match = {
             "post_text": post.text,
             "post_source": post.source,
