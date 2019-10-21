@@ -16,6 +16,8 @@ The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_top
 
 You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `praw.ini.example` file and fill in the details. You'll need to get the client_id and client_secret from the owners of the project.
 
+In order to test in development, you will need to [create your own reddit dev app](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps). Then use the credentials to populate your `praw.ini` file for dev.
+
 ### Option 1: the virtualenv way
 
 There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
