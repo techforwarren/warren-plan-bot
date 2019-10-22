@@ -129,7 +129,7 @@ Strategies are defined as static methods of the Strategy class in `matching.py`
 - Without making actual replies
 - Without checking a posts_replied_to list
 
-`python src/main.py --skip-tracking --simulate-replies`
+`python src/main.py --skip-tracking`
 
 #### Safely, using state from the local Firestore emulator 
 
