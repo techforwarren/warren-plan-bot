@@ -2,57 +2,57 @@
   {
     "text": "!WarrenPlanBot student debt",
     "source": "sh",
-    "match": "student_debt_free_college"
+    "match": "affordable_higher_education"
   },
   {
     "text": "!WarrenPlanBot immigration reform",
     "source": "sh",
-    "match": "immigration_reform"
+    "match": "immigration"
   },
   {
     "text": "!WarrenPlanBot reform immigration",
     "source": "sh",
-    "match": "immigration_reform"
+    "match": "immigration"
   },
   {
     "text": "!WarrenPlanBot wall street reform",
     "source": "sh",
-    "match": "wall_street_reform"
+    "match": "wall_street"
   },
   {
     "text": "!WarrenPlanBot climate risk disclosure",
     "source": "jg",
-    "match": "climate_risk_disclosure"
+    "match": "clean_energy"
   },
   {
     "text": "!WarrenPlanBot pay for women of color",
     "source": "sh",
-    "match": "women_of_color_economic"
+    "match": "valuing_work_women_of_color"
   },
   {
     "text": "!WarrenPlanBot diplomacy",
     "source": "sh",
-    "match": "foreign_service"
+    "match": "rebuild_the_state_department"
   },
   {
     "text": "!WarrenPlanBot election reform",
     "source": "sh",
-    "match": "election_reform"
+    "match": "strengthening_democracy"
   },
   {
     "text": "!WarrenPlanBot for profit prison reform",
     "source": "sh",
-    "match": "private_prison_reform"
+    "match": "end_private_prisons"
   },
   {
     "text": "!WarrenPlanBot minority business owners",
     "source": "sh",
-    "match": "minority_businesses"
+    "match": "leveling_field_entrepreneurs_color"
   },
   {
     "text": "!WarrenPlanBot American jobs",
     "source": "sh",
-    "match": "economic_patriotism"
+    "match": "american_jobs"
   },
   {
     "text": "!WarrenPlanBot green energy jobs",
@@ -65,22 +65,22 @@
   {
     "text": "!WarrenPlanBot crimes by the president",
     "source": "sh",
-    "match": "presidential_accountability"
+    "match": "no_president_is_above_the_law"
   },
   {
     "text": "!WarrenPlanBot reproductive rights",
     "source": "sh",
-    "match": "reproductive_rights"
+    "match": "protect_womens_choices"
   },
   {
     "text": "!WarrenPlanBot military lobbyists",
     "source": "sh",
-    "match": "defense_lobbyists"
+    "match": "corporate_influence_pentagon"
   },
   {
     "text": "!WarrenPlanBot opioid crisis",
     "source": "sh",
-    "match": "opioid_crisis"
+    "match": "end_opioid_crisis"
   },
   {
     "text": "!WarrenPlanBot Puerto Rico debt relief",
@@ -90,32 +90,32 @@
   {
     "text": "!WarrenPlanBot maternal mortality",
     "source": "sh",
-    "match": "black_maternal_mortality"
+    "match": "black_women_mortality_essence"
   },
   {
     "text": "!WarrenPlanBot military housing",
     "source": "sh",
-    "match": "military_housing"
+    "match": "improve_military_housing"
   },
   {
     "text": "!WarrenPlanBot public land management",
     "source": "sh",
-    "match": "public_land"
+    "match": "protect_public_lands"
   },
   {
     "text": "!WarrenPlanBot corporate taxes",
     "source": "sh",
-    "match": "corporate_taxes"
+    "match": "real_corporate_profits"
   },
   {
     "text": "!WarrenPlanBot ceo accountability",
     "source": "sh",
-    "match": "corporate_executive_accountability"
+    "match": "time_to_scare_corporate_america_straight"
   },
   {
     "text": "!WarrenPlanBot family farms",
     "source": "sh",
-    "match": "family_farms"
+    "match": "americas_family_farmers"
   },
   {
     "text": "!WarrenPlanBot electoral college reform",
@@ -125,7 +125,7 @@
   {
     "text": "!WarrenPlanBot safe affordable housing",
     "source": "sh",
-    "match": "affordable_housing"
+    "match": "safe_affordable_housing"
   },
   {
     "text": "!WarrenPlanBot big tech companies",
@@ -150,17 +150,17 @@
   {
     "text": "!WarrenPlanBot free college",
     "source": "jg",
-    "match": "student_debt_free_college"
+    "match": "affordable_higher_education"
   },
   {
     "text": "!WarrenPlanBot college tuition",
     "source": "jg",
-    "match": "student_debt_free_college"
+    "match": "affordable_higher_education"
   },
   {
     "text": "!WarrenPlanBot voting",
     "source": "jg",
-    "match": "election_reform",
+    "match": "strengthening_democracy",
     "alternate_matches": [
       "electoral_college"
     ]
@@ -183,17 +183,17 @@
   {
     "text": "!WarrenPlanBot abortions",
     "source": "jg",
-    "match": "reproductive_rights"
+    "match": "protect_womens_choices"
   },
   {
     "text": "!WarrenPlanBot immigration",
     "source": "jg",
-    "match": "immigration_reform"
+    "match": "immigration"
   },
   {
     "text": "!WarrenPlanBot clean green energy",
     "source": "sh",
-    "match": "clean_energy_for_america",
+    "match": "100_clean_energy",
     "alternate_matches": [
       "climate_risk_disclosure",
       "climate_change",
@@ -218,17 +218,17 @@
   {
     "text": "!WarrenPlanBot does she have a plan for public housing",
     "source": "/r/WPBSandbox",
-    "match": "affordable_housing"
+    "match": "safe_affordable_housing"
   },
   {
     "text": "!WarrenPlanBot what is her plan for affordable public housing?",
     "source": "sh",
-    "match": "affordable_housing"
+    "match": "safe_affordable_housing"
   },
   {
     "text": "!WarrenPlanBot student debt cancellation",
     "source": "sh",
-    "match": "student_debt_free_college"
+    "match": "affordable_higher_education"
   },
   {
     "text": "!WarrenPlanBot what is her plan for an ultra-millionaire tax?",
@@ -296,7 +296,7 @@
   {
     "text": "!WarrenPlanBot what is her plan for ending private prisons??",
     "source": "jg",
-    "match": "private_prison_reform"
+    "match": "end_private_prisons"
   },
   {
     "text": "!WarrenPlanBot show me the plans for healthcare",
@@ -327,12 +327,12 @@
   {
     "text": "!warrenplanbot What will she do about prison overcrowding and understaffing problems?",
     "source": "/r/ElizabethWarren",
-    "match": "private_prison_reform"
+    "match": "end_private_prisons"
   },
   {
     "text": "!WarrenPlanBot, what her criminal justice reform plan?",
     "source": "/r/ElizabethWarren",
-    "match": "comprehensive_criminal_justice_reform"
+    "match": "criminal_justice_reform"
   },
   {
     "text": "!WarrenPlanBot what's her plan regarding climate change?",
@@ -360,15 +360,16 @@
   {
     "text": "!WarrenPlanBot, what's her plan for education?",
     "source": "/r/ElizabethWarren",
-    "match": "student_debt_free_college",
+    "match": "public_education",
     "alternate_matches": [
+      "affordable_higher_education",
       "universal_child_care"
     ]
   },
   {
     "text": "!WarrenPlanBot public banking",
     "source": "/r/ElizabethWarren",
-    "match": "wall_street_reform"
+    "match": "wall_street"
   },
   {
     "text": "!WarrenPlanBot what is the plan for climate change?",
@@ -378,7 +379,7 @@
   {
     "text": "!WarrenPlanBot immigration reform",
     "source": "/r/ElizabethWarren",
-    "match": "immigration_reform"
+    "match": "immigration"
   },
   {
     "text": "!WarrenPlanBot Green New Deal",
@@ -392,7 +393,7 @@
   {
     "text": "!WarrenPlanBot national parks",
     "source": "/r/ElizabethWarren",
-    "match": "public_land"
+    "match": "protect_public_lands"
   },
   {
     "text": "!WarrenPlanBot climate change",
@@ -402,17 +403,17 @@
   {
     "text": "!WarrenPlanBot Trump's recession\n\n(Probably a good thing to figure out now, because *it's going to happen* - maybe the Green New Deal takes care of it?)",
     "source": "/r/ElizabethWarren",
-    "match": "stop_economy_crash"
+    "match": "stop_economic_crash"
   },
   {
     "text": "!WarrenPlanBot Trump's recession",
     "source": "/r/ElizabethWarren",
-    "match": "stop_economy_crash"
+    "match": "stop_economic_crash"
   },
   {
     "text": "!WarrenPlanBot Russian interference in our elections",
     "source": "/r/ElizabethWarren",
-    "match": "election_reform"
+    "match": "strengthening_democracy"
   },
   {
     "text": "!WarrenPlanBot corruption",
@@ -422,7 +423,7 @@
   {
     "text": "!WarrenPlanBot postal banking",
     "source": "sh",
-    "match": "wall_street_reform"
+    "match": "wall_street"
   },
   {
     "text": "!WarrenPlanBot climate",
@@ -446,22 +447,22 @@
   {
     "text": "!WarrenPlanBot [fracking]",
     "source": "/r/ElizabethWarren",
-    "match": "public_land"
+    "match": "protect_public_lands"
   },
   {
     "text": "!WarrenPlanBot Labor Unions",
     "source": "/r/ElizabethWarren",
-    "match": "american_workers_raising_wages"
+    "match": "empowering_american_workers"
   },
   {
     "text": "!WarrenPlanBot trade unions",
     "source": "/r/ElizabethWarren",
-    "match": "american_workers_raising_wages"
+    "match": "empowering_american_workers"
   },
   {
     "text": "!WarrenPlanBot LGBT",
     "source": "/r/ElizabethWarren",
-    "match": "lgbtq_equality"
+    "match": "lgtbtq_equality"
   },
   {
     "text": "!WarrenPlanBot What is your plan on video games?",
@@ -486,12 +487,12 @@
   {
     "text": "I'm always glad to hear good news! Hope she does well this weekend, too.\n\n!WarrenPlanBot rural",
     "source": "/r/ElizabethWarren",
-    "match": "invest_in_rural_america"
+    "match": "invest_rural"
   },
   {
     "text": "!WarrenPlanBot rebuilding the state department.",
     "source": "/r/ElizabethWarren",
-    "match": "foreign_service"
+    "match": "rebuild_the_state_department"
   },
   {
     "text": "!WarrenPlanBot millionaire tax",
@@ -516,7 +517,7 @@
   {
     "text": "!WarrenPlanBot trans rights",
     "source": "/r/ElizabethWarren",
-    "match": "lgbtq_equality"
+    "match": "lgtbtq_equality"
   },
   {
     "text": "!warrenplanbot How would Warren pay for Medicare for All?",
@@ -536,12 +537,12 @@
   {
     "text": "Also, !warrenplanbot what is her plan to rebuild the state department to improve our diplomacy worldwide?",
     "source": "/r/ElizabethWarren",
-    "match": "foreign_service"
+    "match": "rebuild_the_state_department"
   },
   {
     "text": "!WarrenPlanBot social security",
     "source": "/r/ElizabethWarren",
-    "match": "expanding_social_security"
+    "match": "social_security"
   },
   {
     "text": "!warrenplanbot what is Warren's plan for health care?",
@@ -556,8 +557,9 @@
   {
     "text": "!warrenplanbot what is her plan to invest in public education?",
     "source": "/r/ElizabethWarren",
-    "match": "student_debt_free_college",
+    "match": "public_education",
     "alternative_matches": [
+      "affordable_higher_education",
       "universal_child_care"
     ]
   },
@@ -565,23 +567,28 @@
     "text": "!warrenplanbot lobbying",
     "source": "/r/ElizabethWarren",
     "match": "excessive_lobbying_tax"
-  },{
+  },
+  {
     "text": "!warrenplanbot Raising Wages?",
     "source": "/r/ElizabethWarren",
-    "match": "american_workers_raising_wages"
-  },{
+    "match": "empowering_american_workers"
+  },
+  {
     "text": "!warrenplanbot Native Americans?",
     "source": "/r/ElizabethWarren",
-    "match": "tribal_nations_and_indigenous_peoples"
-  },{
+    "match": "tribal_nations"
+  },
+  {
     "text": "!warrenplanbot Have anything on election reform?",
     "source": "/r/ElizabethWarren",
-    "match": "election_reform"
-  },{
-    "text": "!WarrenPlanBot wealth tax\n\nThis is from the creators: http://gabriel-zucman.eu/policy-debates/\n\nThe fine details:\n\n* [How Would a Progressive Wealth Tax Work? Evidence from the Economics Literature](http://gabriel-zucman.eu/files/saez-zucman-wealthtaxobjections.pdf)\n\n* [Scoring of Senator Elizabeth Warren’s wealth tax proposal](http://gabriel-zucman.eu/files/saez-zucman-wealthtax-warren.pdf)\n\n* [Response to Natasha Sarin’s and Larry Summers’ critique of our scoring](https://gabriel-zucman.eu/files/saez-zucman-responseto-summers-sarin.pdf)\n\nEdit: To add, assets about yachts from their Response above:\n\nTo hit Warren's ~$2.75T number by ~2030, it isn't using collectibles. \n\n>More broadly, 80% of the wealth of the top 0.1% wealthiest families is in the form of assets that are traded and have a clear market price: publicly traded stock, bonds, and real estate. Only about 20% of their assets are in private businesses that do not have a directly observable market price. Valuing such businesses, and especially the largest ones, is anything but impossible. That is what the financial sector routinely does, and the IRS could mandate financial institutions to report their valuations of private businesses for the purpose of enforcing the wealth tax. **Art, valuable (gold, jewelry, etc.), and durables (yachts, cars, etc.) are a negligible fraction of wealth at the top.**\n\nOne thing I would note is I thought when it came to the wealth tax, it was based on each additional $0.03 for every dollar earned. Instead, it is 3% of total wealth taxed yearly. That means they're giving up 30% of their total wealth in 10 years. [Number 1717 on the list of Forbes billionaires is Steve Case](https://www.forbes.com/profile/steve-case/?list=billionaires#2749fe3718f3), who is worth $1.5B, earning an additional $200M in the last 6 months. At 1.5B, he would have to give up $450M of his assets over 10 years, assuming he continuously increases an average of 3% of his wealth/year.  But he'd still be worth $1.5B after the tax and most likely would make a lot more money than 3%.",
+    "match": "strengthening_democracy"
+  },
+  {
+    "text": "!WarrenPlanBot wealth tax\n\nThis is from the creators: http://gabriel-zucman.eu/policy-debates/\n\nThe fine details:\n\n* [How Would a Progressive Wealth Tax Work? Evidence from the Economics Literature](http://gabriel-zucman.eu/files/saez-zucman-wealthtaxobjections.pdf)\n\n* [Scoring of Senator Elizabeth Warren\u2019s wealth tax proposal](http://gabriel-zucman.eu/files/saez-zucman-wealthtax-warren.pdf)\n\n* [Response to Natasha Sarin\u2019s and Larry Summers\u2019 critique of our scoring](https://gabriel-zucman.eu/files/saez-zucman-responseto-summers-sarin.pdf)\n\nEdit: To add, assets about yachts from their Response above:\n\nTo hit Warren's ~$2.75T number by ~2030, it isn't using collectibles. \n\n>More broadly, 80% of the wealth of the top 0.1% wealthiest families is in the form of assets that are traded and have a clear market price: publicly traded stock, bonds, and real estate. Only about 20% of their assets are in private businesses that do not have a directly observable market price. Valuing such businesses, and especially the largest ones, is anything but impossible. That is what the financial sector routinely does, and the IRS could mandate financial institutions to report their valuations of private businesses for the purpose of enforcing the wealth tax. **Art, valuable (gold, jewelry, etc.), and durables (yachts, cars, etc.) are a negligible fraction of wealth at the top.**\n\nOne thing I would note is I thought when it came to the wealth tax, it was based on each additional $0.03 for every dollar earned. Instead, it is 3% of total wealth taxed yearly. That means they're giving up 30% of their total wealth in 10 years. [Number 1717 on the list of Forbes billionaires is Steve Case](https://www.forbes.com/profile/steve-case/?list=billionaires#2749fe3718f3), who is worth $1.5B, earning an additional $200M in the last 6 months. At 1.5B, he would have to give up $450M of his assets over 10 years, assuming he continuously increases an average of 3% of his wealth/year.  But he'd still be worth $1.5B after the tax and most likely would make a lot more money than 3%.",
     "source": "/r/ElizabethWarren",
     "match": "ultra_millionaire_tax"
-  },{
+  },
+  {
     "text": "!WarrenPlanBot internet\n\nInternet companies usually donate a _lot_ to the DNC, so I don't know how this will affect the next election.",
     "source": "/r/ElizabethWarren",
     "match": "break_up_big_tech"
@@ -589,7 +596,7 @@
   {
     "text": "!WarrenPlanBot show me Warren's position on trade.",
     "source": "/r/ElizabethWarren",
-    "match": "trade_on_our_terms"
+    "match": "new_approach_trade"
   },
   {
     "text": "!WarrenPlanBot foreign policy",
@@ -606,8 +613,8 @@
     "source": "/r/ElizabethWarren",
     "match": null,
     "alternative_matches": [
-      "minority_businesses",
-      "black_maternal_mortality"
+      "leveling_field_entrepreneurs_color",
+      "black_women_mortality_essence"
     ]
   },
   {
@@ -618,12 +625,12 @@
   {
     "text": "!WarrenPlanBot what is the plan for social security?\n\n(I think it needs the question mark)",
     "source": "/r/ElizabethWarren",
-    "match": "expanding_social_security"
+    "match": "social_security"
   },
   {
     "text": "She really changes how we should think about free trade. Imagine if NAFTA included a provision that Mexican companies would have to offer a living wage and safe working conditions. That could have really changed things. I was only a kid when NAFTA passed, I wonder if the Democrats even attempted that. It always boggled my mind why Clinton would sign that agreement without anything to uplift American jobs and those around the world. It was all about corporate profits and cheap goods. It was fair to say that a lot of those American jobs wouldn't be coming back, but it just feels like a Democrat President would have done more. \n\n!WarrenPlanBot trade",
     "source": "/r/ElizabethWarren",
-    "match": "trade_on_our_terms"
+    "match": "new_approach_trade"
   },
   {
     "text": "!WarrenPlanBot what's her plan to end corruption?",
@@ -638,11 +645,11 @@
   {
     "text": "It\u2019s difficult to answer complex foreign policy questions on the campaign trail. This style of questioning is helpful for outlining an approach but each situation has a million unique variables, some of which are hidden from the public. \n\nIn a broader sense; I think we make a mistake when we separate foreign and domestic policy. Problems overseas are only overseas until  they aren\u2019t. (The deterioration in the Northern Triangle countries over the last several years is what\u2019s causing our immigration influx now.) We\u2019ve been using the military as the main driver of American interests abroad and that\u2019s no good for anyone. Diplomacy is a much better investment than bombs. It seems like Warren gets that.\n\nFurther reading: !WarrenPlanBot Rebuilding the state department.",
     "source": "/r/ElizabethWarren",
-    "match": "foreign_service"
+    "match": "rebuild_the_state_department"
   },
   {
     "text": "!WarrenPlanBot what is her plan for college?",
     "source": "/r/ElizabethWarren",
-    "match": "student_debt_free_college"
+    "match": "affordable_higher_education"
   }
 ]
