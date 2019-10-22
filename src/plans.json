@@ -1,293 +1,258 @@
 [
     {
-        "id": "student_debt_free_college",
+        "id": "affordable_higher_education",
         "topic": "student debt",
         "summary": "Elizabeth is calling for universal free public college and cancelling student loan debt for 42 million Americans. It’s time to cancel student debt and make universal free college a reality.",
         "display_title": "Affordable Higher Education for All",
-        "url": "https://elizabethwarren.com/plans/affordable-higher-education",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/affordable-higher-education"
     },
     {
-        "id": "immigration_reform",
+        "id": "immigration",
         "topic": "immigration reform",
         "summary": "Diversity makes our country strong, and we won’t be divided by our differences. It's long past time for common-sense, comprehensive immigration reform.",
         "display_title": "A Fair and Welcoming Immigration System",
-        "url": "https://elizabethwarren.com/plans/immigration",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/immigration"
     },
     {
-        "id": "wall_street_reform",
+        "id": "wall_street",
         "topic": "wall street reform",
         "summary": "For a long time now, Wall Street’s success hasn’t helped the broader economy — it’s come at the expense of it. It’s time to end Wall Street’s stranglehold on our economy. ",
         "display_title": "End Wall Street's Stranglehold on Our Economy",
-        "url": "https://elizabethwarren.com/plans/wall-street",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/wall-street"
     },
     {
-        "id": "stop_economy_crash",
+        "id": "stop_economic_crash",
         "topic": "strong economy",
         "summary": "Elizabeth warned about an economic crash years before the 2008 crisis, and now she’s seeing serious warning signs again. Congress and regulators should act immediately to tamp down threats before it’s too late.",
         "display_title": "The Coming Economic Crash — And How to Stop It",
-        "url": "https://elizabethwarren.com/plans/stop-economic-crash",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/stop-economic-crash"
     },
     {
-        "id": "climate_risk_disclosure",
+        "id": "clean_energy",
         "topic": "climate risk disclosure",
         "summary": "We need to use all the powers of the government to address climate change, and we don’t have any more time to waste. It’s time for bold action to combat climate change before it’s too late. ",
         "display_title": "Accelerating the Transition to Clean Energy",
-        "url": "https://elizabethwarren.com/plans/clean-energy",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/clean-energy"
     },
     {
-        "id": "women_of_color_economic",
+        "id": "valuing_work_women_of_color",
         "topic": "pay for women of color",
         "summary": "Women of color face a steeper climb to provide financial security for their families because of systemic discrimination. It’s time to boost wages and open up new pathways to the leadership positions for women of color.",
         "display_title": "Valuing the Work of Women of Color",
-        "url": "https://elizabethwarren.com/plans/valuing-work-women-of-color",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/valuing-work-women-of-color"
     },
     {
-        "id": "foreign_service",
+        "id": "rebuild_the_state_department",
         "topic": "diplomacy",
         "summary": "American security and prosperity depend on robust diplomacy -- but the Trump Administration has declared war on the State Department. We must reverse the trend of declining American diplomacy by creating a 21st century foreign service.",
         "display_title": "Rebuild the State Department",
-        "url": "https://elizabethwarren.com/plans/rebuild-the-state-department",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/rebuild-the-state-department"
     },
     {
-        "id": "election_reform",
+        "id": "strengthening_democracy",
         "topic": "election reform",
         "summary": "Our right to vote is under attack—and we need to put more federal muscle in the fight to protect it. It’s time to address election security, administration problems, and voter suppression.",
         "display_title": "Strengthening Our Democracy",
-        "url": "https://elizabethwarren.com/plans/strengthening-democracy",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/strengthening-democracy"
     },
     {
-        "id": "private_prison_reform",
+        "id": "end_private_prisons",
         "topic": "for profit prison reform",
         "summary": "Private prison companies have spent millions to use our criminal and immigration policies to themselves rich instead of keeping us safe. It’s time to ban private prisons and detention centers, and stop profit-driven cruelty against incarcerated people.",
         "display_title": "End Private Prisons",
-        "url": "https://elizabethwarren.com/plans/end-private-prisons",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/end-private-prisons"
     },
     {
-        "id": "minority_businesses",
+        "id": "leveling_field_entrepreneurs_color",
         "topic": "minority business owners",
         "summary": "Not every entrepreneur starts out with an equal chance at success. It’s time to close the startup capital gap for entrepreneurs of color.",
         "display_title": "Leveling the Playing Field for Entrepreneurs of Color",
-        "url": "https://elizabethwarren.com/plans/leveling-field-entrepreneurs-color",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/leveling-field-entrepreneurs-color"
     },
     {
-        "id": "economic_patriotism",
+        "id": "american_jobs",
         "topic": "American jobs",
         "summary": "Giant companies that like to call themselves \"American\" only have one real loyalty — to their shareholders, not American workers. We need to defend American jobs and make American workers our highest priority.",
         "display_title": "Defend & Create American Jobs",
-        "url": "https://elizabethwarren.com/plans/american-jobs",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/american-jobs"
     },
     {
         "id": "green_manufacturing",
         "topic": "green energy jobs",
         "summary": "The climate crisis demands immediate and bold action. We should bank on American ingenuity and American workers to lead the global effort to face down this threat — and create more than a million good jobs here at home.",
         "display_title": "Leading in Green Manufacturing",
-        "url": "https://elizabethwarren.com/plans/green-manufacturing",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/green-manufacturing"
     },
     {
-        "id": "presidential_accountability",
+        "id": "no_president_is_above_the_law",
         "topic": "crimes by the president",
         "summary": "Impeachment isn't supposed to be the only way that a President can be held accountable for committing a crime. Congress should make it clear that Presidents can be indicted for criminal activity, including obstruction of justice. And when she's President, she will appoint Justice Department officials who will reverse flawed policies so no President is shielded from criminal accountability.",
         "display_title": "No President is Above the Law",
-        "url": "https://medium.com/@teamwarren/no-president-is-above-the-law-f4812e580336",
-        "keyword_synonyms": []
+        "url": "https://medium.com/@teamwarren/no-president-is-above-the-law-f4812e580336"
     },
     {
-        "id": "reproductive_rights",
+        "id": "protect_womens_choices",
         "topic": "reproductive rights",
         "summary": "Extremist Republican lawmakers are trying to turn back the clock and deny women access to reproductive health care. Congress should pass new federal laws that protect access to reproductive care from right-wing ideologues in the states.",
         "display_title": "Protect a Woman's Right to Choose",
-        "url": "https://elizabethwarren.com/plans/protect-womens-choices",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/protect-womens-choices"
     },
     {
-        "id": "defense_lobbyists",
+        "id": "corporate_influence_pentagon",
         "topic": "military lobbyists",
         "summary": "Coziness between defense lobbyists, Congress, and the Pentagon tilts countless decisions away from national security interests and toward the desires of giant corporations. Let's shut the revolving door between giant contractors and the Pentagon and crack down on corruption.",
         "display_title": "Reduce Corporate Influence at the Pentagon",
-        "url": "https://elizabethwarren.com/plans/corporate-influence-pentagon",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/corporate-influence-pentagon"
     },
     {
-        "id": "national_security_climate_change",
+        "id": "military_combat_climate_change",
         "topic": "national security climate change",
         "summary": "Climate change is already undermining the way the Pentagon operates. But instead of meeting this threat head-on, Washington is ignoring it. The Pentagon should achieve net zero carbon emissions for all its non-combat bases and infrastructure by 2030.",
         "display_title": "Our Military Can Help Lead the Fight in Combating Climate Change",
-        "url": "https://elizabethwarren.com/plans/military-combat-climate-change",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/military-combat-climate-change"
     },
     {
-        "id": "opioid_crisis",
+        "id": "end_opioid_crisis",
         "topic": "opioid crisis",
         "summary": "In 2017, 70,000 people died from a drug overdose, the highest year on record -- and the majority of those deaths were due to opioids. We need a comprehensive plan to end the opioid crisis.",
         "display_title": "Ending the Opioid Crisis",
-        "url": "https://elizabethwarren.com/plans/end-opioid-crisis",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/end-opioid-crisis"
     },
     {
         "id": "puerto_rico_debt_relief",
         "topic": "Puerto Rico debt relief",
         "summary": "The United States needs leadership that respects all of its citizens, including those living in territories. Puerto Rico needs comprehensive debt relief so it can rebuild and thrive.",
         "display_title": "Comprehensive Debt Relief to Puerto Rico",
-        "url": "https://elizabethwarren.com/plans/puerto-rico-debt-relief",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/puerto-rico-debt-relief"
     },
     {
-        "id": "black_maternal_mortality",
+        "id": "black_women_mortality_essence",
         "topic": "maternal mortality",
         "summary": "We are facing a maternal mortality crisis in America. And for Black moms, it's an epidemic. One major reason? Racism. It's time to hold health systems accountable for preventable failures and demand change - because women's lives depend on it.",
         "display_title": "Addressing Our Maternal Mortality Epidemic",
-        "url": "https://www.essence.com/feature/sen-elizabeth-warren-black-women-mortality-essence/",
-        "keyword_synonyms": []
+        "url": "https://www.essence.com/feature/sen-elizabeth-warren-black-women-mortality-essence/"
     },
     {
-        "id": "military_housing",
+        "id": "improve_military_housing",
         "topic": "military housing",
         "summary": "A handful of private contractors have taken over 99% of domestic military family housing, but have failed to maintain the homes they were entrusted with. It’s long past time to improve our military housing, protect families from abuse, and hold private developers accountable.",
         "display_title": "Improving Our Military Housing",
-        "url": "https://elizabethwarren.com/plans/improve-military-housing",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/improve-military-housing"
     },
     {
-        "id": "public_land",
+        "id": "protect_public_lands",
         "topic": "public land management",
         "summary": "America’s public lands are one of our greatest treasures. But right now, they’re being sold off to the oil, gas, and coal industries for pennies on the dollar. But it doesn’t have to be this way. protect our public lands — to fight climate change and preserve wild, natural places for future generations.",
         "display_title": "Protecting Our Public Lands",
-        "url": "https://elizabethwarren.com/plans/protect-public-lands",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/protect-public-lands"
     },
     {
-        "id": "corporate_taxes",
+        "id": "real_corporate_profits",
         "topic": "corporate taxes",
         "summary": "You probably pay more in federal income taxes than America’s biggest, most profitable corporations. It’s not right — and we cannot afford to let it continue. massive corporations shouldn’t be able to pay $0 in federal income taxes.",
         "display_title": "Real Corporate Profits Tax",
-        "url": "https://elizabethwarren.com/plans/real-corporate-profits",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/real-corporate-profits"
     },
     {
-        "id": "corporate_executive_accountability",
+        "id": "time_to_scare_corporate_america_straight",
         "topic": "ceo accountability",
         "summary": "Our justice system should ensure that if you cheat working Americans, you'll go to jail. It's time to reform our laws to make sure that corporate executives are held accountable for overseeing massive scams.",
         "display_title": "Corporate Executive Accountability Act",
-        "url": "https://www.washingtonpost.com/opinions/elizabeth-warren-its-time-to-scare-corporate-america-straight/2019/04/02/ca464ab0-5559-11e9-8ef3-fbd41a2ce4d5_story.html",
-        "keyword_synonyms": []
+        "url": "https://www.washingtonpost.com/opinions/elizabeth-warren-its-time-to-scare-corporate-america-straight/2019/04/02/ca464ab0-5559-11e9-8ef3-fbd41a2ce4d5_story.html"
     },
     {
-        "id": "family_farms",
+        "id": "americas_family_farmers",
         "topic": "family farms",
         "summary": "Today a farmer can work hard, do everything right — even get great weather — and still not make it. We make big, structural change in our agriculture system — and we can begin by leveling the playing field for America’s family farmers.",
         "display_title": "Leveling the Playing Field for America’s Family Farmers",
-        "url": "https://elizabethwarren.com/plans/americas-family-farmers",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/americas-family-farmers"
     },
     {
         "id": "electoral_college",
         "topic": "electoral college reform",
         "summary": "Presidential candidates should have to ask every American in every part of the country for their vote. It’s time to abolish the Electoral College and to have a national popular vote.",
         "display_title": "Get Rid of the Electoral College",
-        "url": "https://elizabethwarren.com/plans/electoral-college",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/electoral-college"
     },
     {
-        "id": "affordable_housing",
+        "id": "safe_affordable_housing",
         "topic": "safe affordable housing",
         "summary": "Elizabeth’s housing plan will lower rents by 10%, help close the racial wealth gap, and create 1.5 million new jobs. Every American deserves a safe and affordable place to live.",
         "display_title": "Safe and Affordable Housing",
-        "url": "https://elizabethwarren.com/plans/safe-affordable-housing",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/safe-affordable-housing"
     },
     {
         "id": "break_up_big_tech",
         "topic": "big tech companies",
         "summary": "America’s biggest tech companies are controlling more and more of our digital lives and stifling competition in the tech industry. It’s time to break up the biggest tech companies like Amazon, Google, and Facebook.",
         "display_title": "How We Can Break Up Big Tech",
-        "url": "https://elizabethwarren.com/plans/break-up-big-tech",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/break-up-big-tech"
     },
     {
         "id": "universal_child_care",
         "topic": "universal child care",
         "summary": "Elizabeth is fighting to make high-quality child care from birth to school age free for millions of families and affordable for everyone. Let’s make Universal Child Care a reality.",
         "display_title": "Universal Child Care",
-        "url": "https://elizabethwarren.com/plans/universal-child-care",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/universal-child-care"
     },
     {
         "id": "ultra_millionaire_tax",
         "topic": "ultra millionaire tax",
         "summary": "A two-cent tax on the great fortunes of more than $50 million can bring in nearly $3 trillion to rebuild America’s middle class. It's time for the rich to pay their fair share.",
         "display_title": "Ultra-Millionaire Tax",
-        "url": "https://elizabethwarren.com/plans/ultra-millionaire-tax",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/ultra-millionaire-tax"
     },
     {
         "id": "new_farm_economy",
         "topic": "farming economy",
         "summary": "Our agriculture system is failing because Big Ag corporations at the top of the supply chain pay artificially low costs while farmers struggle. It’s time to break up big Ag and guarantee farmers a fair shake.",
         "display_title": "A New Farm Economy",
-        "url": "https://elizabethwarren.com/plans/new-farm-economy",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/new-farm-economy"
     },
     {
         "id": "gun_violence",
         "topic": "gun violence mass shootings",
         "summary": "On average, 100 people are killed in the U.S. by a gun every day — everywhere from our homes, to our streets, to our playgrounds. We need to take action to protect our communities from gun violence.",
         "display_title": "Protecting Our Communities from Gun Violence",
-        "url": "https://elizabethwarren.com/plans/gun-violence",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/gun-violence"
     },
     {
-        "id": "invest_in_rural_america",
+        "id": "invest_rural",
         "topic": "invest in rural america",
         "summary": "Elizabeth’s plan will put health care services in reach of every family, create a public option for broadband so every home and business has access to high-speed internet at an affordable price, and build a sustainable farm economy that raises farm incomes and protects our environment. It’s time to restore opportunity in rural communities.",
         "display_title": "Investing in Rural America",
-        "url": "https://elizabethwarren.com/plans/invest-rural",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/invest-rural"
     },
     {
-        "id": "tribal_nations_and_indigenous_peoples",
+        "id": "tribal_nations",
         "topic": "native americans tribal lands indigenous peoples treaties",
         "summary": "The story of America’s mistreatment of Native communities is a long and painful one, rooted in centuries of discrimination, neglect, greed, and violence. America must uphold its commitments and promises to Native and indigenous peoples.",
         "display_title": "Honoring and Empowering Tribal Nations and Indigenous Peoples",
-        "url": "https://elizabethwarren.com/plans/tribal-nations",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/tribal-nations"
     },
     {
-        "id": "comprehensive_criminal_justice_reform",
+        "id": "criminal_justice_reform",
         "topic": "comprehensive criminal justice reform",
         "summary": "The United States has the highest incarceration rate in the world—yet our harshly punitive system isn’t making our communities safer. It’s long past time for bold, structural change to reform our criminal justice system.",
         "display_title": "Comprehensive Criminal Justice Reform",
-        "url": "https://elizabethwarren.com/plans/criminal-justice-reform",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/criminal-justice-reform"
     },
     {
-        "id": "trade_on_our_terms",
+        "id": "new_approach_trade",
         "topic": "trade",
         "summary": "For decades, big multinational corporations have been dictating America’s trade policy at the expense of everyone else. We need to use America’s enormous leverage to completely transform our approach to trade.",
         "display_title": "A New Approach to Trade",
-        "url": "https://elizabethwarren.com/plans/new-approach-trade",
-        "keyword_synonyms": []
+        "url": "https://elizabethwarren.com/plans/new-approach-trade"
     },
     {
-        "id": "clean_energy_for_america",
+        "id": "100_clean_energy",
         "topic": "clean energy",
         "display_title": "100% Clean Energy for America",
         "summary": "The science is clear. Climate change is caused by human beings and it is accelerating. We need big, structural change, across a range of industries and sectors to solve the climate crisis.",
         "url": "https://elizabethwarren.com/plans/100-clean-energy"
     },
     {
-        "id": "expanding_social_security",
+        "id": "social_security",
         "topic": "expanding social security",
         "display_title": "Expanding Social Security",
         "summary": "It’s too hard to save enough for a decent retirement — and it’s only getting harder. We need to expand Social Security.",
@@ -302,7 +267,7 @@
         "additional_training_text": "healthcare healthcare healthcare healthcare healthcare"
     },
     {
-        "id": "lgbtq_equality",
+        "id": "lgtbtq_equality",
         "topic": "lgbtq lgbt lgb equality",
         "display_title": "LGBTQ+ Rights",
         "summary": "We need a president who will lift up the voices of LGBTQ+ people and fight back against discrimination. No one should feel unsafe because of who they are or who they love.",
@@ -317,7 +282,7 @@
         "url": "https://elizabethwarren.com/plans/disability-justice"
     },
     {
-        "id": "competitive_markets",
+        "id": "promoting_competitive_markets",
         "topic": "competitive markets",
         "display_title": "Promoting Competitive Markets",
         "summary": "Markets work when there are rules and competition - but corporate monopolies have taken over in sector after sector. It’s time to bring back serious antitrust enforcement.",
@@ -352,7 +317,7 @@
         "url": "https://elizabethwarren.com/plans/climate-change"
     },
     {
-        "id": "wall_street_accountable",
+        "id": "holding_wall_street_accountable",
         "topic": "wall street",
         "display_title": "Holding Wall Street Accountable",
         "summary": "Elizabeth has spent her career fighting for American families and holding big banks and corporate executives accountable. It’s time to fundamentally transform the financial sector’s role in our economy.",
@@ -380,14 +345,14 @@
         "url": "https://elizabethwarren.com/plans/excessive-lobbying-tax"
     },
     {
-        "id": "american_workers_raising_wages",
+        "id": "empowering_american_workers",
         "topic": "raising wages unions",
         "display_title": "Empowering American Workers and Raising Wages",
         "summary": "Returning power to working people will be the overarching goal of my presidency. It's time for the most progressive and comprehensive agenda for workers since the New Deal.",
         "url": "https://elizabethwarren.com/plans/empowering-american-workers"
     },
     {
-        "id": "restore_trust_in_ethical_judiciary",
+        "id": "restore_trust",
         "topic": "supreme court judges judiciary",
         "display_title": "Restoring Trust in an Impartial and Ethical Judiciary",
         "summary": "The basic premise of our legal system is that every person is treated equally in the eyes of the law – including judges. It’s time to strengthen the integrity and impartiality of the federal judiciary.",
