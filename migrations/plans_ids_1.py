@@ -1,3 +1,6 @@
+import click
+from google.cloud import firestore
+
 plan_id_transforms = [
     {"old_id": "anti_corruption", "new_id": "anti_corruption"},
     {"old_id": "student_debt_free_college", "new_id": "affordable_higher_education"},
@@ -67,32 +70,60 @@ plan_id_transforms = [
     },
     {"old_id": "restore_trust_in_ethical_judiciary", "new_id": "restore_trust"},
     {"old_id": "environmental_justice", "new_id": "environmental_justice"},
+    # plan clusters
     {"old_id": "campaign_finance_reform", "new_id": "campaign_finance_reform"},
+    # deprecated plans
+    {"old_id": "medicare_for_all_act_2019", "new_id": "medicare_for_all_act_2019"},
 ]
 
 id_lookup = {d["old_id"]: d["new_id"] for d in plan_id_transforms}
 
-# import json
-# from os import path
-#
-# DIRNAME = path.dirname(path.realpath(__file__))
-#
-# with open(path.join(DIRNAME, "../scripts/labeled_posts.json")) as posts_file:
-#     posts = json.load(posts_file)
-#
-# labeled_posts = []
-#
-# for post in posts:
-#     labeled_post = post
-#     if labeled_post["match"]:
-#         labeled_post["match"] = id_lookup[labeled_post["match"]]
-#     if "alternative_matches" in labeled_post:
-#         labeled_post["alternative_matches"] = [
-#             id_lookup[match] for match in labeled_post["alternative_matches"]
-#         ]
-#     labeled_posts.append(labeled_post)
-#
-# print(labeled_posts)
-#
-# with open(path.join(DIRNAME, "../scripts/labeled_posts.json"), "w") as posts_file:
-#     json.dump(labeled_posts, posts_file, indent=2, separators=(",", ": "))
+
+@click.command()
+@click.option(
+    "--project",
+    envvar="GCP_PROJECT",
+    default="wpb-dev",
+    type=str,
+    help="gcp project where firestore db lives",
+)
+@click.option(
+    "--dry-run",
+    default=False,
+    is_flag=True,
+    help="run a dry run before executing the migration",
+)
+def run_migration(project="wpb-dev", dry_run=False):
+
+    db = firestore.Client(project=project)
+
+    posts_db = db.collection("posts")
+
+    for post in posts_db.stream():
+        post_id = post.id
+        post = post.to_dict()
+        post_record_update = {}
+        if (
+            post.get("plan_match")
+            and post.get("plan_match") != id_lookup[post.get("plan_match")]
+        ):
+            post_record_update["plan_match"] = id_lookup[post.get("plan_match")]
+
+        if (
+            post.get("top_plan")
+            and post.get("top_plan") != id_lookup[post.get("top_plan")]
+        ):
+            post_record_update["top_plan"] = id_lookup[post.get("top_plan")]
+
+        if post_record_update:
+            if dry_run:
+                print(
+                    f"[dry-run] For plan: {post_id}\n[dry-run] With content:{post}\n[dry-run] Would update {post_record_update}"
+                )
+            else:
+                # partial update of record
+                posts_db.document(post_id).update(post_record_update)
+
+
+if __name__ == "__main__":
+    run_migration()
