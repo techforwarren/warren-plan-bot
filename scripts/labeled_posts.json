@@ -360,8 +360,9 @@
   {
     "text": "!WarrenPlanBot, what's her plan for education?",
     "source": "/r/ElizabethWarren",
-    "match": "affordable_higher_education",
+    "match": "public_education",
     "alternate_matches": [
+      "affordable_higher_education",
       "universal_child_care"
     ]
   },
@@ -556,8 +557,9 @@
   {
     "text": "!warrenplanbot what is her plan to invest in public education?",
     "source": "/r/ElizabethWarren",
-    "match": "affordable_higher_education",
+    "match": "public_education",
     "alternative_matches": [
+      "affordable_higher_education",
       "universal_child_care"
     ]
   },
