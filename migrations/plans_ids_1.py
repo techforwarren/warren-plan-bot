@@ -121,6 +121,9 @@ def run_migration(project="wpb-dev", dry_run=False):
                     f"[dry-run] For plan: {post_id}\n[dry-run] With content:{post}\n[dry-run] Would update {post_record_update}"
                 )
             else:
+                print(
+                    f"For plan: {post_id}\n[dry-run] With content:{post}\n[dry-run] Updating {post_record_update}"
+                )
                 # partial update of record
                 posts_db.document(post_id).update(post_record_update)
 
