@@ -18,6 +18,8 @@ You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `
 
 In order to test in development, you will need to [create your own reddit dev app](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps). Then use the credentials to populate your `praw.ini` file for dev.
 
+Also please see how to [run the app in dev safely](#run-the-bot)
+
 ### Option 1: the virtualenv way
 
 There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
@@ -127,7 +129,7 @@ Strategies are defined as static methods of the Strategy class in `matching.py`
 - Without making actual replies
 - Without checking a posts_replied_to list
 
-`python src/main.py --skip-tracking`
+`python src/main.py --skip-tracking --simulate-replies`
 
 #### Safely, using state from the local Firestore emulator 
 
