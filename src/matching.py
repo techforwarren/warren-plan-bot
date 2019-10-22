@@ -163,7 +163,9 @@ class Strategy:
         }
 
     @staticmethod
-    def token_sort_lsi_v1_composite(plans: list, post_text: str, threshold=60, **kwargs):
+    def token_sort_lsi_v1_composite(
+        plans: list, post_text: str, threshold=60, **kwargs
+    ):
         """
         Tries the following strategies in order:
          1) fuzzy matching based on hardcoded topics
@@ -177,7 +179,7 @@ class Strategy:
                 partial(Strategy.token_sort_ratio, threshold=threshold),
                 partial(Strategy.lsi_gensim_v1, threshold=80),
             ],
-            **kwargs
+            **kwargs,
         )
 
     @staticmethod
@@ -241,7 +243,9 @@ class Strategy:
         )
 
     @staticmethod
-    def lsa_tfidf_composite_gensim_v2(plans: list, post_text: str, threshold=82, **kwargs):
+    def lsa_tfidf_composite_gensim_v2(
+        plans: list, post_text: str, threshold=82, **kwargs
+    ):
         """
         Composite of LSA and TFIDF methods
 
@@ -290,11 +294,7 @@ class RuleStrategy:
         """
         Matches strictly to a request at the end of the trigger line for the full list of all known plans
         """
-        if re.search(
-            r"show me the plans\W*$",
-            post_text,
-            re.IGNORECASE | re.MULTILINE,
-        ):
+        if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
             return {"operation": "all_the_plans"}
 
     @staticmethod
@@ -302,9 +302,12 @@ class RuleStrategy:
         """
         Matches strictly to a request for help at the trigger line.
         """
-        match = re.match(r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE)
+        match = re.match(
+            r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
+        )
         if match:
             return {"operation": "advanced_help" if match.group(1) else "help"}
+
 
 class Preprocess:
     """

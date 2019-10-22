@@ -240,6 +240,17 @@ To prevent the bot from running every minute, the simplest thing to do is to rem
 
 Or you can do it via the UI: [dev](https://console.cloud.google.com/cloudscheduler?project=wpb-dev) [prod](https://console.cloud.google.com/cloudscheduler?project=wpb-prod)
 
+### Migrations
+
+1) Updating plan ids
+
+To run a dry-run on dev
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/***** python migrations/plans_ids_1.py --project wpb-dev --dry-run`
+
+To run a dry-run on dev
+`GOOGLE_APPLICATION_CREDENTIALS=~/.gcloud/***** python migrations/plans_ids_1.py --project wpb-prod --dry-run`
+
+To run the migration, simply remove `--dry-run`  
 
 ### Pushshift Samples URL
 
