@@ -290,7 +290,7 @@
     "source": "/r/ElizabethWarren",
     "match": "health_care",
     "alternate_matches": [
-      "invest_in_rural_america"
+      "paying_for_m4a"
     ]
   },
   {
@@ -321,6 +321,7 @@
     "source": "/r/ElizabethWarren",
     "match": "ultra_millionaire_tax",
     "alternate_matches": [
+      "paying_for_m4a",
       "corporate_taxes"
     ]
   },
@@ -482,7 +483,8 @@
   {
     "text": "!WarrenPlanBot medicare for all",
     "source": "/r/ElizabethWarren",
-    "match": "health_care"
+    "match": "health_care",
+    "alternate_matches": "paying_for_m4a"
   },
   {
     "text": "I'm always glad to hear good news! Hope she does well this weekend, too.\n\n!WarrenPlanBot rural",
@@ -522,7 +524,7 @@
   {
     "text": "!warrenplanbot How would Warren pay for Medicare for All?",
     "source": "/r/ElizabethWarren",
-    "match": null
+    "match": "paying_for_m4a"
   },
   {
     "text": "!WarrenPlanBot cancer research",
