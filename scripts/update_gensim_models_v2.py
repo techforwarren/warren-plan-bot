@@ -59,11 +59,17 @@ def update_gensim_models():
         + "\n"
         + p2.get("display_title", "")
         for p, p2 in zip(parsed_plans, plans_from_repo)
+    ] + [
+        c["topic"]
+        + "\n"
+        + c.get("additional_training_text", "")
+        + "\n"
+        + c.get("display_title", "")
+        for c in plan_clusters
     ]
 
     documents_for_matching = (
         documents_for_training
-        + [p["topic"] for p in plan_clusters]
         + [p["topic"] for p in plans_from_repo]
         + [p["display_title"] for p in plans_from_repo]
     )
