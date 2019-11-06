@@ -8,7 +8,6 @@ import os
 from os import path
 
 from gensim import corpora, models, similarities
-from gensim.models.phrases import Phraser, Phrases
 
 from matching import GENSIM_V3_MODELS_PATH, Preprocess
 
@@ -82,34 +81,14 @@ def update_gensim_models():
         + [p["id"] for p in plans_from_repo]
     )
 
-    # phrases = Phrases([], min_count=2, threshold=1)
-    #
-    # for doc in documents_for_training:
-    #     phrases.add_vocab(
-    #         Preprocess.preprocess_gensim_v1(sentence) for sentence in doc.split(".")
-    #     )
-
-    # bigram = Phraser(phrases)
     # Run preprocessing
     preprocessed_documents_for_training = [
         Preprocess.preprocess_gensim_v3(doc) for doc in documents_for_training
     ]
 
-    # preprocessed_documents_for_training_with_bigrams = [
-    #     doc + [word for word in bigram[doc] if "_" in word]
-    #     for doc in preprocessed_documents_for_training
-    # ]
-
     preprocessed_documents_for_matching = [
         Preprocess.preprocess_gensim_v3(doc) for doc in documents_for_matching
     ]
-
-    # preprocessed_documents_for_matching_with_bigrams = [
-    #     doc + [word for word in bigram[doc] if "_" in word]
-    #     for doc in preprocessed_documents_for_matching
-    # ]
-    #
-    # bigram.save(path.join(OUTPUT_DIR, "bigram.pkl"))
 
     dictionary = corpora.Dictionary(preprocessed_documents_for_training)
 
@@ -122,8 +101,6 @@ def update_gensim_models():
     matching_corpus = [
         dictionary.doc2bow(text) for text in preprocessed_documents_for_matching
     ]
-    # Maybe save training_corpus
-    # corpora.MmCorpus.serialize('/tmp/deerwester.mm', training_corpus)  # store to disk, for later use
 
     # Models #
 

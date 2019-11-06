@@ -6,7 +6,6 @@ from os import path
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
-from gensim.models.phrases import Phraser
 from gensim.parsing.preprocessing import (
     preprocess_string,
     remove_stopwords,
@@ -58,7 +57,6 @@ class Preprocess:
 
     @staticmethod
     def preprocess_gensim_v1(doc):
-        # Run preprocessing
         preprocessing_filters = [
             unidecode,
             lambda x: x.lower(),
@@ -75,15 +73,9 @@ class Preprocess:
 
     @staticmethod
     def preprocess_gensim_v3(doc):
-        # Run preprocessing
         preprocessed_v1 = Preprocess.preprocess_gensim_v1(doc)
-        # bigram = Phraser.load(path.join(GENSIM_V3_MODELS_PATH, "bigram.pkl"))
-        # print(
-        #     preprocessed_v1 + [word for word in bigram[preprocessed_v1] if "_" in word]
-        # )
-        return preprocessed_v1 + Preprocess.bigrams(
-            preprocessed_v1
-        )  # + [ word for word in bigram[preprocessed_v1] if "_" in word ]
+
+        return preprocessed_v1 + Preprocess.bigrams(preprocessed_v1)
 
     @staticmethod
     def bigrams(list_of_words: list) -> list:
