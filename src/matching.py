@@ -21,9 +21,78 @@ DIRNAME = path.dirname(path.realpath(__file__))
 
 GENSIM_V1_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v1"))
 GENSIM_V2_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v2"))
+GENSIM_V3_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v3"))
 
 # suppress gensim logs
 logging.getLogger("gensim").setLevel(logging.WARNING)
+
+
+class Preprocess:
+    """
+    Defines strategies used for preprocessing text before model building and similarity scoring
+
+    Strategies must each accept a string and return a string
+    """
+
+    @staticmethod
+    def _remove_custom_stopwords(s):
+        return " ".join(
+            w
+            for w in s.split()
+            if w.lower()
+            not in {
+                "elizabeth",
+                "warren",
+                "plan",
+                "warrenplanbot",
+                "warrenplanbotdev",
+                "sen",
+                "senator",
+                "thanks",
+                "thank",
+                "you",
+                "show",
+            }
+        )
+
+    @staticmethod
+    def preprocess_gensim_v1(doc):
+        preprocessing_filters = [
+            unidecode,
+            lambda x: x.lower(),
+            strip_punctuation,
+            strip_multiple_whitespaces,
+            strip_numeric,
+            remove_stopwords,
+            Preprocess._remove_custom_stopwords,
+            strip_short,  # remove words shorter than 3 chars
+            stem_text,  # This is the Porter stemmer
+        ]
+
+        return preprocess_string(doc, preprocessing_filters)
+
+    @staticmethod
+    def preprocess_gensim_v3(doc):
+        preprocessed_v1 = Preprocess.preprocess_gensim_v1(doc)
+
+        return preprocessed_v1 + Preprocess.bigrams(preprocessed_v1)
+
+    @staticmethod
+    def bigrams(list_of_words: list) -> list:
+        """
+        Turn a list of words into a list of bigrams
+        """
+        return [
+            f"{list_of_words[i]} {list_of_words[i+1]}"
+            for i in range(len(list_of_words) - 1)
+        ]
+
+    @staticmethod
+    def bigrams_phrases(doc) -> list:
+        """
+        Turn a list of words into a list of bigrams
+        """
+        return []
 
 
 class Strategy:
@@ -112,13 +181,14 @@ class Strategy:
         threshold,
         potential_plan_threshold=50,
         model_path=GENSIM_V1_MODELS_PATH,
+        preprocess=Preprocess.preprocess_gensim_v1,
         **kwargs,
     ):
         plan_ids, dictionary, index, model = Strategy._load_gensim_models(
             model_name, model, similarity, model_path
         )
 
-        preprocessed_post = Preprocess.preprocess_gensim_v1(post_text)
+        preprocessed_post = preprocess(post_text)
 
         vec_post = dictionary.doc2bow(preprocessed_post)
 
@@ -265,6 +335,49 @@ class Strategy:
 
         return lsa_match
 
+    @staticmethod
+    def lsa_gensim_v3(plans: list, post_text: str, threshold=82, **kwargs):
+        """
+        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
+
+        This version includes the hand-written topics from plans.json in the corpus
+        of documents posts are matched against
+
+        Models have been precomputed using ../scripts/update_gensim_models_v3.py
+        """
+        return Strategy._gensim_similarity(
+            plans,
+            post_text,
+            "lsa",
+            models.LsiModel,
+            similarities.MatrixSimilarity,
+            threshold,
+            preprocess=Preprocess.preprocess_gensim_v3,
+            model_path=GENSIM_V3_MODELS_PATH,
+            **kwargs,
+        )
+
+    @staticmethod
+    def tfidf_gensim_v3(plans: list, post_text: str, threshold=15, **kwargs):
+        """
+        TFIDF – Term Frequency–Inverse Document Frequency
+
+        Using gensim
+
+        Models have been precomputed using ../scripts/update_gensim_models_v3.py
+        """
+        return Strategy._gensim_similarity(
+            plans,
+            post_text,
+            "tfidf",
+            models.TfidfModel,
+            similarities.MatrixSimilarity,
+            threshold,
+            model_path=GENSIM_V3_MODELS_PATH,
+            preprocess=Preprocess.preprocess_gensim_v3,
+            **kwargs,
+        )
+
 
 class RuleStrategy:
     """
@@ -307,51 +420,3 @@ class RuleStrategy:
         )
         if match:
             return {"operation": "advanced_help" if match.group(1) else "help"}
-
-
-class Preprocess:
-    """
-    Defines strategies used for preprocessing text before model building and similarity scoring
-
-    Strategies must each accept a string and return a string
-    """
-
-    @staticmethod
-    def _remove_custom_stopwords(s):
-        return " ".join(
-            w
-            for w in s.split()
-            if w.lower()
-            not in {
-                "elizabeth",
-                "warren",
-                "plan",
-                "warrenplanbot",
-                "warrenplanbotdev",
-                "sen",
-                "senator",
-                "thanks",
-                "thank",
-                "you",
-                "show",
-            }
-        )
-
-    @staticmethod
-    def preprocess_gensim_v1(doc):
-        # Run preprocessing
-        preprocessing_filters = [
-            unidecode,
-            lambda x: x.lower(),
-            strip_punctuation,
-            strip_multiple_whitespaces,
-            strip_numeric,
-            remove_stopwords,
-            Preprocess._remove_custom_stopwords,
-            strip_short,  # remove words shorter than 3 chars
-            stem_text,  # This is the Porter stemmer
-        ]
-
-        return preprocess_string(doc, preprocessing_filters)
-
-    # TODO try a preprocessed that does lemmatization

@@ -1,6 +1,7 @@
 import pytest
 
-from matching import RuleStrategy
+from matching import Preprocess, RuleStrategy
+
 
 class MockComment:
     def __init__(self):
@@ -20,70 +21,54 @@ class TestRuleStrategy:
 
     def test_show_me_the_plans(self):
         assert (
+            RuleStrategy.request_plan_list([], "show me the plans")
+            == self.show_me_the_plans_operation
+        )
+
+        assert (
             RuleStrategy.request_plan_list(
-                [], "show me the plans"
+                [], "show me the plans\n\nI want to show the world the plans"
             )
             == self.show_me_the_plans_operation
         )
 
         assert (
             RuleStrategy.request_plan_list(
-                [], "show me the plans\n\nI want to show the world the plans",
+                [], "show me the plans\n\nI want to show the world the plans"
             )
             == self.show_me_the_plans_operation
         )
 
         assert (
             RuleStrategy.request_plan_list(
-                [],
-                "show me the plans\n\nI want to show the world the plans",
+                [], "You know I love you now show me the plans"
             )
             == self.show_me_the_plans_operation
         )
 
         assert (
             RuleStrategy.request_plan_list(
-                [],
-                "You know I love you now show me the plans",
+                [], "show me the plans\n\nE: It looks like /u/WarrenPlanBot is offline"
             )
             == self.show_me_the_plans_operation
         )
 
         assert (
             RuleStrategy.request_plan_list(
-                [],
-                "show me the plans\n\nE: It looks like /u/WarrenPlanBot is offline",
-            )
-            == self.show_me_the_plans_operation
-        )
-
-        assert (
-            RuleStrategy.request_plan_list(
-                [],
-                "show me the plans about something I love",
+                [], "show me the plans about something I love"
             )
             is None
         )
 
     def test_help(self):
+        assert RuleStrategy.request_help([], "help") == self.help_operation
+
         assert (
-            RuleStrategy.request_help([], "help")
+            RuleStrategy.request_help([], "help\nthanks in advance")
             == self.help_operation
         )
 
-        assert (
-            RuleStrategy.request_help(
-                [], "help\nthanks in advance"
-            )
-            == self.help_operation
-        )
-
-        assert (
-            RuleStrategy.request_help(
-                [], "show me the plans"
-            )
-            is None
-        )
+        assert RuleStrategy.request_help([], "show me the plans") is None
 
     def test_advanced_help(self):
         assert (
@@ -92,15 +77,13 @@ class TestRuleStrategy:
         )
 
         assert (
-            RuleStrategy.request_help(
-                [], "advanced help\nthanks in advance"
-            )
+            RuleStrategy.request_help([], "advanced help\nthanks in advance")
             == self.advanced_help_operation
         )
 
-        assert (
-            RuleStrategy.request_help(
-                [], "advanced show me the plans"
-            )
-            is None
-        )
+        assert RuleStrategy.request_help([], "advanced show me the plans") is None
+
+
+class TestPreprocess:
+    def test_bigrams(self):
+        assert Preprocess.bigrams(["foo", "bar", "baz"]) == ["foo bar", "bar baz"]

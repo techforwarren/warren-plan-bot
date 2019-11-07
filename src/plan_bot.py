@@ -195,7 +195,7 @@ def process_post(
     send=False,
     simulate=False,
     skip_tracking=False,
-    matching_strategy=Strategy.lsa_gensim_v2,
+    matching_strategy=Strategy.lsa_gensim_v3,
 ):
     if post_ids_processed is None:
         post_ids_processed = {}
