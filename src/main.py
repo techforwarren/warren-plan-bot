@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import time
 
 import click
@@ -185,45 +186,23 @@ def run_plan_bot(
             skip_tracking=skip_tracking,
         )
 
-    params = {}
+    # Get new comments since we last ran.
+    #
+    # subreddit.comments() returns the newest comments first so we
+    # need to keep track of that and save that as our cursor.  With no
+    # specified params, it returns newest 100 comments in the
+    # subreddit.
+    comments_params = {}
     if comments_progress:
         newest_comment_id = comments_progress.get("newest")
-        oldest_comment_id = comments_progress.get("oldest")
-
         if newest_comment_id:
-            params["before"] = latest_comment_id
+            # Gets newer comments that our newest comment
+            comments_params["before"] = newest_comment_id
 
-    # Get comments newer than latest
     current_newest_comment_id = None
-    for comment in subreddit.comments(params=params):
+    for comment in subreddit.comments(params=comment_params):
         comment = reddit_util.Comment(comment)
-        process_post(
-            comment,
-            plans,
-            posts_db,
-            post_ids_processed,
-            send=send_replies,
-            simulate=simulate_replies,
-            skip_tracking=skip_tracking,
-        )
-        if not current_newest_comment_id:
-            current_newest_comment_id = comment.fullname
-            if not skip_tracking:
-                comments_progress.reference.set(
-                    {"newest": current_latest_comment_id}, merge=True
-                )
-
-        # We don't already have an oldest comment from a previous run so set it here
-        if not skip_tracking and not oldest_comment_id:
-            comments_progress.reference.set({"oldest": comment.fullname}, merge=True)
-
-    # If no newer comments, let's go further in the past
-    # At some point there will be no older comments available
-    # reddit only provides up to about 1000 most recent comments
-    # so this will essentially be a no-op
-    if not current_newest_comment_id and oldest_comment_id:
-        for comment in subreddit.comments(params={"after": oldest_comment_id}):
-            comment = reddit_util.Comment(comment)
+        if re.search("warrenplanbot", comment.text, re.IGNORECASE):
             process_post(
                 comment,
                 plans,
@@ -234,9 +213,13 @@ def run_plan_bot(
                 skip_tracking=skip_tracking,
             )
 
+        # update the cursor after processing the comment
+        if not current_newest_comment_id:
+            current_newest_comment_id = comment.fullname
             if not skip_tracking:
-                comments_progress.reference.set(
-                    {"oldest": comment.fullname}, merge=True
+                comments_progress_ref = comments_progress.reference
+                comments_progress_ref.set(
+                    {"newest": current_newest_comment_id}, merge=True
                 )
 
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
