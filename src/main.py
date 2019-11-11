@@ -192,12 +192,7 @@ def run_plan_bot(
     # need to keep track of that and save that as our cursor.  With no
     # specified params, it returns newest 100 comments in the
     # subreddit.
-    comments_params = {}
-    if comments_progress:
-        newest_comment_id = comments_progress.get("newest")
-        if newest_comment_id:
-            # Gets newer comments that our newest comment
-            comments_params["before"] = newest_comment_id
+    comments_params = get_comments_params(comments_progress)
 
     current_newest_comment_id = None
     for comment in subreddit.comments(params=comment_params):
@@ -224,6 +219,17 @@ def run_plan_bot(
 
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
 
+
+def get_comments_params(comments_progress):
+    if comments_progress:
+        newest_comment_id = comments_progress.get("newest")
+        if newest_comment_id:
+            # Gets newer comments that our newest comment
+            return {"before": newest_comment_id}
+
+    # Empty params causes subreddit.comments() to return the newest
+    # comments in the subreddit.
+    return {}
 
 def run_plan_bot_event_handler(event, context):
     start_time = time.time()
