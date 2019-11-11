@@ -215,6 +215,7 @@ def get_comments_params(comments_progress_ref):
     # comments in the subreddit.
     return {}
 
+
 def run_plan_bot_event_handler(event, context):
     start_time = time.time()
     print("Starting plan bot loop")
