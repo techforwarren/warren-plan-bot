@@ -124,7 +124,7 @@ def run_plan_bot(
     if skip_tracking:
         posts_db = None
         post_ids_processed = {}
-        comments_progress = None
+        comments_progress_ref = None
     else:
         db = firestore.Client(project=project)
 
@@ -141,10 +141,7 @@ def run_plan_bot(
         )
 
         # Track progress of comments
-        progress_db = db.collection("progress")
-        comments_progress = db.collection("progress").document("comments").get()
-        if not comments_progress.exists:
-            comments_progress = None
+        comments_progress_ref = db.collection("progress").document("comments")
 
     process_the_post = lambda post: process_post(
         post,
@@ -186,10 +183,10 @@ def run_plan_bot(
     # need to keep track of that and save that as our cursor.  With no
     # specified params, it returns newest 100 comments in the
     # subreddit.
-    comments_params = get_comments_params(comments_progress)
+    comments_params = get_comments_params(comments_progress_ref)
 
     current_newest_comment_id = None
-    for comment in subreddit.comments(params=comment_params):
+    for comment in subreddit.comments(params=comments_params):
         comment = reddit_util.Comment(comment)
         if re.search("warrenplanbot", comment.text, re.IGNORECASE):
             process_the_post(comment)
@@ -198,7 +195,6 @@ def run_plan_bot(
         if not current_newest_comment_id:
             current_newest_comment_id = comment.fullname
             if not skip_tracking:
-                comments_progress_ref = comments_progress.reference
                 comments_progress_ref.set(
                     {"newest": current_newest_comment_id}, merge=True
                 )
@@ -206,12 +202,14 @@ def run_plan_bot(
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
 
 
-def get_comments_params(comments_progress):
-    if comments_progress:
-        newest_comment_id = comments_progress.get("newest")
-        if newest_comment_id:
-            # Gets newer comments that our newest comment
-            return {"before": newest_comment_id}
+def get_comments_params(comments_progress_ref):
+    if comments_progress_ref:
+        comments_progress = comments_progress_ref.get()
+        if comments_progress.exists:
+            newest_comment_id = comments_progress.get("newest")
+            if newest_comment_id:
+                # Gets newer comments that our newest comment
+                return {"before": newest_comment_id}
 
     # Empty params causes subreddit.comments() to return the newest
     # comments in the subreddit.
