@@ -123,6 +123,7 @@ def run_plan_bot(
     if skip_tracking:
         posts_db = None
         post_ids_processed = {}
+        comments_progress = None
     else:
         db = firestore.Client(project=project)
 
@@ -137,6 +138,12 @@ def run_plan_bot(
         post_ids_processed = {post.id for post in posts_replied_to}.union(
             {post.id for post in posts_processed}
         )
+
+        # Track progress of comments
+        progress_db = db.collection("progress")
+        comments_progress = db.collection("progress").document("comments").get()
+        if not comments_progress.exists:
+            comments_progress = None
 
     subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
@@ -177,6 +184,60 @@ def run_plan_bot(
             simulate=simulate_replies,
             skip_tracking=skip_tracking,
         )
+
+    params = {}
+    if comments_progress:
+        newest_comment_id = comments_progress.get("newest")
+        oldest_comment_id = comments_progress.get("oldest")
+
+        if newest_comment_id:
+            params["before"] = latest_comment_id
+
+    # Get comments newer than latest
+    current_newest_comment_id = None
+    for comment in subreddit.comments(params=params):
+        comment = reddit_util.Comment(comment)
+        process_post(
+            comment,
+            plans,
+            posts_db,
+            post_ids_processed,
+            send=send_replies,
+            simulate=simulate_replies,
+            skip_tracking=skip_tracking,
+        )
+        if not current_newest_comment_id:
+            current_newest_comment_id = comment.fullname
+            if not skip_tracking:
+                comments_progress.reference.set(
+                    {"newest": current_latest_comment_id}, merge=True
+                )
+
+        # We don't already have an oldest comment from a previous run so set it here
+        if not skip_tracking and not oldest_comment_id:
+            comments_progress.reference.set({"oldest": comment.fullname}, merge=True)
+
+    # If no newer comments, let's go further in the past
+    # At some point there will be no older comments available
+    # reddit only provides up to about 1000 most recent comments
+    # so this will essentially be a no-op
+    if not current_newest_comment_id and oldest_comment_id:
+        for comment in subreddit.comments(params={"after": oldest_comment_id}):
+            comment = reddit_util.Comment(comment)
+            process_post(
+                comment,
+                plans,
+                posts_db,
+                post_ids_processed,
+                send=send_replies,
+                simulate=simulate_replies,
+                skip_tracking=skip_tracking,
+            )
+
+            if not skip_tracking:
+                comments_progress.reference.set(
+                    {"oldest": comment.fullname}, merge=True
+                )
 
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
 
