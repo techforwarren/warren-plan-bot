@@ -146,6 +146,16 @@ def run_plan_bot(
         if not comments_progress.exists:
             comments_progress = None
 
+    process_the_post = lambda post: process_post(
+        post,
+        plans,
+        posts_db,
+        post_ids_processed,
+        send=send_replies,
+        simulate=simulate_replies,
+        skip_tracking=skip_tracking,
+    )
+
     subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
     # Get the subreddit
@@ -158,15 +168,7 @@ def run_plan_bot(
     ):
         # turn this into our more standardized class
         submission = reddit_util.Submission(submission)
-        process_post(
-            submission,
-            plans,
-            posts_db,
-            post_ids_processed,
-            send=send_replies,
-            simulate=simulate_replies,
-            skip_tracking=skip_tracking,
-        )
+        process_the_post(submission)
 
     for pushshift_comment in pushshift.search_comments(
         "warrenplanbot", subreddit_name, limit=limit
@@ -176,15 +178,7 @@ def run_plan_bot(
             praw.models.Comment(reddit, _data=pushshift_comment)
         )
 
-        process_post(
-            comment,
-            plans,
-            posts_db,
-            post_ids_processed,
-            send=send_replies,
-            simulate=simulate_replies,
-            skip_tracking=skip_tracking,
-        )
+        process_the_post(comment)
 
     # Get new comments since we last ran.
     #
@@ -198,15 +192,7 @@ def run_plan_bot(
     for comment in subreddit.comments(params=comment_params):
         comment = reddit_util.Comment(comment)
         if re.search("warrenplanbot", comment.text, re.IGNORECASE):
-            process_post(
-                comment,
-                plans,
-                posts_db,
-                post_ids_processed,
-                send=send_replies,
-                simulate=simulate_replies,
-                skip_tracking=skip_tracking,
-            )
+            process_the_post(comment)
 
         # update the cursor after processing the comment
         if not current_newest_comment_id:
