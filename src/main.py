@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import time
 
 import click
@@ -123,6 +124,7 @@ def run_plan_bot(
     if skip_tracking:
         posts_db = None
         post_ids_processed = {}
+        comments_progress_ref = None
     else:
         db = firestore.Client(project=project)
 
@@ -138,6 +140,19 @@ def run_plan_bot(
             {post.id for post in posts_processed}
         )
 
+        # Track progress of comments
+        comments_progress_ref = db.collection("progress").document("comments")
+
+    process_the_post = lambda post: process_post(
+        post,
+        plans,
+        posts_db,
+        post_ids_processed,
+        send=send_replies,
+        simulate=simulate_replies,
+        skip_tracking=skip_tracking,
+    )
+
     subreddit_name = "ElizabethWarren" if praw_site == "prod" else "WPBSandbox"
 
     # Get the subreddit
@@ -150,15 +165,7 @@ def run_plan_bot(
     ):
         # turn this into our more standardized class
         submission = reddit_util.Submission(submission)
-        process_post(
-            submission,
-            plans,
-            posts_db,
-            post_ids_processed,
-            send=send_replies,
-            simulate=simulate_replies,
-            skip_tracking=skip_tracking,
-        )
+        process_the_post(submission)
 
     for pushshift_comment in pushshift.search_comments(
         "warrenplanbot", subreddit_name, limit=limit
@@ -168,17 +175,39 @@ def run_plan_bot(
             praw.models.Comment(reddit, _data=pushshift_comment)
         )
 
-        process_post(
-            comment,
-            plans,
-            posts_db,
-            post_ids_processed,
-            send=send_replies,
-            simulate=simulate_replies,
-            skip_tracking=skip_tracking,
-        )
+        process_the_post(comment)
+
+    # Get new comments since we last ran.
+    #
+    # subreddit.comments() returns the newest comments first so we
+    # need to reverse it so that the comments we're iterating over are getting newer.
+    # With no specified params, it returns newest 100 comments in the
+    # subreddit.
+    comments_params = get_comments_params(comments_progress_ref)
+    for comment in reversed(list(subreddit.comments(params=comments_params))):
+        comment = reddit_util.Comment(comment)
+        if re.search("warrenplanbot", comment.text, re.IGNORECASE):
+            process_the_post(comment)
+
+        # update the cursor after processing the comment
+        if not skip_tracking:
+            comments_progress_ref.set({"newest": comment.fullname}, merge=True)
 
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
+
+
+def get_comments_params(comments_progress_ref):
+    if comments_progress_ref:
+        comments_progress = comments_progress_ref.get()
+        if comments_progress.exists:
+            newest_comment_id = comments_progress.get("newest")
+            if newest_comment_id:
+                # Gets newer comments that our newest comment
+                return {"before": newest_comment_id}
+
+    # Empty params causes subreddit.comments() to return the newest
+    # comments in the subreddit.
+    return {}
 
 
 def run_plan_bot_event_handler(event, context):

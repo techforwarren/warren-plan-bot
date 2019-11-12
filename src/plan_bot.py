@@ -198,13 +198,16 @@ def process_post(
     matching_strategy=Strategy.lsa_gensim_v3,
 ):
     if post_ids_processed is None:
-        post_ids_processed = {}
-
-    print(f"Processing post {post.type}: {post.id}")
+        post_ids_processed = set()
 
     # Make sure we don't reply to a post we've already processed
     if post.id in post_ids_processed:
         return
+
+    print(f"Processing post {post.type}: {post.id}")
+
+    # Add this post to the set of processed posts
+    post_ids_processed.add(post.id)
 
     # Never try to reply if a post is locked
     if post.locked:
