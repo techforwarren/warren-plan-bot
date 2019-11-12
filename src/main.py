@@ -180,24 +180,18 @@ def run_plan_bot(
     # Get new comments since we last ran.
     #
     # subreddit.comments() returns the newest comments first so we
-    # need to keep track of that and save that as our cursor.  With no
-    # specified params, it returns newest 100 comments in the
+    # need to reverse it so that the comments we're iterating over are getting newer.
+    # With no specified params, it returns newest 100 comments in the
     # subreddit.
     comments_params = get_comments_params(comments_progress_ref)
-
-    current_newest_comment_id = None
-    for comment in subreddit.comments(params=comments_params):
+    for comment in reversed(list(subreddit.comments(params=comments_params))):
         comment = reddit_util.Comment(comment)
         if re.search("warrenplanbot", comment.text, re.IGNORECASE):
             process_the_post(comment)
 
         # update the cursor after processing the comment
-        if not current_newest_comment_id:
-            current_newest_comment_id = comment.fullname
-            if not skip_tracking:
-                comments_progress_ref.set(
-                    {"newest": current_newest_comment_id}, merge=True
-                )
+        if not skip_tracking:
+            comments_progress_ref.set({"newest": comment.fullname}, merge=True)
 
     print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
 
