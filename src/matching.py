@@ -272,7 +272,7 @@ class Strategy:
         )
 
     @staticmethod
-    def lsa_gensim_v2(plans: list, post_text: str, threshold=82, **kwargs):
+    def lsa_gensim_v2(plans: list, post_text: str, threshold=81, **kwargs):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
@@ -314,7 +314,7 @@ class Strategy:
 
     @staticmethod
     def lsa_tfidf_composite_gensim_v2(
-        plans: list, post_text: str, threshold=82, **kwargs
+        plans: list, post_text: str, threshold=81, **kwargs
     ):
         """
         Composite of LSA and TFIDF methods
@@ -336,7 +336,7 @@ class Strategy:
         return lsa_match
 
     @staticmethod
-    def lsa_gensim_v3(plans: list, post_text: str, threshold=82, **kwargs):
+    def lsa_gensim_v3(plans: list, post_text: str, threshold=81.5, **kwargs):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 

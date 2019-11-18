@@ -218,12 +218,12 @@
   {
     "text": "!WarrenPlanBot does she have a plan for public housing",
     "source": "/r/WPBSandbox",
-    "match": "safe_affordable_housing"
+    "match": "protecting_empowering_renters"
   },
   {
     "text": "!WarrenPlanBot what is her plan for affordable public housing?",
     "source": "sh",
-    "match": "safe_affordable_housing"
+    "match": "protecting_empowering_renters"
   },
   {
     "text": "!WarrenPlanBot student debt cancellation",
@@ -258,6 +258,16 @@
     "text": "!WarrenPlanBot this won't match anything ideally",
     "source": "jg",
     "match": null
+  },
+  {
+    "text": "!WarrenPlanBot medicare for all transition",
+    "source": "jg",
+    "match": "m4a_transition"
+  },
+  {
+    "text": "!WarrenPlanBot renters",
+    "source": "jg",
+    "match": "protecting_empowering_renters"
   },
   {
     "text": "!WarrenPlanBot what are Warren's thoughts on universal basic income?",
