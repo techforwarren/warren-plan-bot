@@ -374,27 +374,11 @@ def process_flags(text):
     Identifies flags in the text. Removes the flags from the text and
     returns the tuple (remaining_text, options).
     """
-    # cleaned_args = []
-    # options = {
-    #     "parent": False,
-    #     "why-warren": False
-    # }
-
-    # for arg in text.split():
-    #     if word.lower() in ("--parent", "--tell-parent"):
-    #         options["parent"] = True
-    #     elif word.lower() == "why-warren":
-    #         options["why-warren"] = True
-    #     else:
-    #         cleaned_args.append(word)
-
-    # return (" ".join)
-
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--parent", "--tell-parent", action="store_true")
     parser.add_argument("--why-warren", action="store_true")
     parser.add_argument("rest", nargs=argparse.REMAINDER)
     options, unknown = parser.parse_known_args(text.split())
-    text = " ".join(options.rest)
+    remaining_text = " ".join(options.rest)
     del options.rest  # we don't need this, and removing it makes testing easier
-    return (text, vars(options))
+    return (remaining_text, vars(options))
