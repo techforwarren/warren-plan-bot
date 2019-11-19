@@ -24,6 +24,8 @@ TIME_IN_LOOP = os.getenv(
 
 click_kwargs = {"show_envvar": True, "show_default": True}
 
+POST_IDS_PROCESSED = {}
+
 
 @click.command()
 @click.option(
@@ -123,22 +125,18 @@ def run_plan_bot(
 
     if skip_tracking:
         posts_db = None
-        post_ids_processed = {}
         comments_progress_ref = None
     else:
         db = firestore.Client(project=project)
 
         posts_db = db.collection("posts")
 
-        # Load the list of posts replied to or start with empty list if none
-        posts_replied_to = posts_db.where("replied", "==", True).stream()
-        # TODO migrate posts replied=True to have processed=True, and remove the query above (#84)
-        posts_processed = posts_db.where("processed", "==", True).stream()
+        # get post ids from database only if we don't already have them
+        if not POST_IDS_PROCESSED:
+            # Load the list of posts processed to or start with empty list if none
+            posts_processed = posts_db.where("processed", "==", True).stream()
 
-        # include processed posts in replied to
-        post_ids_processed = {post.id for post in posts_replied_to}.union(
-            {post.id for post in posts_processed}
-        )
+            POST_IDS_PROCESSED.update({post.id for post in posts_processed})
 
         # Track progress of comments
         comments_progress_ref = db.collection("progress").document("comments")
@@ -147,7 +145,7 @@ def run_plan_bot(
         post,
         plans,
         posts_db,
-        post_ids_processed,
+        POST_IDS_PROCESSED,
         send=send_replies,
         simulate=simulate_replies,
         skip_tracking=skip_tracking,
