@@ -360,29 +360,33 @@ def test_get_trigger_line():
 
 
 def test_process_flags():
-    assert plan_bot.process_flags("what's up") == ("what's up", {"parent": False})
+    assert plan_bot.process_flags("what's up") == (
+        "what's up",
+        {"parent": False, "why_warren": False},
+    )
 
     assert plan_bot.process_flags("--tell-parent what's up") == (
         "what's up",
-        {"parent": True},
+        {"parent": True, "why_warren": False},
     )
 
     assert plan_bot.process_flags("--parent what's up") == (
         "what's up",
-        {"parent": True},
+        {"parent": True, "why_warren": False},
     )
 
     assert plan_bot.process_flags("-parent what's up") == (
-        "-parent what's up",
-        {"parent": False},
+        "what's up",
+        {"parent": False, "why_warren": False},
     )
 
     assert plan_bot.process_flags("--parnet what's up") == (
-        "--parnet what's up",
-        {"parent": False},
+        "what's up",
+        {"parent": False, "why_warren": False},
     )
 
-    assert plan_bot.process_flags("--tell-parent, what's up") == (
-        "what's up",
-        {"parent": True},
-    )
+    # assert plan_bot.process_flags("--tell-parent, what's up") == (
+    #     "what's up",
+    #     {"parent": True, "why-waren": False},
+    # )
+

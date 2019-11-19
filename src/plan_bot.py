@@ -6,6 +6,8 @@ from praw.exceptions import APIException
 from matching import RuleStrategy, Strategy
 from reddit_util import standardize
 
+import argparse
+
 
 def parent_reply_prefix(post):
     return f"/u/{post.author.name} asked me to chime in!" f"\n\n"
@@ -372,13 +374,27 @@ def process_flags(text):
     Identifies flags in the text. Removes the flags from the text and
     returns the tuple (remaining_text, options).
     """
-    options = {"parent": False}
+    # cleaned_args = []
+    # options = {
+    #     "parent": False,
+    #     "why-warren": False
+    # }
 
-    match = re.match(
-        r"^(?:--parent|--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
-    )
-    if match:
-        options["parent"] = True
-        text = match.group(1)
+    # for arg in text.split():
+    #     if word.lower() in ("--parent", "--tell-parent"):
+    #         options["parent"] = True
+    #     elif word.lower() == "why-warren":
+    #         options["why-warren"] = True
+    #     else:
+    #         cleaned_args.append(word)
 
-    return (text, options)
+    # return (" ".join)
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--parent", "--tell-parent", action="store_true")
+    parser.add_argument("--why-warren", action="store_true")
+    parser.add_argument("rest", nargs=argparse.REMAINDER)
+    options, unknown = parser.parse_known_args(text.split())
+    text = " ".join(options.rest)
+    del options.rest  # we don't need this, and removing it makes testing easier
+    return (text, vars(options))
