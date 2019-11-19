@@ -24,7 +24,7 @@ TIME_IN_LOOP = os.getenv(
 
 click_kwargs = {"show_envvar": True, "show_default": True}
 
-POST_IDS_PROCESSED = {}
+POST_IDS_PROCESSED = set()
 
 
 @click.command()
