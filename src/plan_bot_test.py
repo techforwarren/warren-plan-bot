@@ -375,6 +375,11 @@ def test_process_flags():
         {"parent": True, "why_warren": False},
     )
 
+    assert plan_bot.process_flags("--why-warren what's up") == (
+        "what's up",
+        {"parent": False, "why_warren": True},
+    )
+
     assert plan_bot.process_flags("-parent what's up") == (
         "what's up",
         {"parent": False, "why_warren": False},
@@ -388,5 +393,15 @@ def test_process_flags():
     assert plan_bot.process_flags("--tell-parent, what's up") == (
         "what's up",
         {"parent": False, "why_warren": False},
+    )
+
+    assert plan_bot.process_flags("--parent --why-warren what's up") == (
+        "what's up",
+        {"parent": True, "why_warren": True},
+    )
+
+    assert plan_bot.process_flags("--why-warren --parent what's up") == (
+        "what's up",
+        {"parent": True, "why_warren": True},
     )
 
