@@ -130,15 +130,10 @@ def run_plan_bot(
 
         posts_db = db.collection("posts")
 
-        # Load the list of posts replied to or start with empty list if none
-        posts_replied_to = posts_db.where("replied", "==", True).stream()
-        # TODO migrate posts replied=True to have processed=True, and remove the query above (#84)
+        # Load the list of posts processed to or start with empty list if none
         posts_processed = posts_db.where("processed", "==", True).stream()
 
-        # include processed posts in replied to
-        post_ids_processed = {post.id for post in posts_replied_to}.union(
-            {post.id for post in posts_processed}
-        )
+        post_ids_processed = {post.id for post in posts_processed}
 
         # Track progress of comments
         comments_progress_ref = db.collection("progress").document("comments")
