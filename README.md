@@ -88,7 +88,7 @@ This will allow you to run all the commands below
 
 `./scripts/autoformat.sh`
 
-### Preprocess plans (repeat every time a new plan is added)
+### Adding a new plan
 
 #### Download plans
 
@@ -106,7 +106,7 @@ This will allow you to run all the commands below
 
 `python scripts/score_strategies.py`
 
-We can matching strategies against labeled posts in `labeled_posts.json`
+This tests matching strategies against labeled posts in `labeled_posts.json`
 
 Posts in that file have the form
 
@@ -284,3 +284,12 @@ want to bite off something larger, or have new ideas for contribution, start a c
 1. If you've changed or created any new scripts or major functionality, remember to update the documentation in this file.
 
 1. Submit a [pull request](https://github.com/techforwarren/warren-plan-bot/compare)
+
+### Code style
+
+All code that's submitted for a PR should be autoformatted using
+
+- `black`
+- `isort`
+
+You can set up your editor however you'd like, or you can just run `./scripts/autoformat.sh`
