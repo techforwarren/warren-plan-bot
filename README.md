@@ -121,6 +121,15 @@ Posts in that file have the form
 
 Strategies are defined as static methods of the Strategy class in `matching.py`
 
+#### Add the latest trigger posts from subreddit to labeled_posts.json
+
+This requires valid praw credentials
+
+`python scripts/download_recent_trigger_posts.py --praw-site prod`
+
+will pull down up to 100 recent posts where someone has triggered the bot.
+
+This can be used to help update the `labeled_posts.json` file with real user queries. You'll still need to determine the desired matches by hand.
 
 ### Run the bot
 
