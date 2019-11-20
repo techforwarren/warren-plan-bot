@@ -233,45 +233,6 @@ class Strategy:
         }
 
     @staticmethod
-    def token_sort_lsi_v1_composite(
-        plans: list, post_text: str, threshold=60, **kwargs
-    ):
-        """
-        Tries the following strategies in order:
-         1) fuzzy matching based on hardcoded topics
-         2) LSI using gensim models
-        """
-
-        return Strategy._composite_strategy(
-            plans,
-            post_text,
-            [
-                partial(Strategy.token_sort_ratio, threshold=threshold),
-                partial(Strategy.lsi_gensim_v1, threshold=80),
-            ],
-            **kwargs,
-        )
-
-    @staticmethod
-    def lsi_gensim_v1(plans: list, post_text, threshold=80, **kwargs):
-        """
-        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
-
-        Using gensim
-
-        Models have been precomputed using ../scripts/update_gensim_models_v1.py
-        """
-        return Strategy._gensim_similarity(
-            plans,
-            post_text,
-            "lsi",
-            models.LsiModel,
-            similarities.MatrixSimilarity,
-            threshold,
-            **kwargs,
-        )
-
-    @staticmethod
     def lsa_gensim_v2(plans: list, post_text: str, threshold=81, **kwargs):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
