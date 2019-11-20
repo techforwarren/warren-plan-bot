@@ -77,7 +77,7 @@ def update_gensim_models():
     )
 
     plan_ids_for_matching = (
-        [p["id"] for p in parsed_plans]
+        [p["id"] for p in plans_from_repo]
         + [p["id"] for p in plan_clusters]
         + [p["id"] for p in plan_clusters]
         + [p["id"] for p in plan_clusters]
