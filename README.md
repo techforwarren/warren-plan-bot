@@ -80,29 +80,33 @@ This will allow you to run all the commands below
 
 `docker exec -it planbot bash`
 
-### Run tests
+### Useful commands
+
+#### Run tests
 
 `pytest`
 
-### Format code
+#### Format code
 
 `./scripts/autoformat.sh`
 
-### Adding a new plan
+#### Add a new plan
 
-#### Download plans
+First, add the plan to `plans.json`, then
+
+##### Download plans
 
 `python scripts/download_plans.py`
 
-#### Extract plan text
+##### Extract plan text
 
 `python scripts/parse_plans.py`
 
-#### Regenerate models
+##### Regenerate models
 
 `./scripts/update_models.sh`
 
-### Test strategies for matching
+#### Test out strategies for matching
 
 `python scripts/score_strategies.py`
 
