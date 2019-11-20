@@ -290,6 +290,7 @@
     "source": "/r/ElizabethWarren",
     "match": "health_care",
     "alternate_matches": [
+      "medicare_for_all_cluster",
       "black_maternal_mortality",
       "invest_in_rural_america",
       "reproductive_rights"
@@ -298,9 +299,9 @@
   {
     "text": "!WarrenPlanBot what is Senator Warren's plan for Medicare for all?",
     "source": "/r/ElizabethWarren",
-    "match": "health_care",
+    "match": "medicare_for_all_cluster",
     "alternate_matches": [
-      "paying_for_m4a"
+      "healthcare"
     ]
   },
   {
@@ -313,6 +314,7 @@
     "source": "/r/ElizabethWarren",
     "match": "health_care",
     "alternate_matches": [
+      "medicare_for_all_cluster",
       "black_maternal_mortality",
       "invest_in_rural_america",
       "reproductive_rights"
@@ -452,6 +454,7 @@
     "match": null,
     "alternate_matches": [
       "health_care",
+      "medicare_for_all_cluster",
       "expanding_social_security"
     ]
   },
@@ -493,8 +496,7 @@
   {
     "text": "!WarrenPlanBot medicare for all",
     "source": "/r/ElizabethWarren",
-    "match": "health_care",
-    "alternate_matches": "paying_for_m4a"
+    "match": "medicare_for_all_cluster"
   },
   {
     "text": "I'm always glad to hear good news! Hope she does well this weekend, too.\n\n!WarrenPlanBot rural",
