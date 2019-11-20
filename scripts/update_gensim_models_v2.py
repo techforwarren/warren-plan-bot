@@ -70,12 +70,16 @@ def update_gensim_models():
 
     documents_for_matching = (
         documents_for_training
+        + [p["topic"] for p in plan_clusters]
+        + [p["display_title"] for p in plan_clusters]
         + [p["topic"] for p in plans_from_repo]
         + [p["display_title"] for p in plans_from_repo]
     )
 
     plan_ids_for_matching = (
         [p["id"] for p in parsed_plans]
+        + [p["id"] for p in plan_clusters]
+        + [p["id"] for p in plan_clusters]
         + [p["id"] for p in plan_clusters]
         + [p["id"] for p in plans_from_repo]
         + [p["id"] for p in plans_from_repo]
