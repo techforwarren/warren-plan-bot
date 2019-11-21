@@ -1,3 +1,4 @@
+import argparse
 import re
 
 from google.cloud import firestore
@@ -5,8 +6,6 @@ from praw.exceptions import APIException
 
 from matching import RuleStrategy, Strategy
 from reddit_util import standardize
-
-import argparse
 
 
 def parent_reply_prefix(post):

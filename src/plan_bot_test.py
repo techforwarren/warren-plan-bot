@@ -256,7 +256,6 @@ def test_process_post_matches_by_display_title_with_parent_option(
     )
 
 
-### NEW ###
 @mock.patch("plan_bot.create_db_record")
 @mock.patch("plan_bot.build_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
@@ -314,8 +313,6 @@ def test_process_post_matches_by_verbatim_with_parent_option(
         simulate=False,
         parent=True,
     )
-
-    ###ENDNEW###
 
 
 @mock.patch("plan_bot.create_db_record")
