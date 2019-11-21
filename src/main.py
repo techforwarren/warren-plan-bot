@@ -19,8 +19,8 @@ PLANS_FILE = "plans.json"
 PLANS_CLUSTERS_FILE = "plan_clusters.json"
 VERBATIMS_FILE = "verbatims.json"
 
-TIME_IN_LOOP = os.getenv(
-    "TIME_IN_LOOP", 40
+TIME_IN_LOOP = float(
+    os.getenv("TIME_IN_LOOP", 40)
 )  # seconds to spend in loop when calling from event handler. this should be less than the time between running iterations of the cloud function
 
 click_kwargs = {"show_envvar": True, "show_default": True}

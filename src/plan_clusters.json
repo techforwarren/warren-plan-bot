@@ -15,5 +15,15 @@
     ],
     "url": "https://elizabethwarren.com/plans#end-washington-corruption",
     "additional_training_text": "corruption end corruption"
+  },
+  {
+    "id": "m4a_cluster",
+    "topic": "medicare for all",
+    "display_title": "Medicare for All",
+    "plan_ids": [
+      "health_care",
+      "m4a_transition",
+      "paying_for_m4a"
+    ]
   }
 ]
