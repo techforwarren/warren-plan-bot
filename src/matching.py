@@ -389,6 +389,20 @@ class RuleStrategy:
     """
 
     @staticmethod
+    def match_verbatim(plans: list, verbatim_id: str, **kwargs):
+        """
+        Match exactly to a verbatim message's ID.
+        """
+        for plan in plans:
+            if plan["id"] == verbatim_id:
+                return {
+                    "match": verbatim_id,
+                    "confidence": 100,
+                    "plan": plan,
+                    "verbatim": True,
+                }
+
+    @staticmethod
     def match_display_title(plans: list, post_text: str, **kwargs):
         """
         Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,

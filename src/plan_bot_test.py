@@ -207,7 +207,9 @@ def test_process_post_matches_by_display_title(
 
     plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+    mock_build_response_text.assert_called_once_with(
+        expected_matching_plan, post, verbatim=None
+    )
     mock_reply.assert_called_once_with(
         post, "response text", send=False, simulate=False, parent=False
     )
@@ -240,7 +242,9 @@ def test_process_post_matches_by_display_title_with_parent_option(
 
     plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+    mock_build_response_text.assert_called_once_with(
+        expected_matching_plan, post, verbatim=None
+    )
 
     mock_reply.assert_called_once_with(
         post,
@@ -289,7 +293,7 @@ def test_process_post_matches_real_plan(
 
     plan_bot.process_post(post, plans, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(plans[0], post)
+    mock_build_response_text.assert_called_once_with(plans[0], post, verbatim=None)
     mock_reply.assert_called_once_with(
         post, "some response text", send=False, simulate=False, parent=False
     )
