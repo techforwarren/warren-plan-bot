@@ -63,14 +63,14 @@ def build_response_text_pure_plan(plan_record, post):
 
 def build_response_text(plan_record, post, **kwargs):
     if kwargs.get("verbatim"):
-        return plan_record["text"]
+        return build_verbatim_response_text(plan_record)
     if plan_record.get("is_cluster"):
         return build_response_text_plan_cluster(plan_record, post)
     return build_response_text_pure_plan(plan_record, post)
 
 
 def build_verbatim_response_text(plan_record):
-    return plan_record["text"]
+    return f"""{plan_record["text"]}{footer()}"""
 
 
 def build_no_match_response_text(potential_plan_matches, post):
@@ -245,22 +245,22 @@ def process_post(
     post_text, options = process_flags(get_trigger_line(post.text))
 
     if options.get("why_warren"):
-        match_info = RuleStrategy.match_plan_id(plans, "why_warren")
-
-    match_info = (
-        RuleStrategy.request_help(plans, post_text, post=post)
-        or RuleStrategy.request_plan_list(plans, post_text, post=post)
-        or RuleStrategy.match_display_title(plans, post_text, post=post)
-        or matching_strategy(plans, post_text, post=post)
-    )
+        match_info = RuleStrategy.match_verbatim(plans, "why_warren")
+    else:
+        match_info = (
+            RuleStrategy.request_help(plans, post_text, post=post)
+            or RuleStrategy.request_plan_list(plans, post_text, post=post)
+            or RuleStrategy.match_display_title(plans, post_text, post=post)
+            or matching_strategy(plans, post_text, post=post)
+        )
 
     match = match_info.get("match")
     operation = match_info.get("operation")
     plan_confidence = match_info.get("confidence")
     plan = match_info.get("plan", {})
     potential_matches = match_info.get("potential_matches")
+    verbatim = match_info.get("verbatim")
     plan_id = plan.get("id")
-    verbatim = plan.get("verbatim")
 
     # Create partial db entry from known values, placeholder defaults for mutable values
     # Mark post as processed _before_ we reply to prevent double-posting

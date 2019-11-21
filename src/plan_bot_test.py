@@ -55,6 +55,7 @@ PLANS = [
         "display_title": "Another Title To Really Make a Person Think",
         "url": "anotherplan.plan",
     },
+    {"id": "why_warren", "text": "This is verbatim."},
 ]
 
 
@@ -255,6 +256,68 @@ def test_process_post_matches_by_display_title_with_parent_option(
     )
 
 
+### NEW ###
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.reply")
+@pytest.mark.parametrize(
+    ["post_text", "expected_matching_plan"], [("!WarrenPlanBot --why-warren", PLANS[2])]
+)
+def test_process_post_matches_by_verbatim(
+    mock_reply,
+    mock_build_response_text,
+    mock_create_db_record,
+    post_text,
+    expected_matching_plan,
+):
+    post = MockSubmission(post_text)
+
+    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_called_once_with(
+        expected_matching_plan, post, verbatim=True
+    )
+    mock_reply.assert_called_once_with(
+        post, "response text", send=False, simulate=False, parent=False
+    )
+
+
+@mock.patch("plan_bot.create_db_record")
+@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.reply")
+@pytest.mark.parametrize(
+    ["post_text", "expected_matching_plan"],
+    [
+        ("!WarrenPlanBot --parent --why-warren", PLANS[2]),
+        ("!WarrenPlanBot --why-warren --tell-parent", PLANS[2]),
+    ],
+)
+def test_process_post_matches_by_verbatim_with_parent_option(
+    mock_reply,
+    mock_build_response_text,
+    mock_create_db_record,
+    post_text,
+    expected_matching_plan,
+):
+    post = MockSubmission(post_text)
+
+    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+
+    mock_build_response_text.assert_called_once_with(
+        expected_matching_plan, post, verbatim=True
+    )
+
+    mock_reply.assert_called_once_with(
+        post,
+        "/u/aredditusername asked me to chime in!\n\nresponse text",
+        send=False,
+        simulate=False,
+        parent=True,
+    )
+
+    ###ENDNEW###
+
+
 @mock.patch("plan_bot.create_db_record")
 @mock.patch("plan_bot.build_response_text")
 @mock.patch("plan_bot.reply")
@@ -408,4 +471,3 @@ def test_process_flags():
         "what's up",
         {"parent": True, "why_warren": True},
     )
-
