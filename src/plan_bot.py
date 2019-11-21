@@ -137,7 +137,6 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
 
     if simulate:
         print(f"[simulated] Bot replying to {post.type}: {post.id}")
-        print(reply_string)
         return True
     if send:
         print(f"Bot replying to {post.type}: {post.id}")
