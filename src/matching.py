@@ -6,9 +6,9 @@ from os import path
 
 from fuzzywuzzy import fuzz
 from gensim import corpora, models, similarities
+from gensim.parsing.preprocessing import STOPWORDS as GENSIM_STOPWORDS
 from gensim.parsing.preprocessing import (
     preprocess_string,
-    remove_stopwords,
     stem_text,
     strip_multiple_whitespaces,
     strip_numeric,
@@ -27,6 +27,23 @@ GENSIM_V3_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_
 logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
+MODIFIED_GENSIM_STOPWORDS = set().union(GENSIM_STOPWORDS) - {"all"}
+
+CUSTOM_STOPWORDS = {
+    "elizabeth",
+    "warren",
+    "plan",
+    "warrenplanbot",
+    "warrenplanbotdev",
+    "sen",
+    "senator",
+    "thanks",
+    "thank",
+    "you",
+    "show",
+}
+
+
 class Preprocess:
     """
     Defines strategies used for preprocessing text before model building and similarity scoring
@@ -35,25 +52,8 @@ class Preprocess:
     """
 
     @staticmethod
-    def _remove_custom_stopwords(s):
-        return " ".join(
-            w
-            for w in s.split()
-            if w.lower()
-            not in {
-                "elizabeth",
-                "warren",
-                "plan",
-                "warrenplanbot",
-                "warrenplanbotdev",
-                "sen",
-                "senator",
-                "thanks",
-                "thank",
-                "you",
-                "show",
-            }
-        )
+    def _remove_stopwords(s, stopwords=CUSTOM_STOPWORDS):
+        return " ".join(w for w in s.split() if w.lower() not in stopwords)
 
     @staticmethod
     def preprocess_gensim_v1(doc):
@@ -63,8 +63,8 @@ class Preprocess:
             strip_punctuation,
             strip_multiple_whitespaces,
             strip_numeric,
-            remove_stopwords,
-            Preprocess._remove_custom_stopwords,
+            partial(Preprocess._remove_stopwords, stopwords=GENSIM_STOPWORDS),
+            Preprocess._remove_stopwords,
             strip_short,  # remove words shorter than 3 chars
             stem_text,  # This is the Porter stemmer
         ]
@@ -231,45 +231,6 @@ class Strategy:
                 )
             ),
         }
-
-    @staticmethod
-    def token_sort_lsi_v1_composite(
-        plans: list, post_text: str, threshold=60, **kwargs
-    ):
-        """
-        Tries the following strategies in order:
-         1) fuzzy matching based on hardcoded topics
-         2) LSI using gensim models
-        """
-
-        return Strategy._composite_strategy(
-            plans,
-            post_text,
-            [
-                partial(Strategy.token_sort_ratio, threshold=threshold),
-                partial(Strategy.lsi_gensim_v1, threshold=80),
-            ],
-            **kwargs,
-        )
-
-    @staticmethod
-    def lsi_gensim_v1(plans: list, post_text, threshold=80, **kwargs):
-        """
-        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
-
-        Using gensim
-
-        Models have been precomputed using ../scripts/update_gensim_models_v1.py
-        """
-        return Strategy._gensim_similarity(
-            plans,
-            post_text,
-            "lsi",
-            models.LsiModel,
-            similarities.MatrixSimilarity,
-            threshold,
-            **kwargs,
-        )
 
     @staticmethod
     def lsa_gensim_v2(plans: list, post_text: str, threshold=81, **kwargs):
