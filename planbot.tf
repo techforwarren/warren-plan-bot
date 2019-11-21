@@ -19,7 +19,9 @@ locals {
   function_name = "run-plan-bot"
   function_storage_bucket_object = "plan_bot.zip"
   limit = "20"
-  timeout = 100
+  schedule = "*/2 * * * *" // every 2 minutes
+  timeout = 160 // longer than the schedule interval
+  time_in_loop = 100 // shorter than the schedule interval
 }
 
 provider "google" {
@@ -43,7 +45,7 @@ resource "google_pubsub_topic" "run_plan_bot" {
 resource "google_cloud_scheduler_job" "run_plan_bot" {
   name = "run-plan-bot"
   description = "run the plan bot cloud function"
-  schedule = "* * * * *"
+  schedule = local.schedule
 
   pubsub_target {
     topic_name = google_pubsub_topic.run_plan_bot.id
@@ -101,6 +103,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
     SEND_REPLIES = var.send_replies
     PRAW_SITE = local.environment
     LIMIT = local.limit
+    TIME_IN_LOOP = local.time_in_loop
   }
 }
 

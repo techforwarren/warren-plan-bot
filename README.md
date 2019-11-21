@@ -80,33 +80,37 @@ This will allow you to run all the commands below
 
 `docker exec -it planbot bash`
 
-### Run tests
+### Useful commands
+
+#### Run tests
 
 `pytest`
 
-### Format code
+#### Format code
 
 `./scripts/autoformat.sh`
 
-### Preprocess plans (repeat every time a new plan is added)
+#### Add a new plan
 
-#### Download plans
+First, add the plan to `plans.json`, then
+
+##### Download plans
 
 `python scripts/download_plans.py`
 
-#### Extract plan text
+##### Extract plan text
 
 `python scripts/parse_plans.py`
 
-#### Regenerate models
+##### Regenerate models
 
 `./scripts/update_models.sh`
 
-### Test strategies for matching
+#### Test out strategies for matching
 
 `python scripts/score_strategies.py`
 
-We can matching strategies against labeled posts in `labeled_posts.json`
+This tests matching strategies against labeled posts in `labeled_posts.json`
 
 Posts in that file have the form
 
@@ -121,6 +125,15 @@ Posts in that file have the form
 
 Strategies are defined as static methods of the Strategy class in `matching.py`
 
+#### Add the latest trigger posts from subreddit to labeled_posts.json
+
+This requires valid praw credentials
+
+`python scripts/download_recent_trigger_posts.py --praw-site prod`
+
+will pull down up to 100 recent posts where someone has triggered the bot.
+
+This can be used to help update the `labeled_posts.json` file with real user queries. You'll still need to determine the desired matches by hand.
 
 ### Run the bot
 
@@ -284,3 +297,12 @@ want to bite off something larger, or have new ideas for contribution, start a c
 1. If you've changed or created any new scripts or major functionality, remember to update the documentation in this file.
 
 1. Submit a [pull request](https://github.com/techforwarren/warren-plan-bot/compare)
+
+### Code style
+
+All code that's submitted for a PR should be autoformatted using
+
+- `black`
+- `isort`
+
+You can set up your editor however you'd like, or you can just run `./scripts/autoformat.sh`
