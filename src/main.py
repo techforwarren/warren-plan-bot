@@ -127,8 +127,6 @@ def run_plan_bot(
     with open(VERBATIMS_FILE) as json_file:
         verbatims = json.load(json_file)
 
-    plans = plans + verbatims
-
     if skip_tracking:
         posts_db = None
         comments_progress_ref = None
@@ -150,6 +148,7 @@ def run_plan_bot(
     process_the_post = lambda post: process_post(
         post,
         plans,
+        verbatims,
         posts_db,
         POST_IDS_PROCESSED,
         send=send_replies,

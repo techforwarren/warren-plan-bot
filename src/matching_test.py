@@ -1,5 +1,3 @@
-import pytest
-
 from matching import Preprocess, RuleStrategy
 
 
@@ -14,10 +12,16 @@ def mock_comment(text):
     return comment
 
 
+VERBATIMS = [{"id": "basic_help", "text": ""}, {"id": "advanced_help", "text": ""}]
+
+
 class TestRuleStrategy:
     show_me_the_plans_operation = {"operation": "all_the_plans"}
-    help_operation = {"operation": "help"}
-    advanced_help_operation = {"operation": "advanced_help"}
+    help_operation = {"operation": "verbatim_response", "verbatim": VERBATIMS[0]}
+    advanced_help_operation = {
+        "operation": "verbatim_response",
+        "verbatim": VERBATIMS[1],
+    }
 
     def test_show_me_the_plans(self):
         assert (
@@ -61,27 +65,29 @@ class TestRuleStrategy:
         )
 
     def test_help(self):
-        assert RuleStrategy.request_help([], "help") == self.help_operation
+        assert RuleStrategy.request_help(VERBATIMS, "help") == self.help_operation
 
         assert (
-            RuleStrategy.request_help([], "help\nthanks in advance")
+            RuleStrategy.request_help(VERBATIMS, "help\nthanks in advance")
             == self.help_operation
         )
 
-        assert RuleStrategy.request_help([], "show me the plans") is None
+        assert RuleStrategy.request_help(VERBATIMS, "show me the plans") is None
 
     def test_advanced_help(self):
         assert (
-            RuleStrategy.request_help([], "advanced help")
+            RuleStrategy.request_help(VERBATIMS, "advanced help")
             == self.advanced_help_operation
         )
 
         assert (
-            RuleStrategy.request_help([], "advanced help\nthanks in advance")
+            RuleStrategy.request_help(VERBATIMS, "advanced help\nthanks in advance")
             == self.advanced_help_operation
         )
 
-        assert RuleStrategy.request_help([], "advanced show me the plans") is None
+        assert (
+            RuleStrategy.request_help(VERBATIMS, "advanced show me the plans") is None
+        )
 
 
 class TestPreprocess:

@@ -55,7 +55,12 @@ PLANS = [
         "display_title": "Another Title To Really Make a Person Think",
         "url": "anotherplan.plan",
     },
+]
+
+VERBATIMS = [
     {"id": "why_warren", "text": "This is verbatim."},
+    {"id": "basic_help", "text": "Basic help."},
+    {"id": "advanced_help", "text": "Advanced help."},
 ]
 
 
@@ -128,7 +133,7 @@ def test_reply_send_and_simulate(mock_comment):
 
 
 def test_build_response_text_to_comment(mock_comment, mock_plan):
-    response_text = plan_bot.build_response_text(mock_plan, mock_comment)
+    response_text = plan_bot.build_plan_response_text(mock_plan, mock_comment)
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
@@ -136,7 +141,7 @@ def test_build_response_text_to_comment(mock_comment, mock_plan):
 
 
 def test_build_response_text_to_submission(mock_submission, mock_plan):
-    response_text = plan_bot.build_response_text(mock_plan, mock_submission)
+    response_text = plan_bot.build_plan_response_text(mock_plan, mock_submission)
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
@@ -160,7 +165,9 @@ def test_build_no_match_response_text_no_potential_matches(mock_submission, mock
 def test_build_response_text_to_submission_with_plan_cluster(
     mock_submission, mock_plan_cluster
 ):
-    response_text = plan_bot.build_response_text(mock_plan_cluster, mock_submission)
+    response_text = plan_bot.build_plan_response_text(
+        mock_plan_cluster, mock_submission
+    )
     assert type(response_text) is str
     assert mock_plan_cluster["display_title"] in response_text
     for plan in mock_plan_cluster["plans"]:
@@ -172,7 +179,7 @@ def test_build_response_text_to_all_the_plans_operation(
     mock_submission, mock_plan, mock_plan_cluster
 ):
     response_text = plan_bot.build_all_plans_response_text(
-        [mock_plan] * 5 + [mock_plan_cluster] * 3, mock_submission
+        [mock_plan] * 5 + [mock_plan_cluster] * 3
     )
 
     assert type(response_text) is str
@@ -187,7 +194,7 @@ def test_build_response_text_to_all_the_plans_operation(
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.build_plan_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     ["post_text", "expected_matching_plan"],
@@ -206,18 +213,16 @@ def test_process_post_matches_by_display_title(
 ):
     post = MockSubmission(post_text)
 
-    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(
-        expected_matching_plan, post, verbatim=None
-    )
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
     mock_reply.assert_called_once_with(
         post, "response text", send=False, simulate=False, parent=False
     )
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.build_plan_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     ["post_text", "expected_matching_plan"],
@@ -241,11 +246,9 @@ def test_process_post_matches_by_display_title_with_parent_option(
 ):
     post = MockSubmission(post_text)
 
-    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(
-        expected_matching_plan, post, verbatim=None
-    )
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
 
     mock_reply.assert_called_once_with(
         post,
@@ -257,38 +260,41 @@ def test_process_post_matches_by_display_title_with_parent_option(
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.build_verbatim_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
-    ["post_text", "expected_matching_plan"], [("!WarrenPlanBot --why-warren", PLANS[2])]
+    ["post_text", "expected_verbatim"],
+    [
+        ("!WarrenPlanBot --why-warren", VERBATIMS[0]),
+        ("!WarrenPlanBot help", VERBATIMS[1]),
+        ("!WarrenPlanBot advanced help", VERBATIMS[2]),
+    ],
 )
 def test_process_post_matches_by_verbatim(
     mock_reply,
     mock_build_response_text,
     mock_create_db_record,
     post_text,
-    expected_matching_plan,
+    expected_verbatim,
 ):
     post = MockSubmission(post_text)
 
-    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(
-        expected_matching_plan, post, verbatim=True
-    )
+    mock_build_response_text.assert_called_once_with(verbatim=expected_verbatim)
     mock_reply.assert_called_once_with(
         post, "response text", send=False, simulate=False, parent=False
     )
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="response text")
+@mock.patch("plan_bot.build_verbatim_response_text", return_value="response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
-    ["post_text", "expected_matching_plan"],
+    ["post_text", "expected_verbatim"],
     [
-        ("!WarrenPlanBot --parent --why-warren", PLANS[2]),
-        ("!WarrenPlanBot --why-warren --tell-parent", PLANS[2]),
+        ("!WarrenPlanBot --parent --why-warren", VERBATIMS[0]),
+        ("!WarrenPlanBot --why-warren --tell-parent", VERBATIMS[0]),
     ],
 )
 def test_process_post_matches_by_verbatim_with_parent_option(
@@ -296,15 +302,13 @@ def test_process_post_matches_by_verbatim_with_parent_option(
     mock_build_response_text,
     mock_create_db_record,
     post_text,
-    expected_matching_plan,
+    expected_verbatim,
 ):
     post = MockSubmission(post_text)
 
-    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(
-        expected_matching_plan, post, verbatim=True
-    )
+    mock_build_response_text.assert_called_once_with(verbatim=expected_verbatim)
 
     mock_reply.assert_called_once_with(
         post,
@@ -316,7 +320,7 @@ def test_process_post_matches_by_verbatim_with_parent_option(
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text")
+@mock.patch("plan_bot.build_plan_response_text")
 @mock.patch("plan_bot.reply")
 def test_process_post_wont_reply_to_locked_post(
     mock_reply, mock_build_response_text, mock_create_db_record
@@ -325,14 +329,14 @@ def test_process_post_wont_reply_to_locked_post(
     post = MockSubmission("!WarrenPlanBot A Title for the 21st Century")
     post.locked = True
 
-    plan_bot.process_post(post, PLANS, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
     mock_build_response_text.assert_not_called()
     mock_reply.assert_not_called()
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="some response text")
+@mock.patch("plan_bot.build_plan_response_text", return_value="some response text")
 @mock.patch("plan_bot.reply")
 def test_process_post_matches_real_plan(
     mock_reply, mock_build_response_text, mock_create_db_record
@@ -351,16 +355,16 @@ def test_process_post_matches_real_plan(
         "!WarrenPlanBot what's Senator Warren's plan to get child care to all the children who need it?"
     )
 
-    plan_bot.process_post(post, plans, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, plans, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(plans[0], post, verbatim=None)
+    mock_build_response_text.assert_called_once_with(plans[0], post)
     mock_reply.assert_called_once_with(
         post, "some response text", send=False, simulate=False, parent=False
     )
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_response_text", return_value="some response text")
+@mock.patch("plan_bot.build_plan_response_text", return_value="some response text")
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     "reddit_username", ["warrenplanbot", "warrenplanbotdev", "WarrenPlanBot"]
@@ -383,7 +387,7 @@ def test_process_post_wont_reply_to_warren_plan_bot(
     )
     post.author.name = reddit_username
 
-    plan_bot.process_post(post, plans, posts_db=mock.MagicMock())
+    plan_bot.process_post(post, plans, VERBATIMS, posts_db=mock.MagicMock())
 
     mock_build_response_text.assert_not_called()
     mock_reply.assert_not_called()

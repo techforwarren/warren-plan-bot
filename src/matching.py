@@ -389,18 +389,13 @@ class RuleStrategy:
     """
 
     @staticmethod
-    def match_verbatim(plans: list, verbatim_id: str, **kwargs):
+    def match_verbatim(verbatims: list, verbatim_id: str, **kwargs):
         """
         Match exactly to a verbatim message's ID.
         """
-        for plan in plans:
-            if plan["id"] == verbatim_id:
-                return {
-                    "match": verbatim_id,
-                    "confidence": 100,
-                    "plan": plan,
-                    "verbatim": True,
-                }
+        for verbatim in verbatims:
+            if verbatim["id"] == verbatim_id:
+                return {"operation": "verbatim_response", "verbatim": verbatim}
 
     @staticmethod
     def match_display_title(plans: list, post_text: str, **kwargs):
@@ -409,7 +404,6 @@ class RuleStrategy:
         or the user to include a stop word for some reason
         """
         preprocessed_post = Preprocess.preprocess_gensim_v1(post_text)
-        plans = filter(lambda p: p.get("display_title"), plans)
         for plan in plans:
             if (
                 Preprocess.preprocess_gensim_v1(plan["display_title"])
@@ -426,7 +420,7 @@ class RuleStrategy:
             return {"operation": "all_the_plans"}
 
     @staticmethod
-    def request_help(plans: list, post_text: str, **kwargs):
+    def request_help(verbatims: list, post_text: str, **kwargs):
         """
         Matches strictly to a request for help at the trigger line.
         """
@@ -434,4 +428,9 @@ class RuleStrategy:
             r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
         )
         if match:
-            return {"operation": "advanced_help" if match.group(1) else "help"}
+            if match.group(1):
+                verbatim_id = "advanced_help"
+            else:
+                verbatim_id = "basic_help"
+
+            return RuleStrategy.match_verbatim(verbatims, verbatim_id)
