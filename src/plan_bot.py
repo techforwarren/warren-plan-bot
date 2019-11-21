@@ -106,7 +106,9 @@ def build_no_match_response_text(potential_plan_matches, post):
 
 
 def build_all_plans_response_text(plans, post):
-    pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
+    pure_plans = list(
+        filter(lambda p: not p.get("is_cluster") and p.get("display_title"), plans)
+    )
 
     response = (
         f"Here's the full list of plans Sen. Warren has released that I know about:"

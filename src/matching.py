@@ -409,6 +409,7 @@ class RuleStrategy:
         or the user to include a stop word for some reason
         """
         preprocessed_post = Preprocess.preprocess_gensim_v1(post_text)
+        plans = filter(lambda p: p.get("display_title"), plans)
         for plan in plans:
             if (
                 Preprocess.preprocess_gensim_v1(plan["display_title"])
