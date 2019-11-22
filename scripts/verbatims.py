@@ -89,7 +89,7 @@ def add(verbatim_id, src_file, in_file, out_file, replace):
         dest = sys.stdout
 
     try:
-        json.dump(verbatims, dest, indent=4)
+        json.dump(verbatims, dest, indent=4, ensure_ascii=False)
     finally:
         dest.close()
 
