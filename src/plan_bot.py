@@ -195,15 +195,12 @@ def process_post(
 
     post_text, options = process_flags(get_trigger_line(post.text))
 
-    if options.get("why_warren"):
-        match_info = RuleStrategy.match_verbatim(verbatims, "why_warren")
-    else:
-        match_info = (
-            RuleStrategy.request_help(verbatims, post_text, post=post)
-            or RuleStrategy.request_plan_list(plans, post_text, post=post)
-            or RuleStrategy.match_display_title(plans, post_text, post=post)
-            or matching_strategy(plans, post_text, post=post)
-        )
+    match_info = (
+        RuleStrategy.match_verbatim(verbatims, post_text, options)
+        or RuleStrategy.request_plan_list(plans, post_text, post=post)
+        or RuleStrategy.match_display_title(plans, post_text, post=post)
+        or matching_strategy(plans, post_text, post=post)
+    )
 
     match = match_info.get("match")
     operation = match_info.get("operation")

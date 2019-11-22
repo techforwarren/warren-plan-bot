@@ -350,10 +350,23 @@ class RuleStrategy:
     """
 
     @staticmethod
-    def match_verbatim(verbatims: list, verbatim_id: str, **kwargs):
+    def match_verbatim(verbatims: list, post_text: str, options: dict = {}):
         """
         Match exactly to a verbatim message's ID.
         """
+        verbatim_id = None
+        if options.get("why_warren"):
+            verbatim_id = "why_warren"
+        else:
+            match = re.match(
+                r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
+            )
+            if match:
+                if match.group(1):
+                    verbatim_id = "advanced_help"
+                else:
+                    verbatim_id = "basic_help"
+
         for verbatim in verbatims:
             if verbatim["id"] == verbatim_id:
                 return {"operation": "verbatim", "verbatim": verbatim}
@@ -379,19 +392,3 @@ class RuleStrategy:
         """
         if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
             return {"operation": "all_the_plans"}
-
-    @staticmethod
-    def request_help(verbatims: list, post_text: str, **kwargs):
-        """
-        Matches strictly to a request for help at the trigger line.
-        """
-        match = re.match(
-            r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
-        )
-        if match:
-            if match.group(1):
-                verbatim_id = "advanced_help"
-            else:
-                verbatim_id = "basic_help"
-
-            return RuleStrategy.match_verbatim(verbatims, verbatim_id)
