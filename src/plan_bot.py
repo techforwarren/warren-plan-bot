@@ -1,10 +1,10 @@
 import argparse
 import re
+from functools import partial
 
 from google.cloud import firestore
-from praw.exceptions import APIException
-
 from matching import RuleStrategy, Strategy
+from praw.exceptions import APIException
 from reddit_util import standardize
 
 
@@ -223,14 +223,8 @@ def process_post(
         posts_db.document(post.id).set(post_record)
 
     operations_map = {
-        "verbatim": {
-            "response": build_verbatim_response_text,
-            "args": {"verbatim": verbatim},
-        },
-        "all_the_plans": {
-            "response": build_all_plans_response_text,
-            "args": {"plans": plans},
-        },
+        "verbatim": partial(build_verbatim_response_text, verbatim),
+        "all_the_plans": partial(build_all_plans_response_text, plans),
     }
 
     post_record_update = {}
@@ -246,9 +240,8 @@ def process_post(
     elif operation and operation in operations_map:
         print(operation, "requested: ", post.id)
 
-        response_fn = operations_map[operation]["response"]
-        response_args = operations_map[operation]["args"]
-        reply_string = response_fn(**response_args)
+        response_fn = operations_map[operation]
+        reply_string = response_fn()
         post_record_update["reply_type"] = "operation"
         post_record_update["operation"] = operation
     else:

@@ -281,7 +281,7 @@ def test_process_post_matches_by_verbatim(
 
     plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(verbatim=expected_verbatim)
+    mock_build_response_text.assert_called_once_with(expected_verbatim)
     mock_reply.assert_called_once_with(
         post, "response text", send=False, simulate=False, parent=False
     )
@@ -308,7 +308,7 @@ def test_process_post_matches_by_verbatim_with_parent_option(
 
     plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(verbatim=expected_verbatim)
+    mock_build_response_text.assert_called_once_with(expected_verbatim)
 
     mock_reply.assert_called_once_with(
         post,
