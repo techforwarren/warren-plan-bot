@@ -3,8 +3,9 @@ import re
 from functools import partial
 
 from google.cloud import firestore
-from matching import RuleStrategy, Strategy
 from praw.exceptions import APIException
+
+from matching import RuleStrategy, Strategy
 from reddit_util import standardize
 
 
@@ -137,7 +138,6 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
 
     if simulate:
         print(f"[simulated] Bot replying to {post.type}: {post.id}")
-        print(reply_string)
         return True
     if send:
         print(f"Bot replying to {post.type}: {post.id}")
@@ -208,12 +208,13 @@ def process_post(
     plan = match_info.get("plan", {})
     potential_matches = match_info.get("potential_matches")
     plan_id = plan.get("id")
-    verbatim = match_info.get("verbatim")
+    verbatim = match_info.get("verbatim", {})
+    verbatim_id = verbatim.get("id")
 
     # Create partial db entry from known values, placeholder defaults for mutable values
     # Mark post as processed _before_ we reply to prevent double-posting
     post_record = create_db_record(
-        post, match, plan_confidence, plan_id, processed=True
+        post, match, plan_confidence, plan_id, verbatim_id, processed=True
     )
 
     if not skip_tracking:
@@ -277,6 +278,7 @@ def create_db_record(
     match=None,
     plan_confidence=None,
     plan_id=None,
+    verbatim_id=None,
     reply_timestamp=None,
     reply_made=False,
     processed=False,
@@ -310,6 +312,7 @@ def create_db_record(
         "plan_match": match,
         "top_plan_confidence": plan_confidence,
         "top_plan": plan_id,
+        "verbatim_id": verbatim_id,
         "reply_timestamp": reply_timestamp,
     }
 
