@@ -17,11 +17,8 @@ VERBATIMS = [{"id": "basic_help", "text": ""}, {"id": "advanced_help", "text": "
 
 class TestRuleStrategy:
     show_me_the_plans_operation = {"operation": "all_the_plans"}
-    help_operation = {"operation": "verbatim_response", "verbatim": VERBATIMS[0]}
-    advanced_help_operation = {
-        "operation": "verbatim_response",
-        "verbatim": VERBATIMS[1],
-    }
+    help_operation = {"operation": "verbatim", "verbatim": VERBATIMS[0]}
+    advanced_help_operation = {"operation": "verbatim", "verbatim": VERBATIMS[1]}
 
     def test_show_me_the_plans(self):
         assert (

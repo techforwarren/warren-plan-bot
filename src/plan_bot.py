@@ -137,6 +137,7 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
 
     if simulate:
         print(f"[simulated] Bot replying to {post.type}: {post.id}")
+        print(reply_string)
         return True
     if send:
         print(f"Bot replying to {post.type}: {post.id}")
@@ -222,21 +223,13 @@ def process_post(
         posts_db.document(post.id).set(post_record)
 
     operations_map = {
-        "verbatim_response": {
+        "verbatim": {
             "response": build_verbatim_response_text,
             "args": {"verbatim": verbatim},
         },
         "all_the_plans": {
             "response": build_all_plans_response_text,
             "args": {"plans": plans},
-        },
-        "help": {
-            "response": build_verbatim_response_text,
-            "args": {"verbatim": "basic_help"},
-        },
-        "advanced_help": {
-            "response": build_verbatim_response_text,
-            "args": {"verbatim": "advanced_help"},
         },
     }
 

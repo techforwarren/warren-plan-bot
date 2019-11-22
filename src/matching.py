@@ -356,7 +356,7 @@ class RuleStrategy:
         """
         for verbatim in verbatims:
             if verbatim["id"] == verbatim_id:
-                return {"operation": "verbatim_response", "verbatim": verbatim}
+                return {"operation": "verbatim", "verbatim": verbatim}
 
     @staticmethod
     def match_display_title(plans: list, post_text: str, **kwargs):
