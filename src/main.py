@@ -17,6 +17,7 @@ from plan_bot import process_post
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
 PLANS_CLUSTERS_FILE = "plan_clusters.json"
+VERBATIMS_FILE = "verbatims.json"
 
 TIME_IN_LOOP = float(
     os.getenv("TIME_IN_LOOP", 40)
@@ -123,6 +124,9 @@ def run_plan_bot(
 
     plans = pure_plans + plan_clusters
 
+    with open(VERBATIMS_FILE) as json_file:
+        verbatims = json.load(json_file)
+
     if skip_tracking:
         posts_db = None
         comments_progress_ref = None
@@ -144,6 +148,7 @@ def run_plan_bot(
     process_the_post = lambda post: process_post(
         post,
         plans,
+        verbatims,
         posts_db,
         POST_IDS_PROCESSED,
         send=send_replies,

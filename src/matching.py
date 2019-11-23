@@ -350,6 +350,28 @@ class RuleStrategy:
     """
 
     @staticmethod
+    def match_verbatim(verbatims: list, post_text: str, options: dict = {}):
+        """
+        Match exactly to a verbatim message's ID.
+        """
+        verbatim_id = None
+        if options.get("why_warren"):
+            verbatim_id = "why_warren"
+        else:
+            match = re.match(
+                r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
+            )
+            if match:
+                if match.group(1):
+                    verbatim_id = "advanced_help"
+                else:
+                    verbatim_id = "basic_help"
+
+        for verbatim in verbatims:
+            if verbatim["id"] == verbatim_id:
+                return {"operation": "verbatim", "verbatim": verbatim}
+
+    @staticmethod
     def match_display_title(plans: list, post_text: str, **kwargs):
         """
         Exact display title matches. Include some preprocessing just to allow punctuation to be imperfect,
@@ -370,14 +392,3 @@ class RuleStrategy:
         """
         if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
             return {"operation": "all_the_plans"}
-
-    @staticmethod
-    def request_help(plans: list, post_text: str, **kwargs):
-        """
-        Matches strictly to a request for help at the trigger line.
-        """
-        match = re.match(
-            r"(advanced\s+)?help\W*$", post_text, re.IGNORECASE | re.MULTILINE
-        )
-        if match:
-            return {"operation": "advanced_help" if match.group(1) else "help"}

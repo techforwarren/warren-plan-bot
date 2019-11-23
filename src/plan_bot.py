@@ -1,4 +1,6 @@
+import argparse
 import re
+from functools import partial
 
 from google.cloud import firestore
 from praw.exceptions import APIException
@@ -59,10 +61,14 @@ def build_response_text_pure_plan(plan_record, post):
     )
 
 
-def build_response_text(plan_record, post):
+def build_plan_response_text(plan_record, post):
     if plan_record.get("is_cluster"):
         return build_response_text_plan_cluster(plan_record, post)
     return build_response_text_pure_plan(plan_record, post)
+
+
+def build_verbatim_response_text(verbatim):
+    return f"""{verbatim["text"]}{footer()}"""
 
 
 def build_no_match_response_text(potential_plan_matches, post):
@@ -97,7 +103,7 @@ def build_no_match_response_text(potential_plan_matches, post):
         )
 
 
-def build_all_plans_response_text(plans, post):
+def build_all_plans_response_text(plans):
     pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
 
     response = (
@@ -116,52 +122,6 @@ def build_all_plans_response_text(plans, post):
     response += f"\n\n" f"{footer()}"
 
     return response
-
-
-def build_help_response_text(plans, post):
-    return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
-
-You can call me like this:  
-`!WarrenPlanBot [plan_topic]`  
-and I’ll reply with the plan she has for that.
-
-For example, if you wanted to learn about Elizabeth’s plan for immigration reform, you could write  
-`!WarrenPlanBot immigration reform`
-
-You can even be a little more conversational if you’d like, and say  
-`!WarrenPlanBot what is her plan for ending private prisons?`
-
-I’ll do my best to find the correct plan, but sometimes I have to guess, which means I might make mistakes (I’m just a bot!). I’ll get better, though, as I learn more about the topics that matter to you most 😄
-
-To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`  
-To display this help: `!WarrenPlanBot help`
-For advanced usage: `!WarrenPlanBot advanced help`
-
-I hope to see you around!
-
-***
-
-This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
-Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).  
-"""
-
-
-def build_advanced_response_text(plans, post):
-    return """I’m the WarrenPlanBot. If Elizabeth Warren has a plan, I can help you find it!
-
-If you start your message with `--tell-parent` or `--parent` like this:
-`!WarrenPlanBot --tell-parent [plan_topic]` OR `!WarrenPlanBot --parent [plan_topic]`,
-I'll reply directly to the parent message.
-
-To see my full list of Elizabeth’s plans, you can use the command: `!WarrenPlanBot show me the plans`
-To display basic help: `!WarrenPlanBot help`
-To display this advanced usage: `!WarrenPlanBot advanced help`
-
-***
-
-This bot was created independently by volunteers. [Join us!](https://elizabethwarren.com/join-us)
-Have another question or run into any problems?  [Send a report](https://www.reddit.com/message/compose?to=WarrenPlanBotDev&subject=BotReport&message=Issue with help response).
-"""
 
 
 def reply(post, reply_string: str, parent=False, send=False, simulate=False):
@@ -190,6 +150,7 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
 def process_post(
     post,
     plans,
+    verbatims,
     posts_db,
     post_ids_processed=None,
     send=False,
@@ -235,7 +196,7 @@ def process_post(
     post_text, options = process_flags(get_trigger_line(post.text))
 
     match_info = (
-        RuleStrategy.request_help(plans, post_text, post=post)
+        RuleStrategy.match_verbatim(verbatims, post_text, options)
         or RuleStrategy.request_plan_list(plans, post_text, post=post)
         or RuleStrategy.match_display_title(plans, post_text, post=post)
         or matching_strategy(plans, post_text, post=post)
@@ -247,20 +208,21 @@ def process_post(
     plan = match_info.get("plan", {})
     potential_matches = match_info.get("potential_matches")
     plan_id = plan.get("id")
+    verbatim = match_info.get("verbatim", {})
+    verbatim_id = verbatim.get("id")
 
     # Create partial db entry from known values, placeholder defaults for mutable values
     # Mark post as processed _before_ we reply to prevent double-posting
     post_record = create_db_record(
-        post, match, plan_confidence, plan_id, processed=True
+        post, match, plan_confidence, plan_id, verbatim_id, processed=True
     )
 
     if not skip_tracking:
         posts_db.document(post.id).set(post_record)
 
     operations_map = {
-        "all_the_plans": {"response": build_all_plans_response_text},
-        "help": {"response": build_help_response_text},
-        "advanced_help": {"response": build_advanced_response_text},
+        "verbatim": partial(build_verbatim_response_text, verbatim),
+        "all_the_plans": partial(build_all_plans_response_text, plans),
     }
 
     post_record_update = {}
@@ -269,15 +231,15 @@ def process_post(
     if match:
         print("plan match: ", plan_id, post.id, plan_confidence)
 
-        reply_string = build_response_text(plan, post)
+        reply_string = build_plan_response_text(plan, post)
         post_record_update["reply_type"] = (
             "plan_cluster" if plan.get("is_cluster") else "plan"
         )
     elif operation and operation in operations_map:
         print(operation, "requested: ", post.id)
 
-        response_fn = operations_map[operation]["response"]
-        reply_string = response_fn(plans, post)
+        response_fn = operations_map[operation]
+        reply_string = response_fn()
         post_record_update["reply_type"] = "operation"
         post_record_update["operation"] = operation
     else:
@@ -316,6 +278,7 @@ def create_db_record(
     match=None,
     plan_confidence=None,
     plan_id=None,
+    verbatim_id=None,
     reply_timestamp=None,
     reply_made=False,
     processed=False,
@@ -349,6 +312,7 @@ def create_db_record(
         "plan_match": match,
         "top_plan_confidence": plan_confidence,
         "top_plan": plan_id,
+        "verbatim_id": verbatim_id,
         "reply_timestamp": reply_timestamp,
     }
 
@@ -372,13 +336,11 @@ def process_flags(text):
     Identifies flags in the text. Removes the flags from the text and
     returns the tuple (remaining_text, options).
     """
-    options = {"parent": False}
-
-    match = re.match(
-        r"^(?:--parent|--tell-parent)[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
-    )
-    if match:
-        options["parent"] = True
-        text = match.group(1)
-
-    return (text, options)
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--parent", "--tell-parent", action="store_true")
+    parser.add_argument("--why-warren", action="store_true")
+    parser.add_argument("rest", nargs=argparse.REMAINDER)
+    options, unknown = parser.parse_known_args(text.split())
+    remaining_text = " ".join(options.rest)
+    del options.rest  # we don't need this, and removing it makes testing easier
+    return (remaining_text, vars(options))
