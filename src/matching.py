@@ -355,7 +355,9 @@ class RuleStrategy:
         Match exactly to a verbatim message's ID.
         """
         verbatim_id = None
-        if options.get("why_warren"):
+        if options.get("why_warren") or re.match(
+            r"why warren\W*$", post_text, re.IGNORECASE | re.MULTILINE
+        ):
             verbatim_id = "why_warren"
         else:
             match = re.match(

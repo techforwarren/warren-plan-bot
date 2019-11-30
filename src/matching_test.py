@@ -99,6 +99,11 @@ class TestRuleStrategy:
 
         assert RuleStrategy.match_verbatim(VERBATIMS, "", {"why_warren": False}) is None
 
+        assert (
+            RuleStrategy.match_verbatim(VERBATIMS, "why warren", {"why_warren": False})
+            == self.why_warren_operation
+        )
+
 
 class TestPreprocess:
     def test_bigrams(self):
