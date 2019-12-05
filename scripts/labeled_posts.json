@@ -572,7 +572,7 @@
     "text": "!warrenplanbot what is her plan to invest in public education?",
     "source": "/r/ElizabethWarren",
     "match": "public_education",
-    "alternative_matches": [
+    "alternate_matches": [
       "affordable_higher_education",
       "universal_child_care"
     ]
@@ -626,7 +626,7 @@
     "text": "Have you contacted her Policy Director, Jon Donenberg? He would really be the best person to get the dirty details of her plans for discussion.  https://www.cnn.com/videos/us/2019/06/23/warren-policy-director-orig.cnn\n\n\n\n!WarrenPlanBot racism",
     "source": "/r/ElizabethWarren",
     "match": null,
-    "alternative_matches": [
+    "alternate_matches": [
       "leveling_field_entrepreneurs_color",
       "black_women_mortality_essence"
     ]
