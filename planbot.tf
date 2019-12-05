@@ -82,7 +82,7 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   description = "run the plan bot"
   runtime = "python37"
 
-  available_memory_mb = 256
+  available_memory_mb = 512
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
