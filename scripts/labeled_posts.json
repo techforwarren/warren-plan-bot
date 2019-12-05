@@ -90,7 +90,7 @@
   {
     "text": "!WarrenPlanBot maternal mortality",
     "source": "sh",
-    "match": "black_women_mortality_essence"
+    "match": "addressing_maternal_mortality_epidemic"
   },
   {
     "text": "!WarrenPlanBot military housing",
@@ -628,7 +628,7 @@
     "match": null,
     "alternate_matches": [
       "leveling_field_entrepreneurs_color",
-      "black_women_mortality_essence"
+      "addressing_maternal_mortality_epidemic"
     ]
   },
   {
