@@ -126,11 +126,11 @@
         "url": "https://elizabethwarren.com/plans/puerto-rico-debt-relief"
     },
     {
-        "id": "black_women_mortality_essence",
-        "topic": "maternal mortality",
-        "summary": "We are facing a maternal mortality crisis in America. And for Black moms, it's an epidemic. One major reason? Racism. It's time to hold health systems accountable for preventable failures and demand change - because women's lives depend on it.",
+        "id": "addressing_maternal_mortality_epidemic",
+        "topic": "black maternal mortality",
+        "summary": "We are facing a maternal mortality crisis in America. And for Black moms, it's an epidemic. One major reason? Racism. It's time to hold health systems accountable and demand change – because women's lives depend on it.",
         "display_title": "Addressing Our Maternal Mortality Epidemic",
-        "url": "https://www.essence.com/feature/sen-elizabeth-warren-black-women-mortality-essence/"
+        "url": "https://elizabethwarren.com/plans/addressing-maternal-mortality-epidemic"
     },
     {
         "id": "improve_military_housing",
@@ -423,5 +423,20 @@
         "display_title": "Fighting Back Against White Nationalist Violence",
         "summary": "When our neighbors are persecuted or attacked, that impacts all of us. I will make combating white nationalist violence a priority. Join me in standing up to hate.",
         "url": "https://elizabethwarren.com/plans/confronting-white-nationalism"
+    },
+    {
+        "id": "agenda_black_america",
+        "topic": "black poc racism",
+        "display_title": "A Working Agenda for Black America",
+        "summary": "We must recognize the systemic discrimination that infects our country, and we must work actively - and deliberately - to root it out and set us on a better path. This agenda is a work in progress and will continue to be updated based on input and insight from Black activists, community leaders, organizers, policy experts, and stakeholders.",
+        "url": "https://elizabethwarren.com/plans/agenda-black-america",
+        "additional_training_text": "racism racism racism racism racism racism racism racism racism"
+    },
+    {
+        "id": "part_time_workers",
+        "topic": "part time workers fair workweek",
+        "display_title": "A Fair Workweek for America’s Part-Time Workers",
+        "summary": "Unpredictable work schedules leave millions of part-time workers with no control over their time. My Fair Workweek plan gives these workers more control and financial security. We need to help shift power back to part-time workers.",
+        "url": "https://elizabethwarren.com/plans/part-time-workers"
     }
 ]
