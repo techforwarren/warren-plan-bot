@@ -94,6 +94,9 @@ def parse_articles(soup):
         class_=re.compile(r".*DetailPageTableOfContentsBlocks__Container.*"),
     )
 
+    # remove "As published on Medium..."
+    decompose_and_smooth_first(soup, "p", text=re.compile(r"As published on Medium.*"))
+
     return "\n".join(parse_article(article) for article in soup.findAll("article"))
 
 
