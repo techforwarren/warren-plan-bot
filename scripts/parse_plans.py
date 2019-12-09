@@ -97,6 +97,12 @@ def parse_articles(soup):
     # remove "As published on Medium..."
     decompose_and_smooth_first(soup, "p", text=re.compile(r"As published on Medium.*"))
 
+    # remove calculator section
+    decompose_and_smooth_first(
+        soup, "p", text=re.compile(r"Use this handy calculator.*")
+    )
+    decompose_and_smooth_first(soup, "a", text=re.compile(r"calculator"))
+
     return "\n".join(parse_article(article) for article in soup.findAll("article"))
 
 
