@@ -126,6 +126,9 @@ def parse_article(article):
         article, "div", class_=re.compile(r".*PlanSignupInterruptorBlocks.*")
     )
 
+    # remove paragraphs like "Read expert letter on cost estimate of Medicare for All here"
+    decompose_and_smooth(article, "p", text=re.compile(r"Read expert letter.*here"))
+
     remove_html_comments(article)
 
     return article.get_text(separator="\n")
