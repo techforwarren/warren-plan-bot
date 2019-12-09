@@ -57,6 +57,18 @@ def decompose_and_smooth(soup, tag, **kwargs):
     soup.smooth()
 
 
+def decompose_and_smooth_first(soup, tag, **kwargs):
+    """
+    Remove first matching html tag including any contents
+    """
+    # remove tag
+    t = soup.find(tag, **kwargs)
+    if t:
+        t.decompose()
+    # smooth together the text that was in those tags with neighboring text
+    soup.smooth()
+
+
 def remove_html_comments(soup):
     """
     Remove html comments entirely ("<---blah--->")
@@ -74,6 +86,23 @@ def parse_articles(soup):
 
     Warren.com, Medium posts and WashingtonPost fall under this category neatly
     """
+
+    # remove table of contents
+    decompose_and_smooth_first(
+        soup,
+        "article",
+        class_=re.compile(r".*DetailPageTableOfContentsBlocks__Container.*"),
+    )
+
+    # remove "As published on Medium..."
+    decompose_and_smooth_first(soup, "p", text=re.compile(r"As published on Medium.*"))
+
+    # remove calculator section
+    decompose_and_smooth_first(
+        soup, "p", text=re.compile(r"Use this handy calculator.*")
+    )
+    decompose_and_smooth_first(soup, "a", text=re.compile(r"calculator"))
+
     return "\n".join(parse_article(article) for article in soup.findAll("article"))
 
 
@@ -92,9 +121,13 @@ def parse_article(article):
     for tag in ["noscript", "img", "button"]:
         decompose_and_smooth(article, tag)
 
+    # remove sign up sections
     decompose_and_smooth(
         article, "div", class_=re.compile(r".*PlanSignupInterruptorBlocks.*")
     )
+
+    # remove paragraphs like "Read expert letter on cost estimate of Medicare for All here"
+    decompose_and_smooth(article, "p", text=re.compile(r"Read expert letter.*here"))
 
     remove_html_comments(article)
 
