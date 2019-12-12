@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 import os
 import re
 import time
@@ -14,11 +15,12 @@ import pushshift
 import reddit_util
 from plan_bot import process_post
 
+logger = logging.getLogger(__name__)
+
 # JSON filename of policy plans
 PLANS_FILE = "plans.json"
 PLANS_CLUSTERS_FILE = "plan_clusters.json"
 VERBATIMS_FILE = "verbatims.json"
-
 TIME_IN_LOOP = float(
     os.getenv("TIME_IN_LOOP", 40)
 )  # seconds to spend in loop when calling from event handler. this should be less than the time between running iterations of the cloud function
@@ -76,6 +78,14 @@ POST_IDS_PROCESSED = set()
     help="gcp project where firestore db lives",
     **click_kwargs,
 )
+@click.option(
+    "--log-level",
+    envvar="LOG_LEVEL",
+    type=click.Choice(["0", "1", "2", "3"]),
+    default="1",
+    help="log level (quiet, info, debug, debug imports)",
+    **click_kwargs,
+)
 def run_plan_bot(
     send_replies=False,
     skip_tracking=False,
@@ -83,6 +93,7 @@ def run_plan_bot(
     limit=10,
     praw_site="dev",
     project="wpb-dev",
+    log_level="1",
 ):
     """
     Run a single pass of Warren Plan Bot
@@ -93,7 +104,24 @@ def run_plan_bot(
     - Reply to any unreplied matching comments (If replies are on)
     - Update replied_to list (If replies and tracking is on)
     """
-    print("Running a single pass of plan bot")
+    if log_level == "0":
+        level_name = logging.WARNING
+    elif log_level == "1":
+        level_name = logging.INFO
+    else:
+        level_name = logging.DEBUG
+
+    logging.basicConfig(
+        level=level_name, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+    )
+    if log_level == "2":
+        # silence debug-logging from external imports so we can have a
+        # "quiet" debug log when we want it.   Additional imports
+        # may mean needing to update this.
+        for logger_name in ("prawcore", "urllib3", "smart_open"):
+            logging.getLogger(logger_name).setLevel(logging.INFO)
+
+    logger.info("Running a single pass of plan bot")
     pass_start_time = time.time()
 
     if simulate_replies and send_replies:
@@ -196,7 +224,9 @@ def run_plan_bot(
         if not skip_tracking:
             comments_progress_ref.set({"newest": comment.fullname}, merge=True)
 
-    print(f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s")
+    logger.info(
+        f"Single pass of plan bot took: {round(time.time() - pass_start_time, 2)}s"
+    )
 
 
 def get_comments_params(comments_progress_ref):
@@ -215,7 +245,7 @@ def get_comments_params(comments_progress_ref):
 
 def run_plan_bot_event_handler(event, context):
     start_time = time.time()
-    print("Starting plan bot loop")
+    logger.info("Starting plan bot loop")
     while time.time() - start_time < TIME_IN_LOOP:
         # Click exits with return code 0 when everything worked. Skip that behavior
         try:

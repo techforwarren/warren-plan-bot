@@ -1,4 +1,5 @@
 import argparse
+import logging
 import re
 from functools import partial
 
@@ -7,6 +8,8 @@ from praw.exceptions import APIException
 
 from matching import RuleStrategy, Strategy
 from reddit_util import standardize
+
+logger = logging.getLogger(__name__)
 
 
 def parent_reply_prefix(post):
@@ -136,15 +139,16 @@ def reply(post, reply_string: str, parent=False, send=False, simulate=False):
     if parent and hasattr(post, "parent"):
         post = standardize(post.parent())
 
+    logger.debug(reply_string)
     if simulate:
-        print(f"[simulated] Bot replying to {post.type}: {post.id}")
+        logger.info(f"[simulated] Bot replying to {post.type}: {post.id}")
         return True
     if send:
-        print(f"Bot replying to {post.type}: {post.id}")
+        logger.info(f"Bot replying to {post.type}: {post.id}")
         post.reply(reply_string)
         return True
 
-    print(f"Bot would have replied to {post.type}: {post.id}")
+    logger.info(f"Bot would have replied to {post.type}: {post.id}")
 
 
 def process_post(
@@ -165,7 +169,7 @@ def process_post(
     if post.id in post_ids_processed:
         return
 
-    print(f"Processing post {post.type}: {post.id}")
+    logger.info(f"Processing post {post.type}: {post.id}")
 
     # Add this post to the set of processed posts
     post_ids_processed.add(post.id)
@@ -229,21 +233,21 @@ def process_post(
 
     # If plan is matched with confidence, build and send reply
     if match:
-        print("plan match: ", plan_id, post.id, plan_confidence)
+        logger.info(f"plan match: {plan_id} {post.id} {plan_confidence}")
 
         reply_string = build_plan_response_text(plan, post)
         post_record_update["reply_type"] = (
             "plan_cluster" if plan.get("is_cluster") else "plan"
         )
     elif operation and operation in operations_map:
-        print(operation, "requested: ", post.id)
+        logger.info(f"{operation} requested: {post.id}")
 
         response_fn = operations_map[operation]
         reply_string = response_fn()
         post_record_update["reply_type"] = "operation"
         post_record_update["operation"] = operation
     else:
-        print("topic mismatch: ", plan_id, post.id, plan_confidence)
+        logger.info(f"topic mismatch: {plan_id} {post.id} {plan_confidence}")
 
         reply_string = build_no_match_response_text(potential_matches, post)
         post_record_update["reply_type"] = "no_match"
