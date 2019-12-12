@@ -155,34 +155,14 @@ def _get_contents(contents):
             raise NotImplementedError(f"dont know how to parse {contents}")
 
 
-def parse_e_warren_dot_com(soup):
-    """
-    Parse javascript-y magic from e-warren dot com to get plan text
-
-    This doesnt necessarily maintain line breaks, and has double whitespaces in some places
-    """
-    scripts = soup.findAll("script")
-    script = [
-        script for script in scripts if "window.contentfulFields" in script.get_text()
-    ][0]
-
-    script_text = script.get_text()
-
-    # contentfulFields is a js object, which we can parse as json
-    match = re.search(r"contentfulFields = ({.*});", script_text)
-
-    contentful_fields = json.loads(match.group(1))
-
-    # do some magic to get the content out and concatenate it
-    contents = contentful_fields["contentType"]["fields"]["content"]["content"]
-
-    content_lists = _get_contents(contents)
-
-    content_str = " ".join(_flatten(content_lists))
-
-    content_str = content_str.replace("\xa0", "")
-
-    return content_str
+def parse_medium_dot_com(soup):
+    print("Parsing Medium article")
+    text = parse_articles(soup)
+    # manually clean up the one medium article that we're currently parsing
+    text_to_strip = "No President Is Above the Law\nTeam Warren\nMay 31 · 5 min read\nBy Elizabeth Warren\n"
+    if text.startswith(text_to_strip):
+        return text[len(text_to_strip) :]
+    return text
 
 
 def parse_plans():
@@ -227,10 +207,10 @@ def parse_plans():
 
         page_soup = BeautifulSoup(html, "lxml")
 
-        if page_soup.find("article"):
+        if "medium" in plan_hostname:
+            text = parse_medium_dot_com(page_soup)
+        elif page_soup.find("article"):
             text = parse_articles(page_soup)
-        elif "elizabethwarren" in plan_hostname:
-            text = parse_e_warren_dot_com(page_soup)
         else:
             logger.warning(
                 f"Failure to parse {plan_id}. Hostname: {plan_hostname} is not yet supported"
