@@ -665,5 +665,10 @@
     "text": "!WarrenPlanBot what is her plan for college?",
     "source": "/r/ElizabethWarren",
     "match": "affordable_higher_education"
+  },
+  {
+    "text": "!WarrenPlanBot blue new deal",
+    "source": "jg",
+    "match": "blue_new_deal"
   }
 ]

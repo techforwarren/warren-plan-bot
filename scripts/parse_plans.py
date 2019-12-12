@@ -94,9 +94,6 @@ def parse_articles(soup):
         class_=re.compile(r".*DetailPageTableOfContentsBlocks__Container.*"),
     )
 
-    # remove "As published on Medium..."
-    decompose_and_smooth_first(soup, "p", text=re.compile(r"As published on Medium.*"))
-
     # remove calculator section
     decompose_and_smooth_first(
         soup, "p", text=re.compile(r"Use this handy calculator.*")
@@ -124,6 +121,11 @@ def parse_article(article):
     # remove sign up sections
     decompose_and_smooth(
         article, "div", class_=re.compile(r".*PlanSignupInterruptorBlocks.*")
+    )
+
+    # remove "As published on Medium..."
+    decompose_and_smooth_first(
+        article, "p", text=re.compile(r"As published on Medium.*")
     )
 
     # remove paragraphs like "Read expert letter on cost estimate of Medicare for All here"
