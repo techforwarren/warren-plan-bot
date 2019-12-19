@@ -297,7 +297,7 @@ class Strategy:
         return lsa_match
 
     @staticmethod
-    def lsa_gensim_v3(plans: list, post_text: str, threshold=78.3, **kwargs):
+    def lsa_gensim_v3(plans: list, post_text: str, threshold=78.2, **kwargs):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
