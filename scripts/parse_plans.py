@@ -125,7 +125,7 @@ def parse_article(article):
 
     # remove "As published on Medium..."
     decompose_and_smooth_first(
-        article, "p", text=re.compile(r"As published on Medium.*")
+        article, "p", text=re.compile(r"As published (on Medium|in Essence).*")
     )
 
     # remove paragraphs like "Read expert letter on cost estimate of Medicare for All here"
