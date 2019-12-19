@@ -516,7 +516,8 @@
   {
     "text": "!WarrenPlanBot what is her plan for helping millions of displaced workers transition careers after automation, AI & machine learning become too embedded in our economy to be ignored any longer?",
     "source": "/r/ElizabethWarren",
-    "match": null
+    "match": null,
+    "alternate_matches": "empowering_american_workers"
   },
   {
     "text": "!WarrenPlanBot What is Warren's plan to make anime real?",
