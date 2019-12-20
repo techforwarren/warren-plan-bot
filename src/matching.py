@@ -19,8 +19,6 @@ from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
-GENSIM_V1_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v1"))
-GENSIM_V2_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v2"))
 GENSIM_V3_MODELS_PATH = path.abspath(path.join(DIRNAME, "models/gensim_strategy_v3"))
 
 # suppress gensim logs
@@ -180,7 +178,7 @@ class Strategy:
         similarity,
         threshold,
         potential_plan_threshold=50,
-        model_path=GENSIM_V1_MODELS_PATH,
+        model_path=GENSIM_V3_MODELS_PATH,
         preprocess=Preprocess.preprocess_gensim_v1,
         **kwargs,
     ):
@@ -233,71 +231,7 @@ class Strategy:
         }
 
     @staticmethod
-    def lsa_gensim_v2(plans: list, post_text: str, threshold=81, **kwargs):
-        """
-        LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
-
-        This version includes the hand-written topics from plans.json in the corpus
-        of documents posts are matched against
-
-        Models have been precomputed using ../scripts/update_gensim_models_v2.py
-        """
-        return Strategy._gensim_similarity(
-            plans,
-            post_text,
-            "lsa",
-            models.LsiModel,
-            similarities.MatrixSimilarity,
-            threshold,
-            model_path=GENSIM_V2_MODELS_PATH,
-            **kwargs,
-        )
-
-    @staticmethod
-    def tfidf_gensim_v2(plans: list, post_text: str, threshold=15, **kwargs):
-        """
-        TFIDF – Term Frequency–Inverse Document Frequency
-
-        Using gensim
-
-        Models have been precomputed using ../scripts/update_gensim_models_v2.py
-        """
-        return Strategy._gensim_similarity(
-            plans,
-            post_text,
-            "tfidf",
-            models.TfidfModel,
-            similarities.MatrixSimilarity,
-            threshold,
-            model_path=GENSIM_V2_MODELS_PATH,
-            **kwargs,
-        )
-
-    @staticmethod
-    def lsa_tfidf_composite_gensim_v2(
-        plans: list, post_text: str, threshold=81, **kwargs
-    ):
-        """
-        Composite of LSA and TFIDF methods
-
-        Using gensim
-
-        Models have been precomputed using ../scripts/update_gensim_models_v2.py
-        """
-        lsa_match = Strategy.lsa_gensim_v2(plans, post_text, threshold, **kwargs)
-
-        if lsa_match["match"]:
-            return lsa_match
-
-        tfidf_match = Strategy.tfidf_gensim_v2(plans, post_text, **kwargs)
-
-        if tfidf_match["match"]:
-            return tfidf_match
-
-        return lsa_match
-
-    @staticmethod
-    def lsa_gensim_v3(plans: list, post_text: str, threshold=78.3, **kwargs):
+    def lsa_gensim_v3(plans: list, post_text: str, threshold=78.2, **kwargs):
         """
         LSI – Latent Semantic Indexing  (aka Latent Semantic Analysis)
 
