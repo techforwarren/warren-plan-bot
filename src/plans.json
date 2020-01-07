@@ -453,5 +453,12 @@
         "display_title": "My Plan to Create 10.6 Million Green Jobs",
         "summary": "Climate change presents an urgent threat, but it also presents the greatest opportunity of our time: the chance to rebuild our economy with 100% clean energy and to create 10.6 million good, union jobs in the process. Let's support a Green New Deal that not only reduces our carbon emissions but also jumpstarts our economy.",
         "url": "https://elizabethwarren.com/plans/green-jobs"
+    },
+    {
+        "id": "disability_rights_and_equality",
+        "topic": "disability rights handicapped",
+        "display_title": "Protecting the Rights and Equality of People with Disabilities",
+        "summary": "2020 marks the 30th anniversary of the ADA, and though we've made significant progress, we still have a lot of ground to cover. Together we can fight for a truly inclusive world.",
+        "url": "https://elizabethwarren.com/plans/disability-rights-and-equality"
     }
 ]
