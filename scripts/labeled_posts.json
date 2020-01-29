@@ -173,7 +173,11 @@
   {
     "text": "!WarrenPlanBot facebook",
     "source": "jg",
-    "match": "break_up_big_tech"
+    "match": null,
+    "alternate_matches":  [
+      "break_up_big_tech",
+      "fighting_digital_disinformation"
+    ]
   },
   {
     "text": "!WarrenPlanBot abortions",

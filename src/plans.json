@@ -488,5 +488,12 @@
         "display_title": "Preventing, Containing, and Treating Infectious Disease Outbreaks at Home and Abroad",
         "summary": "Elizabeth's plan to stop pandemics invests in public health, restores American leadership at home and abroad, and leads with science. We need a president who is prepared.",
         "url": "https://elizabethwarren.com/plans/combating-infectious-disease-outbreaks"
+    },
+    {
+        "id": "fighting_digital_disinformation",
+        "topic": "disinformation misinformation",
+        "display_title": "Fighting Digital Disinformation",
+        "summary": "Online disinformation played a key role in the 2016 election - and our country still isn't prepared to fight it. Disinformation erodes democracy, and we need a plan to fight it.",
+        "url": "https://elizabethwarren.com/plans/fighting-digital-disinformation"
     }
 ]
