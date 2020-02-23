@@ -157,7 +157,7 @@ def build_state_of_race_response_text(today: datetime.date):
         f"As of {today_text}, {current_delegates_awarded} out of {total_pledged_delegates:,} total delegates have been awarded in the primary. "
         f"That means {delegate_percentage_left}% of the delegates are still up for grabs!"
         f"\n\n"
-        f"[Be part of Warren’s surge in support](https://elizabethwarren.com/join-us)!"
+        f"[Be part of Warren’s surge in support!](https://elizabethwarren.com/join-us)"
     )
     return response
 
