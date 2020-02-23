@@ -336,7 +336,18 @@ class RuleStrategy:
         """
         Matches strictly to a request at the end of the trigger line for the state of the race
         """
-        if "state_of_race" in options or re.search(
-            r"state of (?:the )?race\W*$", post_text, re.IGNORECASE | re.MULTILINE
+        if (
+            "state_of_race" in options
+            or re.search(
+                r"state of (?:the )?(?:race|primary)\W*$",
+                post_text,
+                re.IGNORECASE | re.MULTILINE,
+            )
+            or re.search(
+                r"is the (?:race|primary) over\W*$",
+                post_text,
+                re.IGNORECASE | re.MULTILINE,
+            )
+            or re.search(r"status check\W*$", post_text, re.IGNORECASE | re.MULTILINE)
         ):
             return {"operation": "state_of_race"}

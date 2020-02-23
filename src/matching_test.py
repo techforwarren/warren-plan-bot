@@ -77,6 +77,21 @@ class TestRuleStrategy:
         )
 
         assert (
+            RuleStrategy.request_state_of_race([], "is the race over?")
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race([], "is the primary over?")
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race([], "status check!")
+            == self.state_of_race_operation
+        )
+
+        assert (
             RuleStrategy.request_state_of_race(
                 [], "show me the state of the race\n\nI want to show the world"
             )

@@ -382,7 +382,9 @@ def process_flags(text):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--parent", "--tell-parent", action="store_true")
     parser.add_argument("--why-warren", action="store_true")
-    parser.add_argument("--state-of-race", "--state-of-the-race", action="store_true")
+    parser.add_argument(
+        "--state-of-race", "--state-of-the-race", "--status-check", action="store_true"
+    )
     parser.add_argument("rest", nargs=argparse.REMAINDER)
     options, unknown = parser.parse_known_args(text.split())
     remaining_text = " ".join(options.rest)
