@@ -330,14 +330,6 @@ class RuleStrategy:
             return {"operation": "all_the_plans"}
 
     @staticmethod
-    def request_plan_list(plans: list, post_text: str, **kwargs):
-        """
-        Matches strictly to a request at the end of the trigger line for the full list of all known plans
-        """
-        if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
-            return {"operation": "all_the_plans"}
-
-    @staticmethod
     def request_state_of_race(
         plans: list, post_text: str, options: set = set(), **kwargs
     ):
