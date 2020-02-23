@@ -21,6 +21,7 @@ VERBATIMS = [
 
 class TestRuleStrategy:
     show_me_the_plans_operation = {"operation": "all_the_plans"}
+    state_of_race_operation = {"operation": "state_of_race"}
     help_operation = {"operation": "verbatim", "verbatim": VERBATIMS[0]}
     advanced_help_operation = {"operation": "verbatim", "verbatim": VERBATIMS[1]}
     why_warren_operation = {"operation": "verbatim", "verbatim": VERBATIMS[2]}
@@ -28,13 +29,6 @@ class TestRuleStrategy:
     def test_show_me_the_plans(self):
         assert (
             RuleStrategy.request_plan_list([], "show me the plans")
-            == self.show_me_the_plans_operation
-        )
-
-        assert (
-            RuleStrategy.request_plan_list(
-                [], "show me the plans\n\nI want to show the world the plans"
-            )
             == self.show_me_the_plans_operation
         )
 
@@ -65,6 +59,38 @@ class TestRuleStrategy:
             )
             is None
         )
+
+    def test_state_of_race(self):
+        assert (
+            RuleStrategy.request_state_of_race([], "state of race")
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race([], "state of the race")
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race(
+                [], "show me the state of the race\n\nI want to show the world"
+            )
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race(
+                [], "You know I love you now show me the state of the race"
+            )
+            == self.state_of_race_operation
+        )
+
+        assert (
+            RuleStrategy.request_state_of_race([], "whatever", {"state_of_race"})
+            == self.state_of_race_operation
+        )
+
+        assert RuleStrategy.request_state_of_race([], "show me the plans") is None
 
     def test_help(self):
         assert RuleStrategy.match_verbatim(VERBATIMS, "help") == self.help_operation

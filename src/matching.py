@@ -336,3 +336,15 @@ class RuleStrategy:
         """
         if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
             return {"operation": "all_the_plans"}
+
+    @staticmethod
+    def request_state_of_race(
+        plans: list, post_text: str, options: set = set(), **kwargs
+    ):
+        """
+        Matches strictly to a request at the end of the trigger line for the state of the race
+        """
+        if "state_of_race" in options or re.search(
+            r"state of (?:the )?race\W*$", post_text, re.IGNORECASE | re.MULTILINE
+        ):
+            return {"operation": "state_of_race"}

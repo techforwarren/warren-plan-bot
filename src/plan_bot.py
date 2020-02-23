@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import logging
 import re
 from functools import partial
@@ -127,6 +128,32 @@ def build_all_plans_response_text(plans):
     return response
 
 
+def build_state_of_race_response_text(today: datetime.date):
+
+    current_delegates_awarded = 101
+    total_pledged_delegates = 3_979
+    delegate_percentage_left = round(
+        (1 - current_delegates_awarded / total_pledged_delegates) * 100
+    )
+
+    if today > datetime.date(2020, 2, 29):
+        raise NotImplementedError(
+            "Dates after the SC primary have not yet been implemented"
+        )
+    # TODO time zones?
+    # TODO implement after SC (or just maintain this manually for now)
+
+    today_text = today.strftime("%b %d, %Y")
+
+    response = (
+        f"As of {today_text}, {current_delegates_awarded} out of {total_pledged_delegates:,} total delegates have been awarded in the primary. "
+        f"That means {delegate_percentage_left}% of the delegates are still up for grabs!"
+        f"\n"
+        f"Learn how you can [be part of Warren’s surge in support](https://elizabethwarren.com/join-us)!"
+    )
+    return response
+
+
 def reply(post, reply_string: str, parent=False, send=False, simulate=False):
     """
     :param post: post to reply on
@@ -227,6 +254,9 @@ def process_post(
     operations_map = {
         "verbatim": partial(build_verbatim_response_text, verbatim),
         "all_the_plans": partial(build_all_plans_response_text, plans),
+        "state_of_race": partial(
+            build_state_of_race_response_text, datetime.date.today()
+        ),
     }
 
     post_record_update = {}
@@ -343,6 +373,7 @@ def process_flags(text):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--parent", "--tell-parent", action="store_true")
     parser.add_argument("--why-warren", action="store_true")
+    parser.add_argument("--state-of-race", "--state-of-the-race", action="store_true")
     parser.add_argument("rest", nargs=argparse.REMAINDER)
     options, unknown = parser.parse_known_args(text.split())
     remaining_text = " ".join(options.rest)

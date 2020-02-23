@@ -1,3 +1,4 @@
+import datetime
 from unittest import mock
 
 import pytest
@@ -191,6 +192,57 @@ def test_build_response_text_to_all_the_plans_operation(
     for plan in mock_plan_cluster["plans"]:
         assert plan["display_title"] not in response_text
         assert plan["url"] not in response_text
+
+
+def test_build_response_text_to_state_of_race_operation(
+    mock_submission, mock_plan, mock_plan_cluster
+):
+    response_text = plan_bot.build_state_of_race_response_text(
+        datetime.date(2020, 2, 23)
+    )
+
+    assert type(response_text) is str
+
+    assert "Feb 23, 2020" in response_text
+    assert "101" in response_text  # pledged so far
+    assert "97%" in response_text  # percent so far
+    assert "3,979" in response_text  # total
+
+    # before SC
+    response_text = plan_bot.build_state_of_race_response_text(
+        datetime.date(2020, 2, 27)
+    )
+    assert "Feb 27, 2020" in response_text
+    assert "101" in response_text  # pledged so far
+    assert "97%" in response_text  # percent so far
+    assert "3,979" in response_text  # total
+
+    # day of SC
+    # TODO time zones?
+    response_text = plan_bot.build_state_of_race_response_text(
+        datetime.date(2020, 2, 29)
+    )
+    assert "Feb 29, 2020" in response_text
+    assert "101" in response_text  # pledged so far
+    assert "97%" in response_text  # percent so far
+    assert "3,979" in response_text  # total
+
+    with pytest.raises(NotImplementedError):
+        response_text = plan_bot.build_state_of_race_response_text(
+            datetime.date(2020, 3, 1)
+        )
+
+    # TODO implement and uncomment
+    # response_text = plan_bot.build_state_of_race_response_text(
+    #     datetime.date(2020, 3, 1)
+    # )
+    #
+    # assert type(response_text) is str
+    #
+    # assert "Mar 1, 2020" in response_text
+    # assert "155" in response_text  # pledged so far
+    # assert "96%" in response_text  # percent so far
+    # assert "3,979" in response_text  # total
 
 
 @mock.patch("plan_bot.create_db_record")
@@ -439,6 +491,8 @@ def test_get_trigger_line():
         ("--tell-parent, what's up", "what's up", set()),
         ("--parent --why-warren what's up", "what's up", {"parent", "why_warren"}),
         ("--why-warren --parent what's up", "what's up", {"parent", "why_warren"}),
+        ("--state-of-race what's up", "what's up", {"state_of_race"}),
+        ("--state-of-the-race what's up", "what's up", {"state_of_race"}),
     ],
 )
 def test_process_flags(input, expected_rest, expected_flags):
