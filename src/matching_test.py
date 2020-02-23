@@ -72,6 +72,11 @@ class TestRuleStrategy:
         )
 
         assert (
+            RuleStrategy.request_state_of_race([], "what's the state of the race?")
+            == self.state_of_race_operation
+        )
+
+        assert (
             RuleStrategy.request_state_of_race(
                 [], "show me the state of the race\n\nI want to show the world"
             )
