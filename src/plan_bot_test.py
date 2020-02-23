@@ -203,7 +203,7 @@ def test_build_response_text_to_state_of_race_operation(
 
     assert type(response_text) is str
 
-    assert "Feb 23, 2020" in response_text
+    assert "Feb 23rd" in response_text
     assert "101" in response_text  # pledged so far
     assert "97%" in response_text  # percent so far
     assert "3,979" in response_text  # total
@@ -212,7 +212,7 @@ def test_build_response_text_to_state_of_race_operation(
     response_text = plan_bot.build_state_of_race_response_text(
         datetime.date(2020, 2, 27)
     )
-    assert "Feb 27, 2020" in response_text
+    assert "Feb 27th" in response_text
     assert "101" in response_text  # pledged so far
     assert "97%" in response_text  # percent so far
     assert "3,979" in response_text  # total
@@ -222,7 +222,7 @@ def test_build_response_text_to_state_of_race_operation(
     response_text = plan_bot.build_state_of_race_response_text(
         datetime.date(2020, 2, 29)
     )
-    assert "Feb 29, 2020" in response_text
+    assert "Feb 29th" in response_text
     assert "101" in response_text  # pledged so far
     assert "97%" in response_text  # percent so far
     assert "3,979" in response_text  # total
@@ -239,7 +239,7 @@ def test_build_response_text_to_state_of_race_operation(
     #
     # assert type(response_text) is str
     #
-    # assert "Mar 1, 2020" in response_text
+    # assert "Mar 1st" in response_text
     # assert "155" in response_text  # pledged so far
     # assert "96%" in response_text  # percent so far
     # assert "3,979" in response_text  # total

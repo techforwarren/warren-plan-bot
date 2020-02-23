@@ -128,6 +128,14 @@ def build_all_plans_response_text(plans):
     return response
 
 
+def day_suffix(d):
+    return "th" if 11 <= d <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(d % 10, "th")
+
+
+def custom_strftime(format, t):
+    return t.strftime(format).replace("{S}", str(t.day) + day_suffix(t.day))
+
+
 def build_state_of_race_response_text(today: datetime.date):
 
     current_delegates_awarded = 101
@@ -143,13 +151,13 @@ def build_state_of_race_response_text(today: datetime.date):
     # TODO time zones?
     # TODO implement after SC (or just maintain this manually for now)
 
-    today_text = today.strftime("%b %d, %Y")
+    today_text = custom_strftime("%b {S}", today)
 
     response = (
         f"As of {today_text}, {current_delegates_awarded} out of {total_pledged_delegates:,} total delegates have been awarded in the primary. "
         f"That means {delegate_percentage_left}% of the delegates are still up for grabs!"
-        f"\n"
-        f"Learn how you can [be part of Warren’s surge in support](https://elizabethwarren.com/join-us)!"
+        f"\n\n"
+        f"[Be part of Warren’s surge in support](https://elizabethwarren.com/join-us)!"
     )
     return response
 
