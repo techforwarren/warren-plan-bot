@@ -229,6 +229,7 @@ def process_post(
     match_info = (
         RuleStrategy.match_verbatim(verbatims, post_text, options)
         or RuleStrategy.request_plan_list(plans, post_text, post=post)
+        or RuleStrategy.request_state_of_race(plans, post_text, post=post)
         or RuleStrategy.match_display_title(plans, post_text, post=post)
         or matching_strategy(plans, post_text, post=post)
     )
