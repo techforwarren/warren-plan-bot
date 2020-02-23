@@ -284,12 +284,12 @@ class RuleStrategy:
     """
 
     @staticmethod
-    def match_verbatim(verbatims: list, post_text: str, options: dict = {}):
+    def match_verbatim(verbatims: list, post_text: str, options: set = set()):
         """
         Match exactly to a verbatim message's ID.
         """
         verbatim_id = None
-        if options.get("why_warren") or re.match(
+        if "why_warren" in options or re.match(
             r"why warren\W*$", post_text, re.IGNORECASE | re.MULTILINE
         ):
             verbatim_id = "why_warren"
@@ -320,6 +320,14 @@ class RuleStrategy:
                 == preprocessed_post
             ):
                 return {"match": plan["id"], "confidence": 100, "plan": plan}
+
+    @staticmethod
+    def request_plan_list(plans: list, post_text: str, **kwargs):
+        """
+        Matches strictly to a request at the end of the trigger line for the full list of all known plans
+        """
+        if re.search(r"show me the plans\W*$", post_text, re.IGNORECASE | re.MULTILINE):
+            return {"operation": "all_the_plans"}
 
     @staticmethod
     def request_plan_list(plans: list, post_text: str, **kwargs):

@@ -253,12 +253,12 @@ def process_post(
         post_record_update["reply_type"] = "no_match"
 
     # add prefix with info about calling post if this is a parent operation
-    if options["parent"]:
+    if "parent" in options:
         reply_string = parent_reply_prefix(post) + reply_string
 
     try:
         did_reply = reply(
-            post, reply_string, parent=options["parent"], send=send, simulate=simulate
+            post, reply_string, parent="parent" in options, send=send, simulate=simulate
         )
     except APIException as e:
         if e.error_type == "DELETED_COMMENT":
@@ -347,4 +347,7 @@ def process_flags(text):
     options, unknown = parser.parse_known_args(text.split())
     remaining_text = " ".join(options.rest)
     del options.rest  # we don't need this, and removing it makes testing easier
-    return (remaining_text, vars(options))
+    return (
+        remaining_text,
+        {flag for flag, is_true in vars(options).items() if is_true},
+    )

@@ -93,14 +93,14 @@ class TestRuleStrategy:
 
     def test_why_warren(self):
         assert (
-            RuleStrategy.match_verbatim(VERBATIMS, "", {"why_warren": True})
+            RuleStrategy.match_verbatim(VERBATIMS, "", {"why_warren"})
             == self.why_warren_operation
         )
 
-        assert RuleStrategy.match_verbatim(VERBATIMS, "", {"why_warren": False}) is None
+        assert RuleStrategy.match_verbatim(VERBATIMS, "", set()) is None
 
         assert (
-            RuleStrategy.match_verbatim(VERBATIMS, "why warren", {"why_warren": False})
+            RuleStrategy.match_verbatim(VERBATIMS, "why warren", set())
             == self.why_warren_operation
         )
 
