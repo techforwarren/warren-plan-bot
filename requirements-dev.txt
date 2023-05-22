@@ -10,5 +10,5 @@ pytest==4.5.0
 # keyword-extractor
 python-rake==1.4.5
 bs4
-requests==2.22.0
+requests==2.31.0
 lxml
