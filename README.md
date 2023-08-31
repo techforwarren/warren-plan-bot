@@ -20,9 +20,24 @@ In order to test in development, you will need to [create your own reddit dev ap
 
 Also please see how to [run the app in dev safely](#run-the-bot)
 
-### Option 1: the virtualenv way
+### Option 1: The Docker way (recommended)
 
-There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
+There are many ways to set this bot up for local development. A super simple way is to make a docker environment
+
+#### Updating dependencies
+
+When you update dependencies, you'll need to rebuild the container
+
+`docker compose build`
+
+#### Run commands from within the docker container
+
+This will allow you to run all the commands below 
+
+`docker compose run -it planbot`
+
+### Option 2: the virtualenv way
+
 
 The following instructions should be run from the repo root
 
@@ -57,28 +72,6 @@ or visit https://cloud.google.com/sdk/docs/quickstarts
 `brew cask install java` on Mac
 
 or visit https://www.java.com/download/
-
-### Option 2: The Docker way
-
-#### Start the container
-
-`docker-compose up -d`
-
-#### Updating dependencies
-
-When you update dependencies, you'll need to rebuild the container
-
-`docker-compose build`
-
-and then start the new container
-
-`docker-compose down && docker-compose up -d`
-
-#### Run commands from within the docker container
-
-This will allow you to run all the commands below 
-
-`docker exec -it planbot bash`
 
 ### Useful commands
 

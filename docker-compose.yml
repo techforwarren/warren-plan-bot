@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   planbot:
     container_name: planbot
