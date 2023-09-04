@@ -7,6 +7,7 @@ from functools import partial
 from google.cloud import firestore
 from praw.exceptions import APIException
 
+from llm import build_llm_plan_response_text
 from matching import RuleStrategy, Strategy
 from reddit_util import standardize
 
@@ -33,7 +34,7 @@ def _plan_links(plans):
     )
 
 
-def build_response_text_plan_cluster(plan_record, post):
+def build_response_text_plan_cluster(plan_record):
     """
     Create response text with plan summary when plan is actually a plan cluster
     """
@@ -49,7 +50,7 @@ def build_response_text_plan_cluster(plan_record, post):
     )
 
 
-def build_response_text_pure_plan(plan_record, post):
+def build_response_text_pure_plan(plan_record):
     """
     Create response text with plan summary
     """
@@ -65,10 +66,26 @@ def build_response_text_pure_plan(plan_record, post):
     )
 
 
-def build_plan_response_text(plan_record, post):
-    if plan_record.get("is_cluster"):
-        return build_response_text_plan_cluster(plan_record, post)
-    return build_response_text_pure_plan(plan_record, post)
+def build_plan_response_text(plan: dict, full_post_text: str) -> (str, str):
+    """
+    Build response text for plan matches
+
+    :return: (response_text, reply_type)
+    """
+    # use static response text if match is a cluster
+    if plan.get("is_cluster"):
+        return build_response_text_plan_cluster(plan), "plan_cluster"
+
+    # if single plan match, try building a response using llm
+    #  provide the entire text of the post for context of any specific
+    #  questions asked etc...
+    llm_response = build_llm_plan_response_text(plan, full_post_text)
+
+    if llm_response:
+        return llm_response, "plan_llm"
+
+    # if llm failed for any reason, fallback to static response text
+    return build_response_text_pure_plan(plan), "plan"
 
 
 def build_verbatim_response_text(verbatim):
@@ -270,10 +287,8 @@ def process_post(
     if match:
         logger.info(f"plan match: {plan_id} {post.id} {plan_confidence}")
 
-        reply_string = build_plan_response_text(plan, post)
-        post_record_update["reply_type"] = (
-            "plan_cluster" if plan.get("is_cluster") else "plan"
-        )
+        reply_string, reply_type = build_plan_response_text(plan, post.text)
+        post_record_update["reply_type"] = reply_type
     elif operation and operation in operations_map:
         logger.info(f"{operation} requested: {post.id}")
 

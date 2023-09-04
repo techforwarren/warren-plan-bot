@@ -8,7 +8,7 @@ Reddit bot to help you learn about Senator Elizabeth Warren's plans
 Currently active on the following subreddits
 - [/r/ElizabethWarren](https://www.reddit.com/r/ElizabethWarren/)
 
-The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here`
+The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here. any_other_questions_here`
 
 ## Development
 
@@ -19,6 +19,12 @@ You'll need a `praw.ini` file in the '/src' folder of this repo. Copy over the `
 In order to test in development, you will need to [create your own reddit dev app](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps). Then use the credentials to populate your `praw.ini` file for dev.
 
 Also please see how to [run the app in dev safely](#run-the-bot)
+
+### .env file
+
+You'll need a `.env` file in the top-level this repo to test the LLM responses.
+
+Copy over the `.env.example` file and fill in the details. You'll need an OpenAI API key.
 
 ### Option 1: The Docker way (recommended)
 
@@ -37,7 +43,6 @@ This will allow you to run all the commands below
 `docker compose run -it planbot`
 
 ### Option 2: the virtualenv way
-
 
 The following instructions should be run from the repo root
 
@@ -127,6 +132,16 @@ This requires valid praw credentials
 will pull down up to 100 recent posts where someone has triggered the bot.
 
 This can be used to help update the `labeled_posts.json` file with real user queries. You'll still need to determine the desired matches by hand.
+
+#### Test out LLM responses
+
+`python scripts/try_llm.py '[TEXT OF POST]'`
+
+This can be used to test the behavior of the LLM and tweak the prompts.
+
+for ex
+
+`python scripts/try_llm.py '!warrenplanbot child care. how many kids can we help?'`
 
 ### Run the bot
 
