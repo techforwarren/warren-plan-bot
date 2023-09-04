@@ -364,14 +364,16 @@ def create_db_record(
 
 def get_trigger_line(text, trigger_word="!warrenplanbot"):
     """
-    Get the last line that !WarrenPlanBot occurs on,
-    only returning the part of that line which occurs _after_ !WarrenPlamBot
+    Get the final sentance that !WarrenPlanBot occurs in,
+    only returning the part of that sentance which occurs _after_ !WarrenPlanBot
     """
     matches = re.findall(
-        fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
+        fr"{trigger_word}[^-\w]+([^!?.]*[!?.]?)", text, re.IGNORECASE | re.MULTILINE
     )
+    if not matches:
+        return ""
 
-    return matches[-1] if matches else ""
+    return matches[-1]
 
 
 def process_flags(text):

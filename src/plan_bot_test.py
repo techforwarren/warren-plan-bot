@@ -478,6 +478,19 @@ def test_get_trigger_line():
         == "--tell-parent what's up?"
     )
 
+    # only get first sentance
+    assert (
+        plan_bot.get_trigger_line("!WarrenPlanBot what's up? I heard nothing")
+        == "what's up?"
+    )
+
+    assert plan_bot.get_trigger_line("!WarrenPlanBot what's up! Bees.") == "what's up!"
+
+    assert (
+        plan_bot.get_trigger_line("!WarrenPlanBot what's up. Do you know?")
+        == "what's up."
+    )
+
 
 @pytest.mark.parametrize(
     "input,expected_rest,expected_flags",

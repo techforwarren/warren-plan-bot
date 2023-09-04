@@ -7,6 +7,7 @@ import click
 
 from matching import Strategy
 import plan_bot
+from plans import load_plans
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
@@ -29,13 +30,7 @@ with open(path.join(DIRNAME, "labeled_posts.json")) as posts_file:
     labeled_posts = [Post(post) for post in json.load(posts_file)]
 
 
-with open(path.join(DIRNAME, "../src/plans.json")) as plans_file:
-    pure_plans = json.load(plans_file)
-
-with open(path.join(DIRNAME, "../src/plan_clusters.json")) as plans_file:
-    plan_clusters = json.load(plans_file)
-
-plans = pure_plans + plan_clusters
+plans = load_plans()
 
 # Weights for how good/bad the possible outcomes are to be considered
 CORRECT_MATCH = 1

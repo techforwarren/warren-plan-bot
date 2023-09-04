@@ -10,6 +10,7 @@ import click
 import praw
 import praw.models
 from google.cloud import firestore
+from plans import load_plans
 
 import pushshift
 import reddit_util
@@ -137,20 +138,7 @@ def run_plan_bot(
     # Ensure that we don't accidentally write to Reddit
     reddit.read_only = not send_replies
 
-    with open(PLANS_FILE) as json_file:
-        pure_plans = json.load(json_file)
-
-    with open(PLANS_CLUSTERS_FILE) as json_file:
-        plan_clusters = json.load(json_file)
-
-    for plan in plan_clusters:
-        plan["is_cluster"] = True
-        plan["plans"] = [
-            next(filter(lambda p: p["id"] == plan_id, pure_plans))
-            for plan_id in plan["plan_ids"]
-        ]
-
-    plans = pure_plans + plan_clusters
+    plans = load_plans()
 
     with open(VERBATIMS_FILE) as json_file:
         verbatims = json.load(json_file)
