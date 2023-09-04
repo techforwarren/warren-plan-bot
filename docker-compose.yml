@@ -9,3 +9,4 @@ services:
     tty: true
     environment:
       - PYTHONPATH=/mnt/src
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}

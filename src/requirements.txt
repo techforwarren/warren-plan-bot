@@ -5,3 +5,4 @@ google-cloud-storage==1.18.0
 google-cloud-firestore==1.4.0
 gensim==3.8.3
 unidecode==1.1.1
+openai
