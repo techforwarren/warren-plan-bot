@@ -80,7 +80,7 @@ resource "google_storage_bucket_object" "plan_bot_zip" {
 resource "google_cloudfunctions_function" "run_plan_bot" {
   name = local.function_name
   description = "run the plan bot"
-  runtime = "python37"
+  runtime = "python311"
 
   available_memory_mb = 1024
 

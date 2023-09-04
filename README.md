@@ -44,7 +44,7 @@ This will allow you to run all the commands below
 
 ### Option 2: the virtualenv way
 
-The following instructions should be run from the repo root
+The following instructions should be run from the repo root, and require Python 3.11
 
 #### Create the virtualenv (only have to do this once)
 
