@@ -10,11 +10,11 @@ import click
 import praw
 import praw.models
 from google.cloud import firestore
-from plans import load_plans
 
 import pushshift
 import reddit_util
 from plan_bot import process_post
+from plans import load_plans
 
 logger = logging.getLogger(__name__)
 

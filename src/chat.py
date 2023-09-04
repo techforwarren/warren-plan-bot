@@ -4,12 +4,12 @@ import json
 import os
 import textwrap
 from os import path
-from plans import load_plans
 
 import click
 import openai
 
 from matching import Strategy
+from plans import load_plans
 
 MODEL = "gpt-3.5-turbo-16k"  # Need at least 12k tokens in order to fit largest plans
 

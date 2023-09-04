@@ -1,13 +1,14 @@
-from os import path
 import json
+from os import path
+
 DIRNAME = path.dirname(path.realpath(__file__))
 
 
 PLANS_FILE = path.abspath(path.join(DIRNAME, "plans.json"))
 PLANS_CLUSTERS_FILE = path.abspath(path.join(DIRNAME, "plan_clusters.json"))
-PLAN_TEXT_DIR = path.abspath(
-    path.join(DIRNAME, "plan_text")
-)
+PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "plan_text"))
+
+
 def load_plans() -> list[dict]:
     """
     Load all plans from json files
