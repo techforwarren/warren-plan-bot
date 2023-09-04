@@ -138,18 +138,14 @@ def custom_strftime(format, t):
 
 def build_state_of_race_response_text(today: datetime.date):
 
+    if today > datetime.date(2020, 3, 6):
+        return "rip."
+
     current_delegates_awarded = 101
     total_pledged_delegates = 3_979
     delegate_percentage_left = round(
         (1 - current_delegates_awarded / total_pledged_delegates) * 100
     )
-
-    if today > datetime.date(2020, 2, 29):
-        raise NotImplementedError(
-            "Dates after the SC primary have not yet been implemented"
-        )
-    # TODO time zones?
-    # TODO implement after SC (or just maintain this manually for now)
 
     today_text = custom_strftime("%b {S}", today)
 

@@ -186,15 +186,17 @@ def run_plan_bot(
         submission = reddit_util.Submission(submission)
         process_the_post(submission)
 
-    for pushshift_comment in pushshift.search_comments(
-        "warrenplanbot", subreddit_name, limit=limit
-    ):
-
-        comment = reddit_util.Comment(
-            praw.models.Comment(reddit, _data=pushshift_comment)
-        )
-
-        process_the_post(comment)
+    # FIXME: pushshift is only for moderators since Reddit API changes. replace to get deeper comment history than via the Reddit API below
+    #  https://www.reddit.com/r/pushshift/comments/14ei799/pushshift_live_again_and_how_moderators_can/
+    # for pushshift_comment in pushshift.search_comments(
+    #     "warrenplanbot", subreddit_name, limit=limit
+    # ):
+    #
+    #     comment = reddit_util.Comment(
+    #         praw.models.Comment(reddit, _data=pushshift_comment)
+    #     )
+    #
+    #     process_the_post(comment)
 
     # Get new comments since we last ran.
     #
