@@ -13,7 +13,7 @@ from unidecode import unidecode
 
 DIRNAME = path.dirname(path.realpath(__file__))
 
-OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../data/interim/plan_text"))
+OUTPUT_DIR = path.abspath(path.join(DIRNAME, "../src/plan_text"))
 
 PLAN_HTML_DIR = path.abspath(path.join(DIRNAME, "../data/raw/plan_html"))
 
