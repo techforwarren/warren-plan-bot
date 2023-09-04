@@ -12,31 +12,25 @@ import openai
 from matching import Strategy
 
 MODEL = "gpt-3.5-turbo-16k"  # Need at least 12k tokens in order to fit largest plans
-def match_plan(chat_text, matching_strategy=Strategy.lsa_gensim_v3):
 
 
+def generate_user_prompt(chat_text, matching_strategy=Strategy.lsa_gensim_v3):
     plans = load_plans()
-
-    # TODO handle different depending on whether it matches
 
     match_info = matching_strategy(plans, chat_text)
 
-    match = match_info.get("match")
-    plan_confidence = match_info.get("confidence")
-    plan = match_info.get("plan", {})
-    potential_matches = match_info.get("potential_matches")
-    plan_id = plan.get("id")
+    match = match_info["match"]
+    best_match_plan = match_info["plan"]
 
-    post_record_update = {}
+    if not match:
+        print("No single plan matched. Skipping LLM")
+        return
 
-    # If plan is matched with confidence, build and send reply
-    if match:
-        print(match)
-        return Prompts.single_match(user_input=chat_text, matched_plan=plan)
-    else:
-        print("no match")
-        # TODO
-        return " ".join([match["plan"]["url"] for match in potential_matches[:8]])
+    if plan["is_cluster"]:
+        print("Plan cluster matched. Skipping LLM")
+        return
+
+    return Prompts.single_match(user_input=chat_text, matched_plan=best_match_plan)
 
 
 class Prompts:
@@ -70,27 +64,25 @@ Answer:
 Always answer the query using the provided context information, and not prior knowledge.
 Some rules to follow:
 1. Never directly reference the given context in your answer.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or "the relevant plan" or anything along those lines.
+2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or 'the relevant plan' or anything along those lines.
 3. Include information about the plan provided in the given context"""
-
-
-# Also, if a user asks you to provide information about a different plan or topic, do not answer it. Instead, ask them to start a new conversation.
 
 
 def plan_bot_say(text, width=80):
     print("\n" + "\n".join(textwrap.wrap(f"WPB: {text}", width)))
 
 
-# TODO handle plan clusters (or don't match them)
-# TODO user broke out of just this plan
-
-
 @click.command()
 @click.argument("post_text", type=str)
 def chat_plan_bot(post_text: str):
+    user_prompt = generate_user_prompt(post_text)
+    if not user_prompt:
+        plan_bot_say("Sorry")
+        return
+
     messages = [
         {"role": "system", "content": Prompts.planbot_system_prompt()},
-        {"role": "user", "content": match_plan(post_text)},
+        {"role": "user", "content": user_prompt},
     ]
     llm_response = openai.ChatCompletion.create(
         model=MODEL,
@@ -98,7 +90,6 @@ def chat_plan_bot(post_text: str):
         temperature=0,  # consistent responses are more desirable than creative responses for a political campaign
     )
 
-    print(llm_response)
     finish_reason = llm_response["choices"][0]["finish_reason"]
     response_text = llm_response["choices"][0]["message"]["content"]
 
