@@ -27,15 +27,13 @@ class Prompts:
 ---------------------\n
 The title of Senator Warren's plan: "{plan['display_title']}" 
 
-The URL: {plan['url']}
-
 A summary of this plan: {plan['summary']}
 
 The full text of this plan is:
 
 {plan['full_text']}
 -----------
-Given the context information and not prior knowledge, answer the question. Please include the name and url of the plan in your reply.
+Given the context information and not prior knowledge, answer the question.
 
 Query: {user_input}"
 Answer: 

@@ -67,6 +67,30 @@ def build_response_text_pure_plan(plan: PurePlan):
     )
 
 
+def build_response_text_llm(plan: PurePlan):
+    """
+    Create response text using llm
+    """
+
+    llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
+
+    if not llm_response:
+        return
+
+    return (
+        f"Senator Warren has a plan for that!"
+        f"\n\n"
+        f"{llm_response}"
+        f"\n\n"
+        f"Learn more about her plan: [{plan['display_title']}]({plan['url']})"
+        f"\n\n"
+        # Horizontal line above footer
+        "\n***\n"
+        # Disclaimer
+        f"This bot was created independently by volunteers and used LLMs in generating this response. If anything here is incorrect, please reply to this comment and let us know."
+    )
+
+
 def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     """
     Build response text for plan matches
@@ -83,7 +107,10 @@ def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
 
     if llm_response:
-        return "Senator Warren has a plan for that!\n\n" + llm_response + footer(), "plan_llm"
+        return (
+            "Senator Warren has a plan for that!\n\n" + llm_response + footer(),
+            "plan_llm",
+        )
 
     # if llm failed for any reason, fallback to static response text
     return build_response_text_pure_plan(plan), "plan"

@@ -151,10 +151,11 @@ def test_build_response_text_pure_plan_with_llm(mock_plan):
     assert "hamspameggs" in response_text
     assert reply_type == "plan_llm"
 
+
 def test_build_response_text_pure_plan_fallback_to_static_text(mock_plan):
     with mock.patch(
-            "llm.build_llm_plan_response_text",
-            return_value=None,
+        "llm.build_llm_plan_response_text",
+        return_value=None,
     ) as mock_chat_completion:
         response_text, reply_type = plan_bot.build_plan_response_text(
             mock_plan, "foobarbaz"
@@ -164,32 +165,36 @@ def test_build_response_text_pure_plan_fallback_to_static_text(mock_plan):
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
     assert reply_type == "plan"
-def test_build_response_text_pure_plan_llm_fallback_to_static_text_on_early_stop(mock_plan):
+
+
+def test_build_response_text_pure_plan_llm_fallback_to_static_text_on_early_stop(
+    mock_plan,
+):
     with mock.patch(
-            "openai.ChatCompletion.create",
-            return_value=(
+        "openai.ChatCompletion.create",
+        return_value=(
+            {
+                "id": "chatcmpl-uqkvlQyYK7bGYrRHQ0eXlWi7",
+                "object": "chat.completion",
+                "created": 1589478378,
+                "model": "gpt-3.5-turbo",
+                "choices": [
                     {
-                        "id": "chatcmpl-uqkvlQyYK7bGYrRHQ0eXlWi7",
-                        "object": "chat.completion",
-                        "created": 1589478378,
-                        "model": "gpt-3.5-turbo",
-                        "choices": [
-                            {
-                                "message": {
-                                    "content": "This is indeed a test",
-                                    "role": "assistant"
-                                },
-                                "index": 0,
-                                "finish_reason": "foo", # anything but stop
-                            }
-                        ],
-                        "usage": {
-                            "prompt_tokens": 5,
-                            "completion_tokens": 7,
-                            "total_tokens": 12,
+                        "message": {
+                            "content": "This is indeed a test",
+                            "role": "assistant",
                         },
+                        "index": 0,
+                        "finish_reason": "foo",  # anything but stop
                     }
-            ),
+                ],
+                "usage": {
+                    "prompt_tokens": 5,
+                    "completion_tokens": 7,
+                    "total_tokens": 12,
+                },
+            }
+        ),
     ) as mock_chat_completion:
         response_text, reply_type = plan_bot.build_plan_response_text(
             mock_plan, "foobarbaz"
@@ -199,6 +204,7 @@ def test_build_response_text_pure_plan_llm_fallback_to_static_text_on_early_stop
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
     assert reply_type == "plan"
+
 
 def test_build_no_match_response_text(mock_submission, mock_plan):
     response_text = plan_bot.build_no_match_response_text(
