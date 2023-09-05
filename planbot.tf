@@ -27,7 +27,7 @@ locals {
 provider "google" {
   credentials = file(local.credentials_file)
   project = local.project_id
-  region = "us-central1"
+  region = var.region
 }
 
 terraform {
@@ -36,6 +36,13 @@ terraform {
     prefix = "terraform/state"
     credentials = "~/.gcloud/wpb-dev-terraform-key.json"
   }
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "~> 4.80.0"
+    }
+  }
+  required_version = "~> 1.5.6"
 }
 
 resource "google_pubsub_topic" "run_plan_bot" {
@@ -64,6 +71,7 @@ data "archive_file" "plan_bot_zip" {
 # create the storage bucket for function storage
 resource "google_storage_bucket" "plan_bot_function_storage" {
   name = local.function_storage_bucket
+  location = "US"
 }
 
 
@@ -91,16 +99,31 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
   timeout = local.timeout
   entry_point = "run_plan_bot_event_handler"
   max_instances = 1
-  labels = {
-    // here so that the deploy trick above keeps working
-    deployment-tool = "cli-gcloud"
-  }
 
   environment_variables = {
     SEND_REPLIES = var.send_replies
     PRAW_SITE = local.environment
     LIMIT = local.limit
     TIME_IN_LOOP = local.time_in_loop
+    OPENAI_API_KEY = google_secret_manager_secret_version.openai_api_key.secret_data
+  }
+}
+
+resource "google_secret_manager_secret" "openai_api_key" {
+  secret_id = "openai_api_key"
+
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "openai_api_key" {
+  secret = google_secret_manager_secret.openai_api_key.id
+  secret_data = "REPLACE_ME_AFTER_DEPLOYMENT"
+  lifecycle {
+    ignore_changes = [
+      secret_data
+    ]
   }
 }
 

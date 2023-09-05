@@ -1,0 +1,41 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/hashicorp/archive" {
+  version = "2.4.0"
+  hashes = [
+    "h1:ZtsrX5F13Ohsv/k/BvgyBVn0gF+lW4bkG7JmCGrN35Y=",
+    "zh:18e408596dd53048f7fc8229098d0e3ad940b92036a24287eff63e2caec72594",
+    "zh:392d4216ecd1a1fd933d23f4486b642a8480f934c13e2cae3c13b6b6a7e34a7b",
+    "zh:655dd1fa5ca753a4ace21d0de3792d96fff429445717f2ce31c125d19c38f3ff",
+    "zh:70dae36c176aa2b258331ad366a471176417a94dd3b4985a911b8be9ff842b00",
+    "zh:78d5eefdd9e494defcb3c68d282b8f96630502cac21d1ea161f53cfe9bb483b3",
+    "zh:7d8c8e3925f1e21daf73f85983894fbe8868e326910e6df3720265bc657b9c9c",
+    "zh:a032ec0f0aee27a789726e348e8ad20778c3a1c9190ef25e7cff602c8d175f44",
+    "zh:b8e50de62ba185745b0fe9713755079ad0e9f7ac8638d204de6762cc36870410",
+    "zh:c8ad0c7697a3d444df21ff97f3473a8604c8639be64afe3f31b8ec7ad7571e18",
+    "zh:df736c5a2a7c3a82c5493665f659437a22f0baf8c2d157e45f4dd7ca40e739fc",
+    "zh:e8ffbf578a0977074f6d08aa8734e36c726e53dc79894cfc4f25fadc4f45f1df",
+    "zh:efea57ff23b141551f92b2699024d356c7ffd1a4ad62931da7ed7a386aef7f1f",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/google" {
+  version     = "4.80.0"
+  constraints = "4.80.0"
+  hashes = [
+    "h1:g0ypb/BK/CuGLR6TMuBm2QlqtdhooVQIZA/9N1dgx4Y=",
+    "zh:027259bfc3bc38c06ec4f078ba77b0aa2088a2064cfcce8568f8c971438830c7",
+    "zh:0436d41d331b078a3a2db7625f35ab26cbc0af67d0282230227ae71e59643343",
+    "zh:1d42f87b811c6cd66428dc4f1f54312392a26f145f05cce5538875e3bf542f0d",
+    "zh:3bc9ffa34c24cfe690c00844e5dd028c305f163e27441eccc93e11013b5c0b36",
+    "zh:43da14a0917cd9b4643c248f011ed866aa79d99c51245716f9739a3e8f123458",
+    "zh:4696084837d821c06feb8905141ecdb92808e68d31ff2833836b5bb2bc840dff",
+    "zh:502123c304869268a98f146ac69e533b9c7824128d07bfc46204ac176c117645",
+    "zh:b52876431e7da00d903e01bd478ffbaaf6c078e0ce752e5a0ebdee9467246592",
+    "zh:c8763c9ad0cb3345bc3ffeb472932e451950efb148a5932b078dc3af88ace6d0",
+    "zh:ce939e5587361bd55e69bb7f825b4a74b7f003ca1ed42d3c9cc251f7ebb7a27d",
+    "zh:f569b65999264a9416862bca5cd2a6177d94ccb0424f3a4ef424428912b9cb3c",
+    "zh:f5965425a4c07ad2f1b8a9bc9ec80be8c0d1ed6d64816348b9b0f6ab49bd529a",
+  ]
+}
