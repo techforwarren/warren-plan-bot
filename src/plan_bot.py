@@ -83,7 +83,7 @@ def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
 
     if llm_response:
-        return llm_response, "plan_llm"
+        return "Senator Warren has a plan for that!\n\n" + llm_response + footer(), "plan_llm"
 
     # if llm failed for any reason, fallback to static response text
     return build_response_text_pure_plan(plan), "plan"
