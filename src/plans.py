@@ -1,27 +1,41 @@
 import json
 from os import path
+from typing import Literal, TypedDict, Union
 
 DIRNAME = path.dirname(path.realpath(__file__))
-
-
 PLANS_FILE = path.abspath(path.join(DIRNAME, "plans.json"))
 PLANS_CLUSTERS_FILE = path.abspath(path.join(DIRNAME, "plan_clusters.json"))
 PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "plan_text"))
 
+# Plan types #
+# future work: migrate from dictionaries to classes
+class BasePlan(TypedDict):
+    """Base class for all Plans"""
+    id: str # plan id
+    topic: str # hand-picked human-readable topic for matching
+    summary: str # summary, from the Warren Campaign site
+    display_title: str # title, from the Warren Campaign site
+    url: str # url, from the Warren Campaign site
 
-def load_plans() -> list[dict]:
+class PurePlan(BasePlan):
+    """
+    A single plan that can be matched
+    """
+    full_text: str # full text, scraped from the Warren Campaign site and processed to remove html elements, irrelevant campaign features etc...
+    is_cluster: Literal[False] # pure plans are not clusters
+
+class PlanCluster(BasePlan):
+    """
+    A cluster of plans that can be matched
+    """
+    plans: list[PurePlan] # plans that make up the cluster, as designated by the Warren campaign
+    is_cluster: Literal[True] # pure plans are clusters
+
+Plan = Union[PurePlan, PlanCluster] # many functions will take either a pure plan or a plan cluster, as either can be matched
+
+def load_plans() -> list[Plan]:
     """
     Load all plans from json files
-
-    :return: {
-        "id": plan_id
-        "topic": hand-picked human-readable topic for matching
-        "summary": summary, from the Warren Campaign site
-        "display_title": title, from the Warren Campaign site
-        "url": url, from the Warren Campaign site
-        "full_text": [for pure plans, not plan clusters] full text, scraped from the Warren Campaign site and processed to remove html elements, irrelevant campaign features etc...
-        "plans": [for pure clusters, not pure plans] full text, scraped from the Warren Campaign site and processed using beautifulsoup
-    },
 }
     """
     with open(PLANS_FILE) as json_file:

@@ -9,6 +9,7 @@ from praw.exceptions import APIException
 
 from llm import build_llm_plan_response_text
 from matching import RuleStrategy, Strategy
+from plans import Plan, PlanCluster, PurePlan
 from reddit_util import standardize
 
 logger = logging.getLogger(__name__)
@@ -28,13 +29,13 @@ def footer():
     )
 
 
-def _plan_links(plans):
+def _plan_links(plans: list[Plan]) -> str:
     return "\n".join(
         ["[" + plan["display_title"] + "](" + plan["url"] + ")  " for plan in plans]
     )
 
 
-def build_response_text_plan_cluster(plan_record):
+def build_response_text_plan_cluster(plan_cluster: PlanCluster):
     """
     Create response text with plan summary when plan is actually a plan cluster
     """
@@ -43,14 +44,14 @@ def build_response_text_plan_cluster(plan_record):
         f"Senator Warren has quite a number of plans for that!"
         f"\n\n"
         # Links to learn more about the plan cluster
-        f"Learn more about her plans for {plan_record['display_title']}:"
+        f"Learn more about her plans for {plan_cluster['display_title']}:"
         f"\n\n"
-        f"{ _plan_links(plan_record['plans'])}"
+        f"{ _plan_links(plan_cluster['plans'])}"
         f"{footer()}"
     )
 
 
-def build_response_text_pure_plan(plan_record):
+def build_response_text_pure_plan(plan: PurePlan):
     """
     Create response text with plan summary
     """
@@ -58,15 +59,15 @@ def build_response_text_pure_plan(plan_record):
     return (
         f"Senator Warren has a plan for that!"
         f"\n\n"
-        f"{plan_record['summary']}"
+        f"{plan['summary']}"
         f"\n\n"
         # Link to learn more about the plan
-        f"Learn more about her plan: [{plan_record['display_title']}]({plan_record['url']})"
+        f"Learn more about her plan: [{plan['display_title']}]({plan['url']})"
         f"{footer()}"
     )
 
 
-def build_plan_response_text(plan: dict, full_post_text: str) -> (str, str):
+def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     """
     Build response text for plan matches
 
@@ -92,7 +93,7 @@ def build_verbatim_response_text(verbatim):
     return f"""{verbatim["text"]}{footer()}"""
 
 
-def build_no_match_response_text(potential_plan_matches, post):
+def build_no_match_response_text(potential_plan_matches: list[Plan], post):
     if potential_plan_matches:
         return (
             f"I'm not sure I have an exact match for you! "
@@ -124,7 +125,7 @@ def build_no_match_response_text(potential_plan_matches, post):
         )
 
 
-def build_all_plans_response_text(plans):
+def build_all_plans_response_text(plans: list[Plan]) -> str:
     pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
 
     response = (
@@ -153,7 +154,7 @@ def custom_strftime(format, t):
     return t.strftime(format).replace("{S}", str(t.day) + day_suffix(t.day))
 
 
-def build_state_of_race_response_text(today: datetime.date):
+def build_state_of_race_response_text(today: datetime.date) -> str:
 
     if today > datetime.date(2020, 3, 6):
         return "rip."
@@ -373,7 +374,7 @@ def create_db_record(
     return entry
 
 
-def get_trigger_line(text, trigger_word="!warrenplanbot"):
+def get_trigger_line(text: str, trigger_word="!warrenplanbot") -> str:
     """
     Get the final sentance that !WarrenPlanBot occurs in,
     only returning the part of that sentance which occurs _after_ !WarrenPlanBot

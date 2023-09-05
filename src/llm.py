@@ -3,6 +3,8 @@ from typing import Optional
 
 import openai
 
+from plans import PurePlan
+
 MODEL = "gpt-3.5-turbo-16k"  # Need at least 12k tokens in order to fit largest plans
 
 logger = logging.getLogger(__name__)
@@ -10,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Prompts:
     @staticmethod
-    def matched_plan_user_prompt(user_input: str, plan: dict) -> str:
+    def matched_plan_user_prompt(user_input: str, plan: PurePlan) -> str:
         """
         Prompt to use when a single plan has been matched to user's input
         This provides detailed context about the specific plan matched
@@ -58,7 +60,7 @@ Some rules to follow:
 3. Include information about the plan provided in the given context"""
 
 
-def build_llm_plan_response_text(plan: dict, post_text: str) -> Optional[str]:
+def build_llm_plan_response_text(plan: PurePlan, post_text: str) -> Optional[str]:
     """
     Use ChatGPT to generate a contextual reply to a user's full post.
     The plan has already been matched, and other information in the user's
@@ -66,7 +68,7 @@ def build_llm_plan_response_text(plan: dict, post_text: str) -> Optional[str]:
     or simply to focus on the most relevant parts of the plan that the user
     is referring to
 
-    :param plan: Single matched plan, including full text of the plan
+    :param plan: Single matched plan
     :param post_text: Full text of user post which summoned the bot
     :return: LLM reply to pass to user
     """
