@@ -3,10 +3,10 @@ Warren Plan Bot
 
 [![Build Status](https://travis-ci.org/techforwarren/warren-plan-bot.svg?branch=master)](https://travis-ci.org/techforwarren/warren-plan-bot)
 
-Reddit bot to help you learn about Senator Elizabeth Warren's plans
+Reddit bot to help you learn about Senator Elizabeth Warren's plans during the 2020 Democratic Primary
 
 Currently active on the following subreddits
-- [/r/ElizabethWarren](https://www.reddit.com/r/ElizabethWarren/)
+- [/r/WPBSandbox](https://www.reddit.com/r/WPBSandbox)
 
 The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here. any_other_questions_here`
 
