@@ -4,7 +4,7 @@ test:
 
 format:
 	@black src
-	@isort -rc --atomic src
+	@isort --atomic src
 
 lint:
 	@# Ignore white space errors for now

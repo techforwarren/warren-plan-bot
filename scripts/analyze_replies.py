@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 
-import json
-import os
 from collections import Counter
 from os import path
 
 import click
-import praw
 from google.cloud import firestore
-
-import reddit_util
 
 DIRNAME = path.dirname(path.realpath(__file__))
 

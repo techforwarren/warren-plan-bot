@@ -85,13 +85,6 @@ class Preprocess:
             for i in range(len(list_of_words) - 1)
         ]
 
-    @staticmethod
-    def bigrams_phrases(doc) -> list:
-        """
-        Turn a list of words into a list of bigrams
-        """
-        return []
-
 
 class Strategy:
     """

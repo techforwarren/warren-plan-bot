@@ -7,7 +7,9 @@ from functools import partial
 from google.cloud import firestore
 from praw.exceptions import APIException
 
+import llm
 from matching import RuleStrategy, Strategy
+from plans import Plan, PlanCluster, PurePlan
 from reddit_util import standardize
 
 logger = logging.getLogger(__name__)
@@ -27,13 +29,13 @@ def footer():
     )
 
 
-def _plan_links(plans):
+def _plan_links(plans: list[Plan]) -> str:
     return "\n".join(
         ["[" + plan["display_title"] + "](" + plan["url"] + ")  " for plan in plans]
     )
 
 
-def build_response_text_plan_cluster(plan_record, post):
+def build_response_text_plan_cluster(plan_cluster: PlanCluster):
     """
     Create response text with plan summary when plan is actually a plan cluster
     """
@@ -42,14 +44,14 @@ def build_response_text_plan_cluster(plan_record, post):
         f"Senator Warren has quite a number of plans for that!"
         f"\n\n"
         # Links to learn more about the plan cluster
-        f"Learn more about her plans for {plan_record['display_title']}:"
+        f"Learn more about her plans for {plan_cluster['display_title']}:"
         f"\n\n"
-        f"{ _plan_links(plan_record['plans'])}"
+        f"{ _plan_links(plan_cluster['plans'])}"
         f"{footer()}"
     )
 
 
-def build_response_text_pure_plan(plan_record, post):
+def build_response_text_pure_plan(plan: PurePlan):
     """
     Create response text with plan summary
     """
@@ -57,25 +59,65 @@ def build_response_text_pure_plan(plan_record, post):
     return (
         f"Senator Warren has a plan for that!"
         f"\n\n"
-        f"{plan_record['summary']}"
+        f"{plan['summary']}"
         f"\n\n"
         # Link to learn more about the plan
-        f"Learn more about her plan: [{plan_record['display_title']}]({plan_record['url']})"
+        f"Learn more about her plan: [{plan['display_title']}]({plan['url']})"
         f"{footer()}"
     )
 
 
-def build_plan_response_text(plan_record, post):
-    if plan_record.get("is_cluster"):
-        return build_response_text_plan_cluster(plan_record, post)
-    return build_response_text_pure_plan(plan_record, post)
+def build_response_text_llm(plan: PurePlan, full_post_text: str) -> str:
+    """
+    Create response text using llm to include contextual information
+    """
+
+    llm_response = llm.build_plan_response_text(plan, full_post_text)
+
+    if not llm_response:
+        return
+
+    return (
+        f"Senator Warren has a plan for that!"
+        f"\n\n"
+        f"{llm_response}"
+        f"\n\n"
+        f"Learn more about her plan: [{plan['display_title']}]({plan['url']})"
+        f"\n\n"
+        # Horizontal line above footer
+        "\n***\n"
+        # Disclaimer
+        f"This bot was created independently by volunteers and used LLMs in generating this response. If anything is incorrect, please reply and let us know."
+    )
+
+
+def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
+    """
+    Build response text for plan matches
+
+    :return: (response_text, reply_type)
+    """
+    # use static response text if match is a cluster
+    if plan.get("is_cluster"):
+        return build_response_text_plan_cluster(plan), "plan_cluster"
+
+    # if single plan match, try building a response using llm
+    #  provide the entire text of the post for context of any specific
+    #  questions asked etc...
+    llm_response = build_response_text_llm(plan, full_post_text)
+
+    if llm_response:
+        return llm_response, "plan_llm"
+
+    # if llm failed for any reason, fallback to static response text
+    return build_response_text_pure_plan(plan), "plan"
 
 
 def build_verbatim_response_text(verbatim):
     return f"""{verbatim["text"]}{footer()}"""
 
 
-def build_no_match_response_text(potential_plan_matches, post):
+def build_no_match_response_text(potential_plan_matches: list[Plan], post):
     if potential_plan_matches:
         return (
             f"I'm not sure I have an exact match for you! "
@@ -107,7 +149,7 @@ def build_no_match_response_text(potential_plan_matches, post):
         )
 
 
-def build_all_plans_response_text(plans):
+def build_all_plans_response_text(plans: list[Plan]) -> str:
     pure_plans = list(filter(lambda p: not p.get("is_cluster"), plans))
 
     response = (
@@ -136,20 +178,15 @@ def custom_strftime(format, t):
     return t.strftime(format).replace("{S}", str(t.day) + day_suffix(t.day))
 
 
-def build_state_of_race_response_text(today: datetime.date):
+def build_state_of_race_response_text(today: datetime.date) -> str:
+    if today > datetime.date(2020, 3, 6):
+        return "rip."
 
     current_delegates_awarded = 101
     total_pledged_delegates = 3_979
     delegate_percentage_left = round(
         (1 - current_delegates_awarded / total_pledged_delegates) * 100
     )
-
-    if today > datetime.date(2020, 2, 29):
-        raise NotImplementedError(
-            "Dates after the SC primary have not yet been implemented"
-        )
-    # TODO time zones?
-    # TODO implement after SC (or just maintain this manually for now)
 
     today_text = custom_strftime("%b {S}", today)
 
@@ -274,10 +311,8 @@ def process_post(
     if match:
         logger.info(f"plan match: {plan_id} {post.id} {plan_confidence}")
 
-        reply_string = build_plan_response_text(plan, post)
-        post_record_update["reply_type"] = (
-            "plan_cluster" if plan.get("is_cluster") else "plan"
-        )
+        reply_string, reply_type = build_plan_response_text(plan, post.text)
+        post_record_update["reply_type"] = reply_type
     elif operation and operation in operations_map:
         logger.info(f"{operation} requested: {post.id}")
 
@@ -362,16 +397,18 @@ def create_db_record(
     return entry
 
 
-def get_trigger_line(text, trigger_word="!warrenplanbot"):
+def get_trigger_line(text: str, trigger_word="!warrenplanbot") -> str:
     """
-    Get the last line that !WarrenPlanBot occurs on,
-    only returning the part of that line which occurs _after_ !WarrenPlamBot
+    Get the final sentance that !WarrenPlanBot occurs in,
+    only returning the part of that sentance which occurs _after_ !WarrenPlanBot
     """
     matches = re.findall(
-        fr"{trigger_word}[^-\w]+(.*)$", text, re.IGNORECASE | re.MULTILINE
+        rf"{trigger_word}[^-\w]+([^!?.]*[!?.]?)", text, re.IGNORECASE | re.MULTILINE
     )
+    if not matches:
+        return ""
 
-    return matches[-1] if matches else ""
+    return matches[-1]
 
 
 def process_flags(text):

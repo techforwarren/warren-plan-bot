@@ -25,7 +25,7 @@ if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 
-PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "../data/interim/plan_text"))
+PLAN_TEXT_DIR = path.abspath(path.join(DIRNAME, "../src/plan_text"))
 PLANS_FROM_REPO_PATH = path.abspath(path.join(DIRNAME, "../src/plans.json"))
 PLAN_CLUSTERS_PATH = path.abspath(path.join(DIRNAME, "../src/plan_clusters.json"))
 

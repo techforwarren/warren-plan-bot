@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   planbot:
     container_name: planbot
@@ -10,3 +9,4 @@ services:
     tty: true
     environment:
       - PYTHONPATH=/mnt/src
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}

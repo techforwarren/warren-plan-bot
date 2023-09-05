@@ -8,7 +8,7 @@ Reddit bot to help you learn about Senator Elizabeth Warren's plans
 Currently active on the following subreddits
 - [/r/ElizabethWarren](https://www.reddit.com/r/ElizabethWarren/)
 
-The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here`
+The bot can be summoned by making a comment of the form `!WarrenPlanBot plan_topic_goes_here. any_other_questions_here`
 
 ## Development
 
@@ -20,11 +20,31 @@ In order to test in development, you will need to [create your own reddit dev ap
 
 Also please see how to [run the app in dev safely](#run-the-bot)
 
-### Option 1: the virtualenv way
+### .env file
 
-There are many ways to set this bot up for local development. A super simple way is to make a virtual environment
+You'll need a `.env` file in the top-level this repo to test the LLM responses.
 
-The following instructions should be run from the repo root
+Copy over the `.env.example` file and fill in the details. You'll need an OpenAI API key.
+
+### Option 1: The Docker way (recommended)
+
+There are many ways to set this bot up for local development. A super simple way is to make a docker environment
+
+#### Updating dependencies
+
+When you update dependencies, you'll need to rebuild the container
+
+`docker compose build`
+
+#### Run commands from within the docker container
+
+This will allow you to run all the commands below 
+
+`docker compose run -it planbot`
+
+### Option 2: the virtualenv way
+
+The following instructions should be run from the repo root, and require Python 3.11
 
 #### Create the virtualenv (only have to do this once)
 
@@ -48,7 +68,7 @@ There are several ways to do this, one way is to extend your env/bin/activate fi
 
 ##### Gcloud
 
-`brew cask install google-cloud-sdk` on Mac
+`brew install --cask google-cloud-sdk` on Mac
 
 or visit https://cloud.google.com/sdk/docs/quickstarts
 
@@ -57,28 +77,6 @@ or visit https://cloud.google.com/sdk/docs/quickstarts
 `brew cask install java` on Mac
 
 or visit https://www.java.com/download/
-
-### Option 2: The Docker way
-
-#### Start the container
-
-`docker-compose up -d`
-
-#### Updating dependencies
-
-When you update dependencies, you'll need to rebuild the container
-
-`docker-compose build`
-
-and then start the new container
-
-`docker-compose down && docker-compose up -d`
-
-#### Run commands from within the docker container
-
-This will allow you to run all the commands below 
-
-`docker exec -it planbot bash`
 
 ### Useful commands
 
@@ -134,6 +132,16 @@ This requires valid praw credentials
 will pull down up to 100 recent posts where someone has triggered the bot.
 
 This can be used to help update the `labeled_posts.json` file with real user queries. You'll still need to determine the desired matches by hand.
+
+#### Test out LLM responses
+
+`python scripts/try_llm.py '[TEXT OF POST]'`
+
+This can be used to test the behavior of the LLM and tweak the prompts.
+
+for ex
+
+`python scripts/try_llm.py '!warrenplanbot child care. how many kids can we help?'`
 
 ### Run the bot
 

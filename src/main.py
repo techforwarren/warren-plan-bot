@@ -14,6 +14,7 @@ from google.cloud import firestore
 import pushshift
 import reddit_util
 from plan_bot import process_post
+from plans import load_plans
 
 logger = logging.getLogger(__name__)
 
@@ -137,20 +138,7 @@ def run_plan_bot(
     # Ensure that we don't accidentally write to Reddit
     reddit.read_only = not send_replies
 
-    with open(PLANS_FILE) as json_file:
-        pure_plans = json.load(json_file)
-
-    with open(PLANS_CLUSTERS_FILE) as json_file:
-        plan_clusters = json.load(json_file)
-
-    for plan in plan_clusters:
-        plan["is_cluster"] = True
-        plan["plans"] = [
-            next(filter(lambda p: p["id"] == plan_id, pure_plans))
-            for plan_id in plan["plan_ids"]
-        ]
-
-    plans = pure_plans + plan_clusters
+    plans = load_plans()
 
     with open(VERBATIMS_FILE) as json_file:
         verbatims = json.load(json_file)
@@ -198,15 +186,17 @@ def run_plan_bot(
         submission = reddit_util.Submission(submission)
         process_the_post(submission)
 
-    for pushshift_comment in pushshift.search_comments(
-        "warrenplanbot", subreddit_name, limit=limit
-    ):
-
-        comment = reddit_util.Comment(
-            praw.models.Comment(reddit, _data=pushshift_comment)
-        )
-
-        process_the_post(comment)
+    # FIXME: pushshift is only for moderators since Reddit API changes. replace to get deeper comment history than via the Reddit API below
+    #  https://www.reddit.com/r/pushshift/comments/14ei799/pushshift_live_again_and_how_moderators_can/
+    # for pushshift_comment in pushshift.search_comments(
+    #     "warrenplanbot", subreddit_name, limit=limit
+    # ):
+    #
+    #     comment = reddit_util.Comment(
+    #         praw.models.Comment(reddit, _data=pushshift_comment)
+    #     )
+    #
+    #     process_the_post(comment)
 
     # Get new comments since we last ran.
     #
