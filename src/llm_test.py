@@ -1,10 +1,10 @@
 from unittest import mock
 
-from llm import build_llm_plan_response_text
+from llm import build_plan_response_text
 from plan_bot_test import mock_plan
 
 
-def test_build_llm_plan_response_text(mock_plan):
+def test_build_plan_response_text(mock_plan):
     with mock.patch(
         "openai.ChatCompletion.create",
         return_value=(
@@ -31,19 +31,19 @@ def test_build_llm_plan_response_text(mock_plan):
             }
         ),
     ) as mock_chat_completion:
-        response_text = build_llm_plan_response_text(mock_plan, "foobarbaz")
+        response_text = build_plan_response_text(mock_plan, "foobarbaz")
     assert "This is indeed a test" == response_text
 
 
-def test_build_llm_plan_response_text_on_error(mock_plan):
+def test_build_plan_response_text_on_error(mock_plan):
     with mock.patch(
         "openai.ChatCompletion.create", side_effect=ValueError("foo")
     ) as mock_chat_completion:
-        response_text = build_llm_plan_response_text(mock_plan, "foobarbaz")
+        response_text = build_plan_response_text(mock_plan, "foobarbaz")
     assert None is response_text
 
 
-def test_build_llm_plan_response_text_on__early_stop(mock_plan):
+def test_build_plan_response_text_on__early_stop(mock_plan):
     with mock.patch(
         "openai.ChatCompletion.create",
         return_value=(
@@ -70,5 +70,5 @@ def test_build_llm_plan_response_text_on__early_stop(mock_plan):
             }
         ),
     ) as mock_chat_completion:
-        response_text = build_llm_plan_response_text(mock_plan, "foobarbaz")
+        response_text = build_plan_response_text(mock_plan, "foobarbaz")
         assert None is response_text

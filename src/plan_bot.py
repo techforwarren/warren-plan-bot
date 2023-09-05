@@ -72,7 +72,7 @@ def build_response_text_llm(plan: PurePlan):
     Create response text using llm
     """
 
-    llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
+    llm_response = llm.build_plan_response_text(plan, full_post_text)
 
     if not llm_response:
         return
@@ -104,7 +104,7 @@ def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     # if single plan match, try building a response using llm
     #  provide the entire text of the post for context of any specific
     #  questions asked etc...
-    llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
+    llm_response = llm.build_plan_response_text(plan, full_post_text)
 
     if llm_response:
         return (

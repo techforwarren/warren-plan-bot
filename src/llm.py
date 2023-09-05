@@ -58,7 +58,7 @@ Some rules to follow:
 3. Include information about the plan provided in the given context"""
 
 
-def build_llm_plan_response_text(plan: PurePlan, post_text: str) -> Optional[str]:
+def build_plan_response_text(plan: PurePlan, post_text: str) -> Optional[str]:
     """
     Use ChatGPT to generate a contextual reply to a user's full post.
     The plan has already been matched, and other information in the user's

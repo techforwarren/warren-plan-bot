@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from llm import build_llm_plan_response_text
+from llm import build_plan_response_text
 from matching import Strategy
 from plans import load_plans
 import click
@@ -34,7 +34,7 @@ def llm_plan_bot(post_text: str):
         print("Plan cluster matched. Skipping LLM and exiting")
         return
 
-    plan_bot_say(build_llm_plan_response_text(best_match_plan, post_text))
+    plan_bot_say(build_plan_response_text(best_match_plan, post_text))
 
 
 

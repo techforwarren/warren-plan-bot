@@ -141,7 +141,7 @@ def test_reply_send_and_simulate(mock_comment):
 
 def test_build_response_text_pure_plan_with_llm(mock_plan):
     with mock.patch(
-        "llm.build_llm_plan_response_text",
+        "llm.build_plan_response_text",
         return_value="hamspameggs",
     ) as mock_chat_completion:
         response_text, reply_type = plan_bot.build_plan_response_text(
@@ -154,7 +154,7 @@ def test_build_response_text_pure_plan_with_llm(mock_plan):
 
 def test_build_response_text_pure_plan_fallback_to_static_text(mock_plan):
     with mock.patch(
-        "llm.build_llm_plan_response_text",
+        "llm.build_plan_response_text",
         return_value=None,
     ) as mock_chat_completion:
         response_text, reply_type = plan_bot.build_plan_response_text(
