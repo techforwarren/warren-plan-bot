@@ -7,7 +7,7 @@ from functools import partial
 from google.cloud import firestore
 from praw.exceptions import APIException
 
-from llm import build_llm_plan_response_text
+import llm
 from matching import RuleStrategy, Strategy
 from plans import Plan, PlanCluster, PurePlan
 from reddit_util import standardize
@@ -80,7 +80,7 @@ def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     # if single plan match, try building a response using llm
     #  provide the entire text of the post for context of any specific
     #  questions asked etc...
-    llm_response = build_llm_plan_response_text(plan, full_post_text)
+    llm_response = llm.build_llm_plan_response_text(plan, full_post_text)
 
     if llm_response:
         return llm_response, "plan_llm"

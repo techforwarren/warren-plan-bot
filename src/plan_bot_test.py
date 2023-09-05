@@ -48,6 +48,7 @@ PLANS = [
         "summary": "The best century",
         "display_title": "A Title for the 21st Century",
         "url": "plan.plan",
+        "full_text": "foo",
     },
     {
         "id": "another_plan",
@@ -55,6 +56,7 @@ PLANS = [
         "summary": "This is another plan",
         "display_title": "Another Title To Really Make a Person Think",
         "url": "anotherplan.plan",
+        "full_text": "bar",
     },
 ]
 
@@ -78,9 +80,13 @@ def mock_comment():
 @pytest.fixture
 def mock_plan():
     return {
+        "id": "my_plan",
+        "topic": "a plan topic",
         "summary": "a summary",
         "display_title": "Plan Title",
         "url": "http://plan.plan",
+        "full_text": "foo bar",
+        "is_cluster": False,
     }
 
 
@@ -133,21 +139,66 @@ def test_reply_send_and_simulate(mock_comment):
     assert return_val is True
 
 
-def test_build_response_text_to_comment(mock_comment, mock_plan):
-    response_text = plan_bot.build_plan_response_text(mock_plan, mock_comment)
+def test_build_response_text_pure_plan_with_llm(mock_plan):
+    with mock.patch(
+        "llm.build_llm_plan_response_text",
+        return_value="hamspameggs",
+    ) as mock_chat_completion:
+        response_text, reply_type = plan_bot.build_plan_response_text(
+            mock_plan, "foobarbaz"
+        )
+    assert type(response_text) is str
+    assert "hamspameggs" in response_text
+    assert reply_type == "plan_llm"
+
+def test_build_response_text_pure_plan_fallback_to_static_text(mock_plan):
+    with mock.patch(
+            "llm.build_llm_plan_response_text",
+            return_value=None,
+    ) as mock_chat_completion:
+        response_text, reply_type = plan_bot.build_plan_response_text(
+            mock_plan, "foobarbaz"
+        )
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-
-
-def test_build_response_text_to_submission(mock_submission, mock_plan):
-    response_text = plan_bot.build_plan_response_text(mock_plan, mock_submission)
+    assert reply_type == "plan"
+def test_build_response_text_pure_plan_llm_fallback_to_static_text_on_early_stop(mock_plan):
+    with mock.patch(
+            "openai.ChatCompletion.create",
+            return_value=(
+                    {
+                        "id": "chatcmpl-uqkvlQyYK7bGYrRHQ0eXlWi7",
+                        "object": "chat.completion",
+                        "created": 1589478378,
+                        "model": "gpt-3.5-turbo",
+                        "choices": [
+                            {
+                                "message": {
+                                    "content": "This is indeed a test",
+                                    "role": "assistant"
+                                },
+                                "index": 0,
+                                "finish_reason": "foo", # anything but stop
+                            }
+                        ],
+                        "usage": {
+                            "prompt_tokens": 5,
+                            "completion_tokens": 7,
+                            "total_tokens": 12,
+                        },
+                    }
+            ),
+    ) as mock_chat_completion:
+        response_text, reply_type = plan_bot.build_plan_response_text(
+            mock_plan, "foobarbaz"
+        )
     assert type(response_text) is str
     assert mock_plan["display_title"] in response_text
     assert mock_plan["url"] in response_text
     assert mock_plan["summary"] in response_text
-
+    assert reply_type == "plan"
 
 def test_build_no_match_response_text(mock_submission, mock_plan):
     response_text = plan_bot.build_no_match_response_text(
@@ -166,7 +217,7 @@ def test_build_no_match_response_text_no_potential_matches(mock_submission, mock
 def test_build_response_text_to_submission_with_plan_cluster(
     mock_submission, mock_plan_cluster
 ):
-    response_text = plan_bot.build_plan_response_text(
+    response_text, reply_type = plan_bot.build_plan_response_text(
         mock_plan_cluster, mock_submission
     )
     assert type(response_text) is str
@@ -174,6 +225,7 @@ def test_build_response_text_to_submission_with_plan_cluster(
     for plan in mock_plan_cluster["plans"]:
         assert plan["display_title"] in response_text
         assert plan["url"] in response_text
+    assert reply_type == "plan_cluster"
 
 
 def test_build_response_text_to_all_the_plans_operation(
@@ -218,7 +270,6 @@ def test_build_response_text_to_state_of_race_operation(
     assert "3,979" in response_text  # total
 
     # day of SC
-    # TODO time zones?
     response_text = plan_bot.build_state_of_race_response_text(
         datetime.date(2020, 2, 29)
     )
@@ -227,26 +278,11 @@ def test_build_response_text_to_state_of_race_operation(
     assert "97%" in response_text  # percent so far
     assert "3,979" in response_text  # total
 
-    with pytest.raises(NotImplementedError):
-        response_text = plan_bot.build_state_of_race_response_text(
-            datetime.date(2020, 3, 1)
-        )
-
-    # TODO implement and uncomment
-    # response_text = plan_bot.build_state_of_race_response_text(
-    #     datetime.date(2020, 3, 1)
-    # )
-    #
-    # assert type(response_text) is str
-    #
-    # assert "Mar 1st" in response_text
-    # assert "155" in response_text  # pledged so far
-    # assert "96%" in response_text  # percent so far
-    # assert "3,979" in response_text  # total
-
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_plan_response_text", return_value="response text")
+@mock.patch(
+    "plan_bot.build_plan_response_text", return_value=("response text", "reply_type")
+)
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     ["post_text", "expected_matching_plan"],
@@ -267,14 +303,16 @@ def test_process_post_matches_by_display_title(
 
     plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post.text)
     mock_reply.assert_called_once_with(
         post, "response text", send=False, simulate=False, parent=False
     )
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_plan_response_text", return_value="response text")
+@mock.patch(
+    "plan_bot.build_plan_response_text", return_value=("response text", "reply_type")
+)
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     ["post_text", "expected_matching_plan"],
@@ -300,7 +338,7 @@ def test_process_post_matches_by_display_title_with_parent_option(
 
     plan_bot.process_post(post, PLANS, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(expected_matching_plan, post)
+    mock_build_response_text.assert_called_once_with(expected_matching_plan, post.text)
 
     mock_reply.assert_called_once_with(
         post,
@@ -387,7 +425,10 @@ def test_process_post_wont_reply_to_locked_post(
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_plan_response_text", return_value="some response text")
+@mock.patch(
+    "plan_bot.build_plan_response_text",
+    return_value=("some response text", "reply_type"),
+)
 @mock.patch("plan_bot.reply")
 def test_process_post_matches_real_plan(
     mock_reply, mock_build_response_text, mock_create_db_record
@@ -408,14 +449,16 @@ def test_process_post_matches_real_plan(
 
     plan_bot.process_post(post, plans, VERBATIMS, posts_db=mock.MagicMock())
 
-    mock_build_response_text.assert_called_once_with(plans[0], post)
+    mock_build_response_text.assert_called_once_with(plans[0], post.text)
     mock_reply.assert_called_once_with(
         post, "some response text", send=False, simulate=False, parent=False
     )
 
 
 @mock.patch("plan_bot.create_db_record")
-@mock.patch("plan_bot.build_plan_response_text", return_value="some response text")
+@mock.patch(
+    "plan_bot.build_plan_response_text", return_value=("response text", "reply_type")
+)
 @mock.patch("plan_bot.reply")
 @pytest.mark.parametrize(
     "reddit_username", ["warrenplanbot", "warrenplanbotdev", "WarrenPlanBot"]
