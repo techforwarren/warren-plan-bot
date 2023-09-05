@@ -17,7 +17,7 @@ locals {
   function_storage_bucket = "wpb-cloud-function-${local.environment}"
   credentials_file = "~/.gcloud/wpb-${local.environment}-terraform-key.json"
   function_name = "run-plan-bot"
-  function_storage_bucket_object = "plan_bot.zip"
+  function_storage_bucket_object = "plan_bot-${data.archive_file.plan_bot_zip.output_sha}.zip"
   limit = "20"
   schedule = "*/2 * * * *" // every 2 minutes
   timeout = 160 // longer than the schedule interval
@@ -71,10 +71,7 @@ resource "google_storage_bucket" "plan_bot_function_storage" {
 resource "google_storage_bucket_object" "plan_bot_zip" {
   name = local.function_storage_bucket_object
   bucket = google_storage_bucket.plan_bot_function_storage.name
-  source = "${path.root}/dist/plan_bot.zip"
-  depends_on = [
-    data.archive_file.plan_bot_zip
-  ]
+  source = data.archive_file.plan_bot_zip.output_path
 }
 
 resource "google_cloudfunctions_function" "run_plan_bot" {
@@ -104,21 +101,6 @@ resource "google_cloudfunctions_function" "run_plan_bot" {
     PRAW_SITE = local.environment
     LIMIT = local.limit
     TIME_IN_LOOP = local.time_in_loop
-  }
-}
-
-# redeploy cloud function if code has changed
-resource "null_resource" "update_cloud_function" {
-  depends_on = [
-    google_cloudfunctions_function.run_plan_bot,
-    google_storage_bucket_object.plan_bot_zip
-  ]
-  triggers = {
-    uploaded_function_code = google_storage_bucket_object.plan_bot_zip.crc32c
-  }
-
-  provisioner "local-exec" {
-    command = "google_application_credentials=${local.credentials_file} gcloud functions deploy ${local.function_name} --source gs://${google_storage_bucket.plan_bot_function_storage.name}/${google_storage_bucket_object.plan_bot_zip.name} --project ${local.project_id}"
   }
 }
 
