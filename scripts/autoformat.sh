@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Sort imports
-isort -rc --atomic src
+isort --atomic src
 
 # Format code
 black src

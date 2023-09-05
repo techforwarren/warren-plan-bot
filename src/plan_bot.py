@@ -155,7 +155,6 @@ def custom_strftime(format, t):
 
 
 def build_state_of_race_response_text(today: datetime.date) -> str:
-
     if today > datetime.date(2020, 3, 6):
         return "rip."
 
@@ -380,7 +379,7 @@ def get_trigger_line(text: str, trigger_word="!warrenplanbot") -> str:
     only returning the part of that sentance which occurs _after_ !WarrenPlanBot
     """
     matches = re.findall(
-        fr"{trigger_word}[^-\w]+([^!?.]*[!?.]?)", text, re.IGNORECASE | re.MULTILINE
+        rf"{trigger_word}[^-\w]+([^!?.]*[!?.]?)", text, re.IGNORECASE | re.MULTILINE
     )
     if not matches:
         return ""

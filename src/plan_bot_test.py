@@ -377,7 +377,6 @@ def test_process_post_matches_by_verbatim_with_parent_option(
 def test_process_post_wont_reply_to_locked_post(
     mock_reply, mock_build_response_text, mock_create_db_record
 ):
-
     post = MockSubmission("!WarrenPlanBot A Title for the 21st Century")
     post.locked = True
 
