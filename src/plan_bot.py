@@ -87,7 +87,7 @@ def build_response_text_llm(plan: PurePlan, full_post_text: str) -> str:
         # Horizontal line above footer
         "\n***\n"
         # Disclaimer
-        f"This bot was created independently by volunteers and used LLMs in generating this response. If anything here is incorrect, please reply to this comment and let us know."
+        f"This bot was created independently by volunteers and used LLMs in generating this response. If anything is incorrect, please reply and let us know."
     )
 
 
