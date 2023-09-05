@@ -68,7 +68,7 @@ There are several ways to do this, one way is to extend your env/bin/activate fi
 
 ##### Gcloud
 
-`brew cask install google-cloud-sdk` on Mac
+`brew install --cask google-cloud-sdk` on Mac
 
 or visit https://cloud.google.com/sdk/docs/quickstarts
 
