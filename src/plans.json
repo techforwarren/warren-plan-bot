@@ -187,7 +187,8 @@
         "topic": "universal child care",
         "summary": "Elizabeth is fighting to make high-quality child care from birth to school age free for millions of families and affordable for everyone. Let’s make Universal Child Care a reality.",
         "display_title": "Universal Child Care",
-        "url": "https://elizabethwarren.com/plans/universal-child-care"
+        "url": "https://elizabethwarren.com/plans/universal-child-care",
+        "additional_training_text": "childcare"
     },
     {
         "id": "ultra_millionaire_tax",
