@@ -67,9 +67,9 @@ def build_response_text_pure_plan(plan: PurePlan):
     )
 
 
-def build_response_text_llm(plan: PurePlan):
+def build_response_text_llm(plan: PurePlan, full_post_text: str) -> str:
     """
-    Create response text using llm
+    Create response text using llm to include contextual information
     """
 
     llm_response = llm.build_plan_response_text(plan, full_post_text)
@@ -104,13 +104,10 @@ def build_plan_response_text(plan: Plan, full_post_text: str) -> (str, str):
     # if single plan match, try building a response using llm
     #  provide the entire text of the post for context of any specific
     #  questions asked etc...
-    llm_response = llm.build_plan_response_text(plan, full_post_text)
+    llm_response = build_response_text_llm(plan, full_post_text)
 
     if llm_response:
-        return (
-            "Senator Warren has a plan for that!\n\n" + llm_response + footer(),
-            "plan_llm",
-        )
+        return llm_response, "plan_llm"
 
     # if llm failed for any reason, fallback to static response text
     return build_response_text_pure_plan(plan), "plan"
