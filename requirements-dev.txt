@@ -9,5 +9,5 @@ pytest~=7.4.1
 
 # plan-extractor
 bs4
-requests==2.22.0
+requests==2.32.0
 lxml
